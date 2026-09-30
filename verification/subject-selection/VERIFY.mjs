@@ -8,16 +8,16 @@ const root = resolve(process.argv[3] ?? '.');
 const mod = join(root, 'redux-tweak');
 const hash = path => createHash('sha256').update(readFileSync(path)).digest('hex').toUpperCase();
 assert.equal(hash(join(mod, 'interface/provinceview.gui')), '697DF7DFD78B3B2266060730DCD0D3DDCCC17FCF22F45B89482E6CCDF81D2058');
-assert.equal(hash(join(mod, 'common/custom_gui/ReduxSubjectSelection.txt')), '18598E2EF0C351D4C8A0A720B4A7263F7E24E901DFF3946DEC2F1451D3361B00');
 const decisionPath = join(mod, 'decisions/ReduxSubjectSelection.txt');
 if (mode === 'Baseline' || mode === 'Rollback') {
+    assert.equal(hash(join(mod, 'common/custom_gui/ReduxSubjectSelection.txt')), '18598E2EF0C351D4C8A0A720B4A7263F7E24E901DFF3946DEC2F1451D3361B00');
     assert.equal(existsSync(decisionPath), false);
     assert.equal(readFileSync(join(mod, 'descriptor.mod'), 'utf8').includes('version="0.1.0"'), true);
     console.log(`PASS: ${mode.toUpperCase()} toggle absent; province buttons unchanged; version=0.1.0`);
     process.exit(0);
 }
 
-// This fixture executes the new selection effects, not the EU4 engine.
+// Execute the selection entry points against fixtures, not the EU4 engine.
 function parse(text) {
     const tokens = text.match(/#[^\r\n]*|"(?:\\.|[^"\\])*"|[{}=]|[^\s{}=]+/g).filter(t => !t.startsWith('#'));
     let i = 0;
@@ -38,6 +38,22 @@ function parse(text) {
 }
 const effects = new Map(parse(readFileSync(join(mod, 'common/scripted_effects/ReduxSubjectSelection.txt'), 'utf8')));
 const triggers = new Map(parse(readFileSync(join(mod, 'common/scripted_triggers/ReduxSubjectSelection.txt'), 'utf8')));
+const buttons = parse(readFileSync(join(mod, 'common/custom_gui/ReduxSubjectSelection.txt'), 'utf8'))
+    .map(([key, value]) => {
+        assert.equal(key, 'custom_button');
+        return new Map(value);
+    });
+assert.deepEqual(buttons.map(button => button.get('name')), ['redux_subject_select_dip', 'redux_subject_select_mil']);
+for (const button of buttons) {
+    assert.deepEqual(button.get('trigger'), [['Redux_SubjectSelectionButtonAllowed', 'yes']]);
+    assert.deepEqual(button.get('effect'), [['Redux_ToggleSubjectSelection', 'yes']]);
+}
+const provinceEffects = readFileSync(join(mod, 'common/scripted_effects/SYS-Prov.txt'), 'utf8');
+for (const [key, value] of parse(provinceEffects.slice(provinceEffects.indexOf('Pow_UI = {'),
+    provinceEffects.indexOf('Prov_DispProfit = {')))) effects.set(key, value);
+const actions = readFileSync(join(mod, 'common/on_actions/00_on_actions.txt'), 'latin1');
+const nativeButtons = new Map(parse(actions.slice(actions.indexOf('on_dip_development = {'),
+    actions.indexOf('on_overextension_pulse = {'))));
 const decisions = new Map(parse(readFileSync(decisionPath, 'utf8'))[0][1]);
 assert.equal(decisions.size, 1);
 const decision = new Map(decisions.get('redux_toggle_subject_selection'));
@@ -57,15 +73,17 @@ function world(scope, enabled, selected) {
         country('D', 'B'), country('X'), country('H', 'X')];
     const p = (id, owner, area, region, node, state = true, valid = true) => ({ type: 'province', id,
         owner: countries.find(c => c.id === owner), area, region, node, state, core: state, valid,
-        flags: new Set(selected ? ['UI_Select'] : []), neighbors: [] });
+        flags: new Set(selected ? ['UI_Select'] : []), neighbors: [], base_production: 1, base_manpower: 1 });
     const provinces = [p('seed', 'A', 'north', 'r1', 'n1'), p('own', 'A', 'north', 'r1', 'n1'),
         p('b1', 'B', 'north', 'r1', 'n1'), p('b2', 'B', 'north', 'r1', 'n1', false),
         p('b3', 'B', 'south', 'r1', 'n1'), p('c1', 'C', 'south', 'r2', 'n2'),
         p('invalid', 'B', 'north', 'r1', 'n1', true, false), p('tribute', 'T', 'north', 'r1', 'n1'),
         p('indirect', 'D', 'north', 'r1', 'n1'), p('foreign', 'X', 'north', 'r1', 'n1'),
-        p('other-subject', 'H', 'north', 'r1', 'n1')];
-    provinces[0].neighbors = ['b1', 'invalid', 'tribute', 'indirect', 'foreign'];
-    return { countries, provinces, seed: provinces[0], actor: countries[0], targets: new Map(), globals: new Set() };
+        p('other-subject', 'H', 'north', 'r1', 'n1'), p('ownfar', 'A', 'far', 'r3', 'n3', false)];
+    provinces[0].neighbors = ['own', 'b1', 'invalid', 'tribute', 'indirect', 'foreign'];
+    provinces[2].neighbors = ['seed', 'own', 'b3', 'c1', 'invalid', 'tribute', 'indirect', 'foreign', 'other-subject'];
+    return { countries, provinces, seed: provinces[0], actor: countries[0], targets: new Map(), globals: new Set(),
+        stack: [], events: [] };
 }
 function substitute(tree, params) {
     return tree.map(([key, value]) => {
@@ -78,27 +96,47 @@ function substitute(tree, params) {
 }
 function scopeTarget(key, current, w) {
     if (key === 'owner') return current.owner;
+    if (key === 'FROM') return w.actor;
+    if (key === 'PREV') return w.stack.at(-1);
     if (key.startsWith('event_target:')) return w.targets.get(key.slice(13));
     return undefined;
+}
+function inScope(current, w, callback) {
+    w.stack.push(current);
+    try { return callback(); } finally { w.stack.pop(); }
 }
 function test(tree, current, w) {
     return tree.every(([key, value]) => {
         const target = scopeTarget(key, current, w);
-        if (target) return test(value, target, w);
+        if (target) return inScope(current, w, () => test(value, target, w));
         if (triggers.has(key)) return test(triggers.get(key), current, w);
         if (key === 'AND') return test(value, current, w);
         if (key === 'OR') return value.some(pair => test([pair], current, w));
         if (key === 'NOT') return !test(value, current, w);
+        if (key === 'always') return value === 'yes';
         if (key === 'ai') return current.ai === (value === 'yes');
         if (key === 'has_country_flag' || key === 'has_province_flag') return current.flags.has(value);
         if (key === 'is_subject_other_than_tributary_trigger') return Boolean(current.overlord) && !current.tributary;
         if (key === 'is_subject_of') return current.overlord === scopeTarget(value, current, w).id;
+        if (key === 'owned_by') {
+            const owner = scopeTarget(value, current, w);
+            return current.owner === (owner?.type === 'province' ? owner.owner : owner);
+        }
         if (key === 'isValidProv') return current.valid;
+        if (key === 'is_city') return current.valid === (value === 'yes');
+        if (key === 'is_colony') return value === 'no';
+        if (key === 'province_id') return current.id === value;
+        if (key === 'base_production' || key === 'base_manpower') return current[key] === Number(value);
         if (key === 'is_state') return current.state;
         if (key === 'is_state_core') return current.core;
         if (key === 'is_key_equal') {
             const args = Object.fromEntries(value);
             assert.equal(args.lhs, 'UI_SelectScope');
+            return current.scope === Number(args.value);
+        }
+        if (key === 'is_variable_equal') {
+            const args = Object.fromEntries(value);
+            assert.equal(args.which, 'fqr');
             return current.scope === Number(args.value);
         }
         throw new Error(`Unsupported fixture trigger: ${key}`);
@@ -118,6 +156,11 @@ function execute(tree, current, w) {
         }
         taken = false;
         if (key === 'custom_tooltip') continue;
+        if (key === 'hidden_effect') { execute(value, current, w); continue; }
+        if (key === 'province_event') {
+            w.events.push({ province: current.id, id: Object.fromEntries(value).id });
+            continue;
+        }
         if (key === 'set_global_flag') { w.globals.add(value); continue; }
         if (key.startsWith('set_') && key.endsWith('_flag')) { current.flags.add(value); continue; }
         if (key.startsWith('clr_') && key.endsWith('_flag')) { current.flags.delete(value); continue; }
@@ -127,17 +170,19 @@ function execute(tree, current, w) {
             continue;
         }
         const target = scopeTarget(key, current, w);
-        if (target) { execute(value, target, w); continue; }
+        if (target) { inScope(current, w, () => execute(value, target, w)); continue; }
         let candidates;
         if (key === 'every_neighbor_province') candidates = w.provinces.filter(p => current.neighbors.includes(p.id));
         else if (key === 'area' || key === 'region') candidates = w.provinces.filter(p => p[key] === current[key]);
         else if (key === 'every_trade_node_member_province') candidates = w.provinces.filter(p => p.node === current.node);
-        else if (key === 'every_subject_country') candidates = w.countries.filter(c => c.overlord);
+        else if (key === 'every_subject_country') candidates = w.countries.filter(c => c.overlord === current.id);
         else if (key === 'every_owned_province') candidates = w.provinces.filter(p => p.owner === current);
         else throw new Error(`Unsupported fixture effect: ${key}`);
         const limit = value.find(([name]) => name === 'limit')?.[1];
         for (const candidate of candidates) {
-            if (!limit || test(limit, candidate, w)) execute(value.filter(([name]) => name !== 'limit'), candidate, w);
+            inScope(current, w, () => {
+                if (!limit || test(limit, candidate, w)) execute(value.filter(([name]) => name !== 'limit'), candidate, w);
+            });
         }
     }
 }
@@ -150,7 +195,8 @@ for (let scope = 0; scope <= 6; scope++) for (const enabled of [false, true]) fo
     const before = w.provinces.map(p => p.flags.has('UI_Select'));
     execute(effects.get('Redux_ExpandSubjectToggle'), w.seed, w);
     const changed = w.provinces.filter((p, i) => before[i] !== p.flags.has('UI_Select')).map(p => p.id);
-    assert.deepEqual(changed.sort(), enabled ? [...expected[scope]].sort() : [], `scope=${scope}, enabled=${enabled}, selected=${selected}`);
+    const subjectIds = scope === 4 && selected ? expected[5] : expected[scope];
+    assert.deepEqual(changed.sort(), enabled ? [...subjectIds].sort() : [], `scope=${scope}, enabled=${enabled}, selected=${selected}`);
     assert.equal(w.seed.flags.has('UI_Select'), selected);
     cases++;
 }
@@ -196,6 +242,89 @@ execute(effects.get('Redux_ExpandSubjectToggle'), anotherPlayer.provinces[2], an
 assert.deepEqual(anotherPlayer.provinces.filter(p => p.flags.has('UI_Select')).map(p => p.id), ['indirect']);
 cases += 3;
 
+const ownedExpected = [['seed'], ['seed', 'own'], ['seed', 'own'], ['seed', 'own'],
+    ['seed', 'own'], ['seed', 'own', 'ownfar'], ['seed', 'own']];
+const entries = [
+    ['Pow_UI', effects.get('Pow_UI'), false], ['Pow_UI_R', effects.get('Pow_UI_R'), true],
+    ...[...nativeButtons].flatMap(([name, tree]) => [false, true].map(selected => [name, tree, selected]))
+];
+assert.equal(entries.length, 6);
+for (const [name, tree, selected] of entries) for (let scope = 0; scope <= 6; scope++) for (const enabled of [false, true]) {
+    const native = world(scope, enabled, selected);
+    const before = native.provinces.map(p => p.flags.has('UI_Select'));
+    execute(tree, native.seed, native);
+    const changed = native.provinces.filter((p, i) => before[i] !== p.flags.has('UI_Select')).map(p => p.id);
+    const ownIds = scope === 4 && selected ? ownedExpected[5] : ownedExpected[scope];
+    const subjectIds = scope === 4 && selected ? expected[5] : expected[scope];
+    assert.deepEqual(changed.sort(), [...ownIds, ...(enabled ? subjectIds : [])].sort(),
+        `${name}, scope=${scope}, enabled=${enabled}, selected=${selected}`);
+    assert.deepEqual(native.events, [{ province: 'seed', id: selected ? 'SYS_Pin.005' : 'SYS_Pin.006' }]);
+    cases++;
+}
+
+const buttonExpected = [['b1'], ['b1', 'seed', 'own', 'b3', 'c1'], ['b1', 'seed', 'own', 'b2'],
+    ['b1', 'seed', 'own', 'b2', 'b3'], ['b1', 'seed', 'own', 'b3', 'c1'],
+    ['b1', 'seed', 'own', 'ownfar', 'b2', 'b3', 'c1'], ['b1', 'seed', 'own', 'b2', 'b3']];
+function click(button, province, w) {
+    if (test(button.get('potential'), province, w) && test(button.get('trigger'), province, w)) {
+        execute(button.get('effect'), province, w);
+    }
+}
+for (const button of buttons) for (let scope = 0; scope <= 6; scope++) {
+    for (const enabled of [false, true]) for (const selected of [false, true]) {
+        const subject = world(scope, enabled, selected);
+        subject.countries[1].scope = (scope + 3) % 7;
+        const seed = subject.provinces[2];
+        assert.ok(test(button.get('potential'), seed, subject));
+        assert.equal(test(button.get('trigger'), seed, subject), enabled);
+        const before = subject.provinces.map(p => p.flags.has('UI_Select'));
+        click(button, seed, subject);
+        const changed = subject.provinces.filter((p, i) => before[i] !== p.flags.has('UI_Select')).map(p => p.id);
+        const ids = scope === 4 && selected ? buttonExpected[5] : buttonExpected[scope];
+        assert.deepEqual(changed.sort(), enabled ? [...ids].sort() : [],
+            `${button.get('name')}, scope=${scope}, enabled=${enabled}, selected=${selected}`);
+        assert.deepEqual(subject.events, enabled ? [{ province: 'b1', id: selected ? 'SYS_Pin.005' : 'SYS_Pin.006' }] : []);
+        assert.equal(subject.globals.has('UI_Select'), enabled && !selected);
+        assert.equal(subject.actor.scope, scope);
+        cases++;
+    }
+}
+
+for (const button of buttons) {
+    for (const id of ['seed', 'invalid', 'tribute', 'indirect', 'foreign', 'other-subject']) {
+        const excluded = world(5, true, false);
+        const province = excluded.provinces.find(p => p.id === id);
+        assert.ok(!test(button.get('trigger'), province, excluded));
+        click(button, province, excluded);
+        assert.ok(excluded.provinces.every(p => !p.flags.has('UI_Select')));
+        assert.deepEqual(excluded.events, []);
+        cases++;
+    }
+    const frozenButton = world(5, true, false);
+    frozenButton.actor.flags.add('UI_Freeze');
+    assert.ok(!test(button.get('trigger'), frozenButton.provinces[2], frozenButton));
+    // The shared effect also enforces the gate when called outside custom_gui.
+    execute(button.get('effect'), frozenButton.provinces[2], frozenButton);
+    assert.ok(frozenButton.provinces.every(p => !p.flags.has('UI_Select')));
+    assert.deepEqual(frozenButton.events, []);
+    const pending = world(0, true, false);
+    pending.provinces[2].flags.add('Pin_Show');
+    click(button, pending.provinces[2], pending);
+    assert.ok(pending.provinces[2].flags.has('Pin_Hide'));
+    assert.ok(!pending.provinces[2].flags.has('UI_Select'));
+    assert.deepEqual(pending.events, [{ province: 'b1', id: 'SYS_Pin.005' }]);
+    const isolated = world(2, true, false);
+    isolated.actor = isolated.countries[1];
+    isolated.actor.ai = false;
+    isolated.actor.flags.add('Redux_IncludeSubjects');
+    isolated.actor.scope = 2;
+    isolated.targets.set('Redux_SelectionActor', isolated.countries[0]);
+    click(button, isolated.provinces.find(p => p.id === 'indirect'), isolated);
+    assert.equal(isolated.targets.get('Redux_SelectionActor'), isolated.actor);
+    assert.deepEqual(isolated.provinces.filter(p => p.flags.has('UI_Select')).map(p => p.id), ['b1', 'b2', 'indirect']);
+    cases += 3;
+}
+
 for (const [relative, hook, upstreamHash] of [
     ['common/on_actions/00_on_actions.txt', /^\t\tRedux_ExpandSubjectToggle = yes\r?\n/gm,
         'CF512DD7F6FF8C52583374D811ACA1764DF62DF56C6A11611E027D69520A026A'],
@@ -207,10 +336,9 @@ for (const [relative, hook, upstreamHash] of [
     const original = Buffer.from(content.replace(hook, ''), 'latin1');
     assert.equal(createHash('sha256').update(original).digest('hex').toUpperCase(), upstreamHash);
 }
-const actions = readFileSync(join(mod, 'common/on_actions/00_on_actions.txt'), 'latin1');
 for (const name of ['on_dip_development', 'on_mil_development']) {
     const start = actions.indexOf(`${name} = {`);
     const hook = actions.indexOf('Redux_ExpandSubjectToggle = yes', start);
     assert.ok(hook > start && hook < actions.indexOf('has_province_flag = Pin_Show', start));
 }
-console.log(`PASS: MODIFIED ${cases} selection fixtures; six batch scopes; toggle and exclusions verified; buttons unchanged`);
+console.log(`PASS: MODIFIED ${cases} selection fixtures; native and subject buttons; player scope, decision gate, exclusions and pin events verified; GUI unchanged`);

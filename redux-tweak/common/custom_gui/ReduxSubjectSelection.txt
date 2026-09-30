@@ -6,21 +6,8 @@ custom_button = {
 			is_subject_of = FROM
 		}
 	}
-	trigger = { FROM = { NOT = { has_country_flag = UI_Freeze } } }
-	effect = {
-		if = {
-			limit = {
-				OR = {
-					has_province_flag = Pin_Show
-					has_province_flag = UI_Select
-				}
-			}
-			Pow_UI_R = yes
-		}
-		else = {
-			Pow_UI = yes
-		}
-	}
+	trigger = { Redux_SubjectSelectionButtonAllowed = yes }
+	effect = { Redux_ToggleSubjectSelection = yes }
 	tooltip = redux_subject_select_tooltip
 }
 
@@ -32,20 +19,7 @@ custom_button = {
 			is_subject_of = FROM
 		}
 	}
-	trigger = { FROM = { NOT = { has_country_flag = UI_Freeze } } }
-	effect = {
-		if = {
-			limit = {
-				OR = {
-					has_province_flag = Pin_Show
-					has_province_flag = UI_Select
-				}
-			}
-			Pow_UI_R = yes
-		}
-		else = {
-			Pow_UI = yes
-		}
-	}
+	trigger = { Redux_SubjectSelectionButtonAllowed = yes }
+	effect = { Redux_ToggleSubjectSelection = yes }
 	tooltip = redux_subject_select_tooltip
 }

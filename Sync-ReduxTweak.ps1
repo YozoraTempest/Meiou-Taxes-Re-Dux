@@ -95,6 +95,7 @@ $knownInstalledHashes = @{
     'descriptor.mod' = @(
         '319E7FFD8EA39D9EF5CBECFD07471EDEA8A9087C10B706D5BCAAC2BC83994BC2',
         'C7AF00B74B1A724A3486954C73EF81CA83431E49494F17E6500FB1905EC3611F',
+        'C4943ED21F77F3873BF7B8E81ED39640E5BD2BE838CF41D7E0193DF283B37ACB',
         (Get-FileHash -LiteralPath (Join-Path $source 'redux-tweak/descriptor.mod') -Algorithm SHA256).Hash
     )
     'common/scripted_effects/SYS-Construct.txt' = @('F179ED5E26FB1469D5D57AC173313261295F35A9A94F772F21C13A597F002CA3')
@@ -109,6 +110,8 @@ $knownInstalledHashes = @{
         '2E2AD78C895AF291656593C93B48A092D182EDA61B14C450B53E475D4B859BF5',
         '697DF7DFD78B3B2266060730DCD0D3DDCCC17FCF22F45B89482E6CCDF81D2058'
     )
+    'common/scripted_effects/ReduxSubjectSelection.txt' = @('0148F9E770BA93064CDF3902343D3E44CBDACD02EFE9E56CABA9B97887B04D25')
+    'common/scripted_triggers/ReduxSubjectSelection.txt' = @('BA1A8ADFB3EF2462E0E07D53EA08A10239BAB1CF569EDB4ACBC7207B917FA9D7')
 }
 foreach ($relative in $files | Where-Object { $_ -notin @('descriptor.mod', 'localisation/redux-tweak_l_english.yml') }) {
     $currentHash = (Get-FileHash -LiteralPath (Join-Path $source ('redux-tweak/' + $relative)) -Algorithm SHA256).Hash
@@ -126,6 +129,7 @@ if (Test-Path -LiteralPath $oldLocale -PathType Leaf) {
     $knownLocaleHashes = @(
         '463539FF656ECF4AD5915841CFF0A762A6DE4BA7F3EE3310EFA898DADE5008DF',
         'EA500C241E9FEA083151FA7FA15F2FF217E6BB137C5816E5B2F3D57048E9F17F',
+        '5A25602585D6F5309CCE7AAC3C7F38F6E2741E2F41983AA94BFB370EDF1DB8D1',
         (Get-FileHash -LiteralPath (Join-Path $source 'redux-tweak/localisation/redux-tweak_l_english.yml') -Algorithm SHA256).Hash
     )
     if ((Get-FileHash -LiteralPath $oldLocale -Algorithm SHA256).Hash -cnotin $knownLocaleHashes) {

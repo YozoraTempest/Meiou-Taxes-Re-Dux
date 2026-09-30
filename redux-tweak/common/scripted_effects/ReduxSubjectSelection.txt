@@ -9,33 +9,91 @@ Redux_SubjectSelection_deselect = {
     clr_province_flag = UI_Select
 }
 
-Redux_SelectSubjectRealm = {
+Redux_SelectCountryRealm = {
+    every_owned_province = {
+        limit = {
+            $target$ = yes
+            Redux_SelectionChange_$action$ = yes
+            OR = {
+                event_target:Redux_SelectionActor = {
+                    is_key_equal = { lhs = UI_SelectScope value = 5 }
+                }
+                Redux_SelectionState_$action$ = yes
+            }
+        }
+        Redux_SubjectSelection_$action$ = yes
+    }
+}
+
+Redux_SelectRealm = {
     event_target:Redux_SelectionActor = {
+        Redux_SelectCountryRealm = { action = $action$ target = $target$ }
         every_subject_country = {
             limit = {
                 is_subject_other_than_tributary_trigger = yes
                 is_subject_of = event_target:Redux_SelectionActor
             }
-            every_owned_province = {
-                limit = {
-                    isValidProv = yes
-                    OR = {
-                        event_target:Redux_SelectionActor = {
-                            is_key_equal = { lhs = UI_SelectScope value = 5 }
-                        }
-                        AND = {
-                            is_state = yes
-                            is_state_core = owner
-                        }
-                    }
-                }
-                Redux_SubjectSelection_$action$ = yes
-            }
+            Redux_SelectCountryRealm = { action = $action$ target = $target$ }
         }
     }
 }
 
-# Extend the existing batch without changing its seed province or rendering path.
+# The actor is the player, even when the seed province belongs to a subject.
+Redux_ApplySelectionScope = {
+    if = {
+        limit = { event_target:Redux_SelectionActor = { is_key_equal = { lhs = UI_SelectScope value = 1 } } }
+        every_neighbor_province = {
+            limit = {
+                $target$ = yes
+                Redux_SelectionChange_$action$ = yes
+            }
+            Redux_SubjectSelection_$action$ = yes
+        }
+    }
+    else_if = {
+        limit = { event_target:Redux_SelectionActor = { is_key_equal = { lhs = UI_SelectScope value = 2 } } }
+        area = {
+            limit = {
+                $target$ = yes
+                Redux_SelectionChange_$action$ = yes
+            }
+            Redux_SubjectSelection_$action$ = yes
+        }
+    }
+    else_if = {
+        limit = { event_target:Redux_SelectionActor = { is_key_equal = { lhs = UI_SelectScope value = 3 } } }
+        region = {
+            limit = {
+                $target$ = yes
+                Redux_SelectionChange_$action$ = yes
+            }
+            Redux_SubjectSelection_$action$ = yes
+        }
+    }
+    else_if = {
+        limit = {
+            event_target:Redux_SelectionActor = {
+                OR = {
+                    is_key_equal = { lhs = UI_SelectScope value = 4 }
+                    is_key_equal = { lhs = UI_SelectScope value = 5 }
+                }
+            }
+        }
+        Redux_SelectRealm = { action = $action$ target = $target$ }
+    }
+    else_if = {
+        limit = { event_target:Redux_SelectionActor = { is_key_equal = { lhs = UI_SelectScope value = 6 } } }
+        every_trade_node_member_province = {
+            limit = {
+                $target$ = yes
+                Redux_SelectionChange_$action$ = yes
+            }
+            Redux_SubjectSelection_$action$ = yes
+        }
+    }
+}
+
+# Native buttons already handle owned provinces and schedule the pin event.
 Redux_ExpandSubjectSelection = {
     if = {
         limit = {
@@ -46,44 +104,32 @@ Redux_ExpandSubjectSelection = {
             }
         }
         owner = { save_event_target_as = Redux_SelectionActor }
+        Redux_ApplySelectionScope = {
+            action = $action$
+            target = Redux_SubjectSelectionTarget
+        }
+    }
+}
+
+Redux_ToggleSubjectSelection = {
+    if = {
+        limit = { Redux_SubjectSelectionButtonAllowed = yes }
+        FROM = { save_event_target_as = Redux_SelectionActor }
         if = {
-            limit = { owner = { is_key_equal = { lhs = UI_SelectScope value = 1 } } }
-            every_neighbor_province = {
-                limit = { Redux_SubjectSelectionTarget = yes }
-                Redux_SubjectSelection_$action$ = yes
-            }
-        }
-        else_if = {
-            limit = { owner = { is_key_equal = { lhs = UI_SelectScope value = 2 } } }
-            area = {
-                limit = { Redux_SubjectSelectionTarget = yes }
-                Redux_SubjectSelection_$action$ = yes
-            }
-        }
-        else_if = {
-            limit = { owner = { is_key_equal = { lhs = UI_SelectScope value = 3 } } }
-            region = {
-                limit = { Redux_SubjectSelectionTarget = yes }
-                Redux_SubjectSelection_$action$ = yes
-            }
-        }
-        else_if = {
             limit = {
-                owner = {
-                    OR = {
-                        is_key_equal = { lhs = UI_SelectScope value = 4 }
-                        is_key_equal = { lhs = UI_SelectScope value = 5 }
-                    }
+                OR = {
+                    has_province_flag = Pin_Show
+                    has_province_flag = UI_Select
                 }
             }
-            Redux_SelectSubjectRealm = { action = $action$ }
+            Redux_ApplySelectionScope = { action = deselect target = Redux_RealmSelectionTarget }
+            Redux_SubjectSelection_deselect = yes
+            hidden_effect = { province_event = { id = SYS_Pin.005 } }
         }
-        else_if = {
-            limit = { owner = { is_key_equal = { lhs = UI_SelectScope value = 6 } } }
-            every_trade_node_member_province = {
-                limit = { Redux_SubjectSelectionTarget = yes }
-                Redux_SubjectSelection_$action$ = yes
-            }
+        else = {
+            Redux_ApplySelectionScope = { action = select target = Redux_RealmSelectionTarget }
+            Redux_SubjectSelection_select = yes
+            hidden_effect = { province_event = { id = SYS_Pin.006 } }
         }
     }
 }
