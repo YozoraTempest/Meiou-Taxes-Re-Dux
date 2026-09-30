@@ -196,14 +196,16 @@ execute(effects.get('Redux_ExpandSubjectToggle'), anotherPlayer.provinces[2], an
 assert.deepEqual(anotherPlayer.provinces.filter(p => p.flags.has('UI_Select')).map(p => p.id), ['indirect']);
 cases += 3;
 
-const upstream = resolve('C:/Users/Vulon/OneDrive/文档/Paradox Interactive/Europa Universalis IV/mod/MEIOUandTaxes1');
-for (const [relative, hook] of [
-    ['common/on_actions/00_on_actions.txt', /^\t\tRedux_ExpandSubjectToggle = yes\r?\n/gm],
-    ['common/scripted_effects/SYS-Prov.txt', /^\tRedux_ExpandSubjectSelection = \{ action = (select|deselect) \}\r?\n/gm]
+for (const [relative, hook, upstreamHash] of [
+    ['common/on_actions/00_on_actions.txt', /^\t\tRedux_ExpandSubjectToggle = yes\r?\n/gm,
+        'CF512DD7F6FF8C52583374D811ACA1764DF62DF56C6A11611E027D69520A026A'],
+    ['common/scripted_effects/SYS-Prov.txt', /^\tRedux_ExpandSubjectSelection = \{ action = (select|deselect) \}\r?\n/gm,
+        '85B7EE4A862041F99B524C04FC13D87FFB50B4CCA8F6BA71E873CF7BF254C8CC']
 ]) {
     const content = readFileSync(join(mod, relative), 'latin1');
     assert.equal([...content.matchAll(hook)].length, 2);
-    assert.equal(content.replace(hook, ''), readFileSync(join(upstream, relative), 'latin1'));
+    const original = Buffer.from(content.replace(hook, ''), 'latin1');
+    assert.equal(createHash('sha256').update(original).digest('hex').toUpperCase(), upstreamHash);
 }
 const actions = readFileSync(join(mod, 'common/on_actions/00_on_actions.txt'), 'latin1');
 for (const name of ['on_dip_development', 'on_mil_development']) {
