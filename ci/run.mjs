@@ -4,7 +4,7 @@ import { appendFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFile
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { affectedMods, compareVersions, describeMod, loadRegistry, nightlyNeeded, releaseNeeded, sha256 } from './lib.mjs';
+import { affectedMods, compareVersions, describeMod, findRelease, loadRegistry, nightlyNeeded, releaseNeeded, sha256 } from './lib.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const registry = loadRegistry(root);
@@ -141,11 +141,11 @@ function publish(id) {
     assert.equal(sha256(readFileSync(join(output, metadata.filename))), metadata.zipSha256);
     assert.equal(readFileSync(join(output, `${metadata.filename}.sha256`), 'utf8'), `${metadata.zipSha256}  ${metadata.filename}\n`);
     const tag = `${id}-v${current.version}`;
-    const endpoint = `repos/${repository}/releases/tags/${tag}`;
-    const existing = api(endpoint, true);
+    const listReleases = () => api(`repos/${repository}/releases?per_page=100`, false, true).flat();
+    const existing = findRelease(listReleases(), tag);
     if (existing) {
-        assert.equal(api(`repos/${repository}/commits/${tag}`).sha, metadata.sourceSha, 'Existing release tag points to another commit');
         if (!existing.draft) {
+            assert.equal(api(`repos/${repository}/commits/${tag}`).sha, metadata.sourceSha, 'Existing release tag points to another commit');
             const previous = metadataFor(existing, id);
             assert.equal(previous.contentFingerprint, metadata.contentFingerprint);
             assert.equal(previous.zipSha256, metadata.zipSha256);
@@ -155,6 +155,10 @@ function publish(id) {
             summary(`PASS: RELEASE ${tag} already published and verified`);
             return;
         }
+        const tagCommit = api(`repos/${repository}/commits/${tag}`, true);
+        if (tagCommit) assert.equal(tagCommit.sha, metadata.sourceSha, 'Existing tag points to another commit');
+        command('gh', ['api', '--method', 'PATCH', `repos/${repository}/releases/${existing.id}`,
+            '-f', `target_commitish=${metadata.sourceSha}`]);
     }
     const assets = [metadata.filename, `${metadata.filename}.sha256`, `${id}-build-info.json`].map(name => join(output, name));
     const notes = join(output, 'release-notes.md');
@@ -164,7 +168,9 @@ function publish(id) {
     if (!existing) command('gh', ['release', 'create', tag, '--repo', repository, '--target', metadata.sourceSha,
         '--draft', '--title', `${current.name} ${current.version}`, '--notes-file', notes]);
     command('gh', ['release', 'upload', tag, ...assets, '--repo', repository, '--clobber']);
-    const draft = api(endpoint);
+    const release = findRelease(listReleases(), tag);
+    assert.ok(release?.draft, 'Expected an unpublished draft');
+    const draft = api(`repos/${repository}/releases/${release.id}`);
     for (const asset of assets) assert.ok(draft.assets.some(item => item.name === asset.split(/[\\/]/).at(-1)));
     command('gh', ['release', 'edit', tag, '--repo', repository, '--draft=false', '--latest=false']);
     summary(`PASS: RELEASE https://github.com/${repository}/releases/tag/${tag}`);
