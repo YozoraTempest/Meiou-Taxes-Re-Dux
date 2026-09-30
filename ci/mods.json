@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "shared_inputs": [
+    "ci/lib.mjs",
+    "ci/run.mjs",
+    "ci/package.sh",
+    "ci/run.sh",
+    ".gitattributes",
+    ".github/workflows/nightly.yml",
+    ".github/workflows/release.yml"
+  ],
+  "mods": [
+    {
+      "id": "redux-tweak",
+      "name": "Redux Tweak",
+      "files": [
+        "descriptor.mod",
+        "common/custom_gui/ReduxSubjectSelection.txt",
+        "common/on_actions/00_on_actions.txt",
+        "common/scripted_effects/ReduxSubjectSelection.txt",
+        "common/scripted_effects/SYS-Construct.txt",
+        "common/scripted_effects/SYS-Prov.txt",
+        "common/scripted_triggers/ReduxSubjectSelection.txt",
+        "customizable_localization/ReduxSubjectSelection.txt",
+        "decisions/ReduxSubjectSelection.txt",
+        "interface/provinceview.gui",
+        "localisation/redux-tweak_l_english.yml"
+      ],
+      "test_inputs": [
+        "verification/VERIFY.sh",
+        "verification/VERIFY.mjs",
+        "verification/subject-selection/VERIFY.mjs"
+      ],
+      "tests": [
+        ["sh", "verification/VERIFY.sh"],
+        ["node", "verification/subject-selection/VERIFY.mjs", "Modified"]
+      ],
+      "depends_on": []
+    }
+  ]
+}
