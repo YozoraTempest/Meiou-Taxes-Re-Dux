@@ -116,3 +116,9 @@ export function nightlyNeeded(current, artifacts) {
     return !artifacts.some(artifact => artifact.name === `nightly-${current.id}-${current.fingerprint}` &&
         !artifact.expired && artifact.successful);
 }
+
+export function findRelease(releases, tag) {
+    const matches = releases.filter(release => release.tag_name === tag);
+    assert.ok(matches.length <= 1, `Duplicate release tag: ${tag}`);
+    return matches[0] ?? null;
+}

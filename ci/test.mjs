@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
-import { affectedMods, compareVersions, describeMod, loadRegistry, nightlyNeeded, packageFiles, releaseNeeded, safePath } from './lib.mjs';
+import { affectedMods, compareVersions, describeMod, findRelease, loadRegistry, nightlyNeeded, packageFiles, releaseNeeded, safePath } from './lib.mjs';
 
 function fixture(t) {
     const root = mkdtempSync(join(tmpdir(), 'mod-ci-test-'));
@@ -167,4 +167,13 @@ test('real packager verifies allowlist and produces repeatable ZIP bytes', t => 
     const result = spawnSync('sh', [script, planPath, join(f.root, 'bad.zip')], { encoding: 'utf8' });
     assert.notEqual(result.status, 0);
     assert.match(result.stderr, /Source changed/);
+});
+
+test('release lookup includes drafts even when tag endpoint does not expose them', () => {
+    const draft = { id: 123, tag_name: 'alpha-v1.0.0', draft: true, target_commitish: 'commit' };
+    assert.equal(findRelease([draft], 'alpha-v1.0.0'), draft);
+    assert.equal(findRelease([draft], 'beta-v1.0.0'), null);
+});
+test('release lookup rejects ambiguous duplicate tags', () => {
+    assert.throws(() => findRelease([{ tag_name: 'alpha-v1.0.0' }, { tag_name: 'alpha-v1.0.0' }], 'alpha-v1.0.0'), /Duplicate/);
 });
