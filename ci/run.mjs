@@ -155,8 +155,8 @@ function publish(id) {
             summary(`PASS: RELEASE ${tag} already published and verified`);
             return;
         }
-        const tagCommit = api(`repos/${repository}/commits/${tag}`, true);
-        if (tagCommit) assert.equal(tagCommit.sha, metadata.sourceSha, 'Existing tag points to another commit');
+        const tagRef = api(`repos/${repository}/git/ref/tags/${tag}`, true);
+        if (tagRef) assert.equal(api(`repos/${repository}/commits/${tag}`).sha, metadata.sourceSha, 'Existing tag points to another commit');
         command('gh', ['api', '--method', 'PATCH', `repos/${repository}/releases/${existing.id}`,
             '-f', `target_commitish=${metadata.sourceSha}`]);
     }
