@@ -1,0 +1,143 @@
+name: Formal Mod Releases
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, closed]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  plan:
+    name: Detect Release Changes
+    if: >-
+      github.event.pull_request.head.ref == 'develop' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (github.event.action != 'closed' || github.event.pull_request.merged == true)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      has_mods: ${{ steps.plan.outputs.has_mods }}
+      source_sha: ${{ steps.plan.outputs.source_sha }}
+      verify_matrix: ${{ steps.plan.outputs.verify_matrix }}
+      has_verify: ${{ steps.plan.outputs.has_verify }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.merged && github.event.pull_request.merge_commit_sha || github.ref }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '26'
+      - name: Test CI Logic
+        run: sh ci/test.sh
+      - name: Select Mods and Check Versions
+        id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: sh ci/run.sh plan release
+
+  verify:
+    name: Verify / ${{ matrix.id }}
+    needs: plan
+    if: github.event.action != 'closed' && needs.plan.outputs.has_verify == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.verify_matrix) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.plan.outputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '26'
+      - run: sh ci/run.sh verify "$MOD_ID"
+        env:
+          MOD_ID: ${{ matrix.id }}
+
+  checks:
+    name: Release Checks
+    needs: [plan, verify]
+    if: >-
+      always() && github.event.action != 'closed' &&
+      github.event.pull_request.head.ref == 'develop' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require Successful Validation
+        env:
+          PLAN_RESULT: ${{ needs.plan.result }}
+          VERIFY_RESULT: ${{ needs.verify.result }}
+        run: |
+          test "$PLAN_RESULT" = success
+          test "$VERIFY_RESULT" = success || test "$VERIFY_RESULT" = skipped
+
+  build:
+    name: Formal / ${{ matrix.id }}
+    needs: plan
+    if: >-
+      github.event.action == 'closed' && github.event.pull_request.merged == true &&
+      needs.plan.outputs.has_mods == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.plan.outputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '26'
+      - run: sh ci/run.sh build release "$MOD_ID"
+        env:
+          MOD_ID: ${{ matrix.id }}
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: formal-${{ matrix.id }}-${{ matrix.fingerprint }}
+          path: dist/${{ matrix.id }}/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+
+  publish:
+    name: Publish / ${{ matrix.id }}
+    needs: [plan, build]
+    if: github.event.action == 'closed' && github.event.pull_request.merged == true && needs.plan.outputs.has_mods == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    concurrency:
+      group: formal-${{ matrix.id }}-${{ matrix.version }}
+      cancel-in-progress: false
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.plan.outputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '26'
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: formal-${{ matrix.id }}-${{ matrix.fingerprint }}
+          path: dist/${{ matrix.id }}/
+      - name: Publish Verified Release
+        env:
+          MOD_ID: ${{ matrix.id }}
+          GH_TOKEN: ${{ github.token }}
+        run: sh ci/run.sh publish "$MOD_ID"

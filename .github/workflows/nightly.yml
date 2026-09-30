@@ -1,0 +1,79 @@
+name: Nightly Mods
+
+on:
+  push:
+    branches: [develop]
+  schedule:
+    - cron: '0 2 * * *'
+      timezone: Asia/Shanghai
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: nightly-develop
+  cancel-in-progress: true
+
+jobs:
+  plan:
+    name: Detect Nightly Changes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      has_mods: ${{ steps.plan.outputs.has_mods }}
+      source_sha: ${{ steps.plan.outputs.source_sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event_name == 'push' && github.sha || 'develop' }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '26'
+      - name: Test CI Logic
+        run: sh ci/test.sh
+      - name: Select Changed Mods
+        id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: sh ci/run.sh plan nightly
+
+  build:
+    name: Nightly / ${{ matrix.id }}
+    needs: plan
+    if: needs.plan.outputs.has_mods == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.plan.outputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '26'
+      - name: Validate and Build Nightly
+        run: sh ci/run.sh build nightly "$MOD_ID"
+        env:
+          MOD_ID: ${{ matrix.id }}
+      - name: Upload Nightly Package
+        id: upload
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: nightly-${{ matrix.id }}-${{ matrix.fingerprint }}
+          path: dist/${{ matrix.id }}/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+      - name: Record Download Link
+        env:
+          MOD_ID: ${{ matrix.id }}
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+        run: |
+          printf '\n- %s nightly download: %s\n' "$MOD_ID" "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"

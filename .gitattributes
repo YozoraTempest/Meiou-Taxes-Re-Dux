@@ -1,7 +1,14 @@
 # Preserve the bytes checked against upstream files and release manifests.
+* -text
 /redux-tweak.mod -text
 /redux-tweak/** -text
 /verification/** -text
 
 /.gitattributes text eol=lf
 *.sh text eol=lf
+/.github/** text eol=lf
+/ci/** text eol=lf
+/LICENSE text eol=lf
+/README.md text eol=lf
+/.gitignore text eol=lf
+/Sync-ReduxTweak.ps1 text eol=lf
