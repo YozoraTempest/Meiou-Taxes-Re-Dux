@@ -1,0 +1,47 @@
+diff --git "a/C:\\Users\\Vulon\\OneDrive\\\346\226\207\346\241\243\\Paradox Interactive\\Europa Universalis IV\\mod\\Pop Display\\interface\\provinceview.gui" b/redux-tweak/interface/provinceview.gui
+index fded324..4a7c427 100644
+--- "a/C:\\Users\\Vulon\\OneDrive\\\346\226\207\346\241\243\\Paradox Interactive\\Europa Universalis IV\\mod\\Pop Display\\interface\\provinceview.gui"	
++++ b/redux-tweak/interface/provinceview.gui
+@@ -2642,7 +2642,7 @@ guiTypes = {
+         y = -374
+       }
+       size = {
+-        x = 475
++        x = 550
+         y = 480
+       }
+       dontRender = ""
+@@ -2782,6 +2782,16 @@ guiTypes = {
+         Orientation = "UPPER_LEFT"
+         shortcut = "d"
+       }
++      guiButtonType = {
++        name = "redux_subject_select_dip"
++        scripted = yes
++        position = {
++          x = 490
++          y = 157
++        }
++        quadTextureSprite = "GFX_actions_button_mod_1"
++        Orientation = "UPPER_LEFT"
++      }
+       guiButtonType = {
+         name = "prod_base_exploit_button"
+         position = {
+@@ -2846,6 +2856,16 @@ guiTypes = {
+         Orientation = "UPPER_LEFT"
+         shortcut = "d"
+       }
++      guiButtonType = {
++        name = "redux_subject_select_mil"
++        scripted = yes
++        position = {
++          x = 490
++          y = 184
++        }
++        quadTextureSprite = "GFX_actions_button_mod_2"
++        Orientation = "UPPER_LEFT"
++      }
+       guiButtonType = {
+         name = "mp_base_exploit_button"
+         position = {

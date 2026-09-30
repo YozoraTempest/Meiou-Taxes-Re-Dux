@@ -1,0 +1,236 @@
+diff --git "a/C:\\Users\\Vulon\\OneDrive\\\346\226\207\346\241\243\\Paradox Interactive\\Europa Universalis IV\\mod\\MEIOUandTaxes1\\common\\on_actions\\00_on_actions.txt" b/redux-tweak/common/on_actions/00_on_actions.txt
+index 221f38a..cc9e538 100644
+--- "a/C:\\Users\\Vulon\\OneDrive\\\346\226\207\346\241\243\\Paradox Interactive\\Europa Universalis IV\\mod\\MEIOUandTaxes1\\common\\on_actions\\00_on_actions.txt"	
++++ b/redux-tweak/common/on_actions/00_on_actions.txt
+@@ -51269,6 +51269,7 @@ on_dip_development = {
+ 				}
+ 			}
+ 		}
++		Redux_ExpandSubjectToggle = yes
+ 		if = { 
+ 			limit = { 
+ 				OR = { 
+@@ -51628,6 +51629,7 @@ on_mil_development = {
+ 				}
+ 			}
+ 		}
++		Redux_ExpandSubjectToggle = yes
+ 		if = { 
+ 			limit = { 
+ 				OR = { 
+diff --git "a/C:\\Users\\Vulon\\OneDrive\\\346\226\207\346\241\243\\Paradox Interactive\\Europa Universalis IV\\mod\\MEIOUandTaxes1\\common\\scripted_effects\\SYS-Prov.txt" b/redux-tweak/common/scripted_effects/SYS-Prov.txt
+index 4b7cc4a..8ff1cd5 100644
+--- "a/C:\\Users\\Vulon\\OneDrive\\\346\226\207\346\241\243\\Paradox Interactive\\Europa Universalis IV\\mod\\MEIOUandTaxes1\\common\\scripted_effects\\SYS-Prov.txt"	
++++ b/redux-tweak/common/scripted_effects/SYS-Prov.txt
+@@ -154,6 +154,7 @@ Prov_DoClass = { ## class checks (does it exist)
+ 	}
+ }
+ Pow_UI = {
++	Redux_ExpandSubjectSelection = { action = select }
+ 	set_province_flag = Pin_Show
+ 	set_province_flag = UI_Select
+ 	set_global_flag = UI_Select
+@@ -289,6 +290,7 @@ Pow_UI = {
+ 	}
+ }
+ Pow_UI_R = {
++	Redux_ExpandSubjectSelection = { action = deselect }
+ 	set_province_flag = Pin_Hide
+ 	clr_province_flag = UI_Select
+ 	
+diff --git "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\baseline\\redux-tweak.mod" b/redux-tweak.mod
+index 942cb03..66fe635 100644
+--- "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\baseline\\redux-tweak.mod"
++++ b/redux-tweak.mod
+@@ -1,5 +1,5 @@
+ name="Redux Tweak"
+-version="0.1.0"
++version="0.1.1"
+ supported_version="v1.37.*.*"
+ tags={
+ 	"Balance"
+diff --git "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\baseline\\redux-tweak\\descriptor.mod" b/redux-tweak/descriptor.mod
+index 93df753..22f9403 100644
+--- "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\baseline\\redux-tweak\\descriptor.mod"
++++ b/redux-tweak/descriptor.mod
+@@ -1,5 +1,5 @@
+ name="Redux Tweak"
+-version="0.1.0"
++version="0.1.1"
+ supported_version="v1.37.*.*"
+ tags={
+ 	"Balance"
+diff --git "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\baseline\\redux-tweak\\localisation\\redux-tweak_l_english.yml" b/redux-tweak/localisation/redux-tweak_l_english.yml
+index 4602804..89e526e 100644
+--- "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\baseline\\redux-tweak\\localisation\\redux-tweak_l_english.yml"
++++ b/redux-tweak/localisation/redux-tweak_l_english.yml
+@@ -1,2 +1,8 @@
+ ﻿l_english:
+  redux_subject_select_tooltip:0 "Select or deselect this subject province (Redux Tweak)."
++ redux_toggle_subject_selection_title:0 "[GetReduxSubjectSelectionTitle]"
++ redux_toggle_subject_selection_desc:0 "Include provinces of direct non-tributary subjects in the current bulk selection scope. Individual selection and province buttons remain unchanged."
++ redux_subject_selection_title_on:0 "Bulk Selection: Include Subjects (ON)"
++ redux_subject_selection_title_off:0 "Bulk Selection: Include Subjects (OFF)"
++ redux_subject_selection_enabled:0 "Bulk selection now includes provinces of direct non-tributary subjects."
++ redux_subject_selection_disabled:0 "Bulk selection no longer includes subject provinces. Existing selections remain unchanged."
+diff --git "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\empty" b/redux-tweak/decisions/ReduxSubjectSelection.txt
+index e69de29..2505922 100644
+--- "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\empty"
++++ b/redux-tweak/decisions/ReduxSubjectSelection.txt
+@@ -0,0 +1,19 @@
++country_decisions = {
++    redux_toggle_subject_selection = {
++        major = yes
++        potential = { ai = no }
++        allow = { NOT = { has_country_flag = UI_Freeze } }
++        effect = {
++            if = {
++                limit = { has_country_flag = Redux_IncludeSubjects }
++                clr_country_flag = Redux_IncludeSubjects
++                custom_tooltip = redux_subject_selection_disabled
++            }
++            else = {
++                set_country_flag = Redux_IncludeSubjects
++                custom_tooltip = redux_subject_selection_enabled
++            }
++        }
++        ai_will_do = { factor = 0 }
++    }
++}
+diff --git "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\empty" b/redux-tweak/customizable_localization/ReduxSubjectSelection.txt
+index e69de29..4b79dd6 100644
+--- "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\empty"
++++ b/redux-tweak/customizable_localization/ReduxSubjectSelection.txt
+@@ -0,0 +1,11 @@
++defined_text = {
++    name = GetReduxSubjectSelectionTitle
++    text = {
++        localisation_key = redux_subject_selection_title_on
++        trigger = { has_country_flag = Redux_IncludeSubjects }
++    }
++    text = {
++        localisation_key = redux_subject_selection_title_off
++        trigger = { NOT = { has_country_flag = Redux_IncludeSubjects } }
++    }
++}
+diff --git "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\empty" b/redux-tweak/common/scripted_triggers/ReduxSubjectSelection.txt
+index e69de29..fe43f8c 100644
+--- "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\empty"
++++ b/redux-tweak/common/scripted_triggers/ReduxSubjectSelection.txt
+@@ -0,0 +1,7 @@
++Redux_SubjectSelectionTarget = {
++    isValidProv = yes
++    owner = {
++        is_subject_other_than_tributary_trigger = yes
++        is_subject_of = event_target:Redux_SelectionActor
++    }
++}
+diff --git "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\empty" b/redux-tweak/common/scripted_effects/ReduxSubjectSelection.txt
+index e69de29..c8d2529 100644
+--- "a/C:\\Users\\Vulon\\AppData\\Local\\Temp\\redux-subject-selection-20260930\\empty"
++++ b/redux-tweak/common/scripted_effects/ReduxSubjectSelection.txt
+@@ -0,0 +1,104 @@
++Redux_SubjectSelection_select = {
++    set_province_flag = Pin_Show
++    set_province_flag = UI_Select
++    set_global_flag = UI_Select
++}
++
++Redux_SubjectSelection_deselect = {
++    set_province_flag = Pin_Hide
++    clr_province_flag = UI_Select
++}
++
++Redux_SelectSubjectRealm = {
++    event_target:Redux_SelectionActor = {
++        every_subject_country = {
++            limit = {
++                is_subject_other_than_tributary_trigger = yes
++                is_subject_of = event_target:Redux_SelectionActor
++            }
++            every_owned_province = {
++                limit = {
++                    isValidProv = yes
++                    OR = {
++                        event_target:Redux_SelectionActor = {
++                            is_key_equal = { lhs = UI_SelectScope value = 5 }
++                        }
++                        AND = {
++                            is_state = yes
++                            is_state_core = owner
++                        }
++                    }
++                }
++                Redux_SubjectSelection_$action$ = yes
++            }
++        }
++    }
++}
++
++# Extend the existing batch without changing its seed province or rendering path.
++Redux_ExpandSubjectSelection = {
++    if = {
++        limit = {
++            owner = {
++                ai = no
++                has_country_flag = Redux_IncludeSubjects
++                NOT = { has_country_flag = UI_Freeze }
++            }
++        }
++        owner = { save_event_target_as = Redux_SelectionActor }
++        if = {
++            limit = { owner = { is_key_equal = { lhs = UI_SelectScope value = 1 } } }
++            every_neighbor_province = {
++                limit = { Redux_SubjectSelectionTarget = yes }
++                Redux_SubjectSelection_$action$ = yes
++            }
++        }
++        else_if = {
++            limit = { owner = { is_key_equal = { lhs = UI_SelectScope value = 2 } } }
++            area = {
++                limit = { Redux_SubjectSelectionTarget = yes }
++                Redux_SubjectSelection_$action$ = yes
++            }
++        }
++        else_if = {
++            limit = { owner = { is_key_equal = { lhs = UI_SelectScope value = 3 } } }
++            region = {
++                limit = { Redux_SubjectSelectionTarget = yes }
++                Redux_SubjectSelection_$action$ = yes
++            }
++        }
++        else_if = {
++            limit = {
++                owner = {
++                    OR = {
++                        is_key_equal = { lhs = UI_SelectScope value = 4 }
++                        is_key_equal = { lhs = UI_SelectScope value = 5 }
++                    }
++                }
++            }
++            Redux_SelectSubjectRealm = { action = $action$ }
++        }
++        else_if = {
++            limit = { owner = { is_key_equal = { lhs = UI_SelectScope value = 6 } } }
++            every_trade_node_member_province = {
++                limit = { Redux_SubjectSelectionTarget = yes }
++                Redux_SubjectSelection_$action$ = yes
++            }
++        }
++    }
++}
++
++Redux_ExpandSubjectToggle = {
++    if = {
++        limit = {
++            OR = {
++                has_province_flag = Pin_Show
++                has_province_flag = UI_Select
++            }
++        }
++        Redux_ExpandSubjectSelection = { action = deselect }
++    }
++    else = {
++        Redux_ExpandSubjectSelection = { action = select }
++    }
++}

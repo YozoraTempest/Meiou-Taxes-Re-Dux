@@ -1,0 +1,67 @@
+Branch/field: redux-tweak dependencies; province_window width; redux_subject_select_dip and redux_subject_select_mil.
+Issue: Pop Display and Redux Tweak both override interface/provinceview.gui. Redux previously declared only the MEIOU dependency and used the MEIOU GUI as its base, so load priority could discard Pop Display's province controls. The subject overlays must also fit inside province_window to receive clicks.
+Change: declare dependencies on both MEIOU and Taxes v3.0 and Pop Display. Base the Redux GUI on the installed Pop Display GUI, preserving its controls, then widen province_window from 475 to 550 and insert only the two subject pin overlays. The native owned-province buttons and construction script are unchanged in this revision. Sync-ReduxTweak.ps1 verifies the Pop base hash and upgrades the existing launcher dependency block while preserving its path.
+
+MODIFIED_FILE: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\redux-tweak\interface\provinceview.gui
+DIFF_FILE: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\province-pin\province-pin.diff
+VERIFICATION.txt: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\province-pin\VERIFICATION.txt
+ROLLBACK.sh: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\province-pin\ROLLBACK.sh
+Live installed GUI: C:\Users\Vulon\OneDrive\文档\Paradox Interactive\Europa Universalis IV\mod\redux-tweak\interface\provinceview.gui
+
+Previous repository Redux GUI SHA256: CFDB608D576DFC13C5F84F0D0D73D29AA57311A4E96895C25094E9E68B794230
+Previous live installed Redux GUI SHA256: 2E2AD78C895AF291656593C93B48A092D182EDA61B14C450B53E475D4B859BF5
+Original Pop Display GUI SHA256 before/after: 4EEA36E04375D2CAC1F7CB44E9E7367F99B1D439117098CC5661320258634788
+Original MEIOU GUI SHA256 before/after: 2CFCC89956B89BA4948F902A6152BA232241119B654FDB1CD74AFBFCCCDB1214
+Modified repository and live installed Redux GUI SHA256: 697DF7DFD78B3B2266060730DCD0D3DDCCC17FCF22F45B89482E6CCDF81D2058
+Modified repository descriptor.mod SHA256: C7AF00B74B1A724A3486954C73EF81CA83431E49494F17E6500FB1905EC3611F
+Modified repository redux-tweak.mod SHA256: 43D7CFA6A188CD7A3E09D94B3AFD940177A02551313C1649E336997257D6C469
+Modified live launcher redux-tweak.mod SHA256: 3394FA8880CF871FA866191D67E267C37B90278AD2A6C6C65B1F6350496C06AB
+
+DIFF_FILE input: original installed Pop Display provinceview.gui versus modified repository Redux GUI.
+DIFF_FILE result: exactly three hunks: province_window width 475->550 and one scripted subject overlay next to each of the native DIP and MIL pin buttons. Pop Display controls unpin_everything and select_area remain present.
+
+BASELINE command (PowerShell, repository working directory):
+./verification/province-pin/VERIFY.ps1 -Mode Baseline -ModDirectory 'C:\Users\Vulon\AppData\Local\Temp\redux-pop-merge-baseline-20260930'
+Input: independent fixture with original Pop Display and MEIOU GUIs, no Redux Tweak files.
+Literal output: PASS: BASELINE Pop Display controls present; subject overlays=0; Redux absent
+Exit status: 0
+
+MODIFIED migration and sync command (PowerShell, repository working directory):
+./Sync-ReduxTweak.ps1 -ModDirectory 'C:\Users\Vulon\AppData\Local\Temp\redux-pop-merge-launcher-test-20260930'
+Input: independent fixture with original Pop Display and MEIOU files and a previous Redux launcher containing only the MEIOU dependency.
+Literal output: SYNC PASS: 6 files verified in C:\Users\Vulon\AppData\Local\Temp\redux-pop-merge-launcher-test-20260930
+Additional literal result: pop_dependency=True path_preserved=True
+Exit status: 0
+
+MODIFIED verification command (PowerShell, repository working directory):
+./verification/province-pin/VERIFY.ps1 -Mode Modified -ModDirectory 'C:\Users\Vulon\AppData\Local\Temp\redux-pop-merge-launcher-test-20260930'
+Input: independent modified fixture after sync.
+Literal output: PASS: MODIFIED Pop Display controls preserved; subject overlays=2; dependencies=2; six files verified
+Exit status: 0
+
+MODIFIED live sync command (PowerShell, repository working directory):
+./Sync-ReduxTweak.ps1
+Input: source Redux files, installed Pop Display GUI, and existing live launcher descriptor.
+Literal output: SYNC PASS: 6 files verified in C:\Users\Vulon\OneDrive\文档\Paradox Interactive\Europa Universalis IV\mod
+Exit status: 0 (the same command and output were observed twice, confirming idempotence)
+
+MODIFIED live verification command (PowerShell, repository working directory):
+./verification/province-pin/VERIFY.ps1 -Mode Modified -ModDirectory 'C:\Users\Vulon\OneDrive\文档\Paradox Interactive\Europa Universalis IV\mod'
+Input: live installed mod directory after sync.
+Literal output: PASS: MODIFIED Pop Display controls preserved; subject overlays=2; dependencies=2; six files verified
+Exit status: 0
+
+ROLLBACK command (PowerShell invoking sh, repository working directory):
+sh ./verification/province-pin/ROLLBACK.sh 'C:\Users\Vulon\AppData\Local\Temp\redux-pop-merge-rollback-20260930' 'C:\Users\Vulon\AppData\Local\Temp\redux-pop-merge-backup-20260930'
+Input: a separate copy of the modified fixture, with an absent backup destination. The live installation was not passed to rollback.
+Literal output: ROLLBACK PASS: Redux Tweak moved to backup; Pop Display and MEIOU unchanged
+Exit status: 0
+
+ROLLBACK verification command (PowerShell, repository working directory):
+./verification/province-pin/VERIFY.ps1 -Mode Rollback -ModDirectory 'C:\Users\Vulon\AppData\Local\Temp\redux-pop-merge-rollback-20260930' -BackupDirectory 'C:\Users\Vulon\AppData\Local\Temp\redux-pop-merge-backup-20260930'
+Input: the rolled-back copy and retained backup.
+Literal output: PASS: ROLLBACK Redux removed; Pop Display and MEIOU GUIs unchanged; backup retained
+Exit status: 0
+Restored behavior/status: the rollback fixture again has only the Pop Display and MEIOU GUIs, with no Redux overlays; the modified live Redux installation remains in place.
+
+Runtime status: dlc_load.json lists MEIOU, Pop Display and Redux Tweak as enabled. The other two enabled workshop mods, The EU5 Soundtrack and the CB-color mod, do not contain interface/provinceview.gui at their descriptor paths. eu4.exe was not running at the final check. Static and installation checks passed; an in-game test after starting EU4 is still needed to establish which GUI wins at runtime and whether selecting a subject province activates the scripted pin. A subject hover should show the distinct Redux Tweak tooltip; an owned province should retain its native button.

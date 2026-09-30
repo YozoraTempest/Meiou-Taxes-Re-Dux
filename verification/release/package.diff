@@ -1,0 +1,23 @@
+diff --git a/verification/release/source-content.txt b/verification/release/archive-content.txt
+index 104ee7b..24a74af 100644
+--- a/verification/release/source-content.txt
++++ b/verification/release/archive-content.txt
+@@ -1,17 +1,7 @@
+-LICENSE
+-README.md
+ redux-tweak.mod
+ redux-tweak/common/custom_gui/ReduxSubjectSelection.txt
+ redux-tweak/common/scripted_effects/SYS-Construct.txt
+ redux-tweak/descriptor.mod
+ redux-tweak/interface/provinceview.gui
++redux-tweak/LICENSE
+ redux-tweak/localisation/redux-tweak_l_english.yml
+-Sync-ReduxTweak.ps1
+-verification/province-pin/province-pin.diff
+-verification/province-pin/ROLLBACK.sh
+-verification/province-pin/VERIFICATION.txt
+-verification/province-pin/VERIFY.ps1
+-verification/redux-tweak.diff
+-verification/ROLLBACK.sh
+-verification/VERIFICATION.txt
+-verification/VERIFY.ps1

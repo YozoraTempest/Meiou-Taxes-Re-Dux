@@ -1,0 +1,51 @@
+custom_button = {
+	name = redux_subject_select_dip
+	potential = {
+		owner = {
+			is_subject_other_than_tributary_trigger = yes
+			is_subject_of = FROM
+		}
+	}
+	trigger = { FROM = { NOT = { has_country_flag = UI_Freeze } } }
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					has_province_flag = Pin_Show
+					has_province_flag = UI_Select
+				}
+			}
+			Pow_UI_R = yes
+		}
+		else = {
+			Pow_UI = yes
+		}
+	}
+	tooltip = redux_subject_select_tooltip
+}
+
+custom_button = {
+	name = redux_subject_select_mil
+	potential = {
+		owner = {
+			is_subject_other_than_tributary_trigger = yes
+			is_subject_of = FROM
+		}
+	}
+	trigger = { FROM = { NOT = { has_country_flag = UI_Freeze } } }
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					has_province_flag = Pin_Show
+					has_province_flag = UI_Select
+				}
+			}
+			Pow_UI_R = yes
+		}
+		else = {
+			Pow_UI = yes
+		}
+	}
+	tooltip = redux_subject_select_tooltip
+}

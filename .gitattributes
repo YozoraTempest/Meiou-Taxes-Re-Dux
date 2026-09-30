@@ -1,0 +1,7 @@
+# Preserve the bytes checked against upstream files and release manifests.
+/redux-tweak.mod -text
+/redux-tweak/** -text
+/verification/** -text
+
+/.gitattributes text eol=lf
+*.sh text eol=lf

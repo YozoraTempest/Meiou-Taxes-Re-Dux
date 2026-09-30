@@ -1,0 +1,104 @@
+Redux_SubjectSelection_select = {
+    set_province_flag = Pin_Show
+    set_province_flag = UI_Select
+    set_global_flag = UI_Select
+}
+
+Redux_SubjectSelection_deselect = {
+    set_province_flag = Pin_Hide
+    clr_province_flag = UI_Select
+}
+
+Redux_SelectSubjectRealm = {
+    event_target:Redux_SelectionActor = {
+        every_subject_country = {
+            limit = {
+                is_subject_other_than_tributary_trigger = yes
+                is_subject_of = event_target:Redux_SelectionActor
+            }
+            every_owned_province = {
+                limit = {
+                    isValidProv = yes
+                    OR = {
+                        event_target:Redux_SelectionActor = {
+                            is_key_equal = { lhs = UI_SelectScope value = 5 }
+                        }
+                        AND = {
+                            is_state = yes
+                            is_state_core = owner
+                        }
+                    }
+                }
+                Redux_SubjectSelection_$action$ = yes
+            }
+        }
+    }
+}
+
+# Extend the existing batch without changing its seed province or rendering path.
+Redux_ExpandSubjectSelection = {
+    if = {
+        limit = {
+            owner = {
+                ai = no
+                has_country_flag = Redux_IncludeSubjects
+                NOT = { has_country_flag = UI_Freeze }
+            }
+        }
+        owner = { save_event_target_as = Redux_SelectionActor }
+        if = {
+            limit = { owner = { is_key_equal = { lhs = UI_SelectScope value = 1 } } }
+            every_neighbor_province = {
+                limit = { Redux_SubjectSelectionTarget = yes }
+                Redux_SubjectSelection_$action$ = yes
+            }
+        }
+        else_if = {
+            limit = { owner = { is_key_equal = { lhs = UI_SelectScope value = 2 } } }
+            area = {
+                limit = { Redux_SubjectSelectionTarget = yes }
+                Redux_SubjectSelection_$action$ = yes
+            }
+        }
+        else_if = {
+            limit = { owner = { is_key_equal = { lhs = UI_SelectScope value = 3 } } }
+            region = {
+                limit = { Redux_SubjectSelectionTarget = yes }
+                Redux_SubjectSelection_$action$ = yes
+            }
+        }
+        else_if = {
+            limit = {
+                owner = {
+                    OR = {
+                        is_key_equal = { lhs = UI_SelectScope value = 4 }
+                        is_key_equal = { lhs = UI_SelectScope value = 5 }
+                    }
+                }
+            }
+            Redux_SelectSubjectRealm = { action = $action$ }
+        }
+        else_if = {
+            limit = { owner = { is_key_equal = { lhs = UI_SelectScope value = 6 } } }
+            every_trade_node_member_province = {
+                limit = { Redux_SubjectSelectionTarget = yes }
+                Redux_SubjectSelection_$action$ = yes
+            }
+        }
+    }
+}
+
+Redux_ExpandSubjectToggle = {
+    if = {
+        limit = {
+            OR = {
+                has_province_flag = Pin_Show
+                has_province_flag = UI_Select
+            }
+        }
+        Redux_ExpandSubjectSelection = { action = deselect }
+    }
+    else = {
+        Redux_ExpandSubjectSelection = { action = select }
+    }
+}

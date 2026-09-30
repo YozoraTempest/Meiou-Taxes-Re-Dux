@@ -1,0 +1,55 @@
+diff --git a/README.md b/README.md
+index 88c6db4..c09066d 100644
+--- a/README.md
++++ b/README.md
+@@ -1 +1,17 @@
+-# Meiou-Taxes-Re-Dux
+\ No newline at end of file
++# Meiou Taxes Redux
++
++用于存放 MEIOU and Taxes v3.0 的独立 EU4 子模组。每个子模组有自己的目录和启动器描述符，不把上游模组文件纳入本仓库。
++
++## 子模组
++
++| 名称 | 用途 | 状态 |
++| --- | --- | --- |
++| `redux-tweak` | 数值调整 | 已建立可安装结构，尚未加入具体调整 |
++
++## redux-tweak
++
++`redux-tweak.mod` 是启动器入口，`redux-tweak/descriptor.mod` 是模组目录内的描述符。两者声明依赖 `MEIOU and Taxes v3.0`，并沿用上游描述符中的 EU4 版本 `v1.37.*.*`。这里不使用 `replace_path`，避免遮蔽本体的整个目录。
++
++安装时，将 `redux-tweak.mod` 和整个 `redux-tweak` 目录放入 EU4 的用户模组目录（Windows 通常为 `Documents/Paradox Interactive/Europa Universalis IV/mod`）。在启动器的同一个播放集内启用 MEIOU and Taxes v3.0 与 Redux Tweak，并让本子模组在本体之后加载。
++
++目前尚无游戏数值变更。添加调整时，只把需要覆盖的游戏路径放入 `redux-tweak/`，记录所依据的上游文件与具体数值差异，再通过游戏验证效果。
+diff --git a/redux-tweak.mod b/redux-tweak.mod
+new file mode 100644
+--- /dev/null
++++ b/redux-tweak.mod
+@@ -0,0 +1,11 @@
++name="Redux Tweak"
++version="0.1.0"
++supported_version="v1.37.*.*"
++tags={
++	"Balance"
++	"Gameplay"
++}
++dependencies={
++	"MEIOU and Taxes v3.0"
++}
++path="mod/redux-tweak"
+diff --git a/redux-tweak/descriptor.mod b/redux-tweak/descriptor.mod
+new file mode 100644
+--- /dev/null
++++ b/redux-tweak/descriptor.mod
+@@ -0,0 +1,10 @@
++name="Redux Tweak"
++version="0.1.0"
++supported_version="v1.37.*.*"
++tags={
++	"Balance"
++	"Gameplay"
++}
++dependencies={
++	"MEIOU and Taxes v3.0"
++}

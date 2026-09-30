@@ -1,0 +1,11 @@
+defined_text = {
+    name = GetReduxSubjectSelectionTitle
+    text = {
+        localisation_key = redux_subject_selection_title_on
+        trigger = { has_country_flag = Redux_IncludeSubjects }
+    }
+    text = {
+        localisation_key = redux_subject_selection_title_off
+        trigger = { NOT = { has_country_flag = Redux_IncludeSubjects } }
+    }
+}

@@ -1,0 +1,61 @@
+Branch/field: redux-tweak 0.1.0 release packaging / archive entry allowlist and relative launcher path. No branch switch or gameplay changes.
+Result: the player ZIP contains exactly six runtime files plus LICENSE. It excludes tests, verification records, sync scripts, developer README, Git metadata and local absolute paths. Source hashes were recorded before packaging in source-hashes.txt and matched against every archive entry afterward.
+
+MODIFIED_FILE: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\dist\redux-tweak-0.1.0.zip
+DIFF_FILE: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\release\package.diff
+VERIFICATION.txt: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\release\VERIFICATION.txt
+ROLLBACK.sh: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\release\ROLLBACK.sh
+Archive bytes: 30063
+Archive SHA256: 01C33C573292F777BC423BF6A3CFE9C302CC90983A812946E52E2FBCB1694321
+Original source GUI SHA256 before/after: 697DF7DFD78B3B2266060730DCD0D3DDCCC17FCF22F45B89482E6CCDF81D2058
+Original source launcher SHA256 before/after: 43D7CFA6A188CD7A3E09D94B3AFD940177A02551313C1649E336997257D6C469
+
+Archive entries:
+redux-tweak.mod
+redux-tweak/descriptor.mod
+redux-tweak/common/custom_gui/ReduxSubjectSelection.txt
+redux-tweak/common/scripted_effects/SYS-Construct.txt
+redux-tweak/interface/provinceview.gui
+redux-tweak/localisation/redux-tweak_l_english.yml
+redux-tweak/LICENSE
+
+All commands below use the repository working directory.
+
+BASELINE command:
+./verification/release/PACKAGE.ps1 -Mode Baseline
+Input: current repository release allowlist, version 0.1.0, seven original source files including LICENSE.
+Literal output: PASS: BASELINE 7 source files; portable descriptor; version=0.1.0; dependencies=2
+Exit status: 0
+
+MODIFIED command:
+./verification/release/PACKAGE.ps1 -Mode Build
+Input: the seven source files recorded by BASELINE; absent dist/redux-tweak-0.1.0.zip.
+Literal output: PASS: MODIFIED release ZIP contains exactly 7 files; hashes match baseline; no development files
+Exit status: 0
+
+EXTRACTED descriptor command:
+./verification/VERIFY.ps1 -Root 'C:\Users\Vulon\AppData\Local\Temp\redux-tweak-release-player-20260930\extracted'
+Input: ZIP extracted with System.IO.Compression.ZipFile.ExtractToDirectory into an independent temporary directory.
+Literal output: PASS: descriptor parity, dependency, version, path, no replace_path
+Exit status: 0
+
+ROLLBACK command:
+sh ./verification/release/ROLLBACK.sh 'C:\Users\Vulon\AppData\Local\Temp\redux-tweak-release-player-20260930\rollback.zip' 'C:\Users\Vulon\AppData\Local\Temp\redux-tweak-release-player-20260930\backup.zip'
+Input: an independent copy of the release archive and an absent backup path. The final dist archive was not passed to rollback.
+Literal output: ROLLBACK PASS: test release archive moved to backup; source files unchanged
+Exit status: 0
+
+ROLLBACK verification command:
+./verification/release/PACKAGE.ps1 -Mode Rollback -ArchivePath 'C:\Users\Vulon\AppData\Local\Temp\redux-tweak-release-player-20260930\rollback.zip' -BackupPath 'C:\Users\Vulon\AppData\Local\Temp\redux-tweak-release-player-20260930\backup.zip'
+Input: the rolled-back test path and its backup archive.
+Literal output: PASS: ROLLBACK test archive removed; backup verified; source files unchanged
+Exit status: 0
+Restored behavior/status: the test archive path is absent and its byte-identical backup remains. Repository sources and the live game installation are unchanged. The final dist/redux-tweak-0.1.0.zip remains available for release.
+
+FINAL verification command:
+./verification/release/PACKAGE.ps1 -Mode Verify
+Input: the final dist/redux-tweak-0.1.0.zip, source allowlist and recorded baseline hashes.
+Literal output: PASS: VERIFIED 7 archive entries; hashes match source; relative install path; license retained
+Exit status: 0
+
+Installation: extract redux-tweak.mod and redux-tweak/ directly into the EU4 user mod directory. Enable MEIOU and Taxes v3.0, Pop Display and Redux Tweak in the same playset. The ZIP packages the current source version; no new in-game functional validation was performed during packaging.

@@ -1,0 +1,77 @@
+Branch/field: redux-tweak 0.1.1 / decision redux_toggle_subject_selection / per-country flag Redux_IncludeSubjects / six existing UI_SelectScope batch modes.
+Change: add one persistent default-OFF toggle decision. When enabled, extend the existing batch to valid provinces of direct non-tributary subjects. Selection and deselection use the same geographic filter. Mode 0 stays individual. Changing the toggle does not alter UI_SelectScope or existing province selections. Province GUI, custom button definitions, shortcuts and construction scripts remain byte-identical to version 0.1.0.
+Integration: add exactly one expansion call in each of the two existing native DIP/MIL selection callbacks and one call each in Pow_UI/Pow_UI_R. The installed MEIOU on-actions file is compiled/inlined, so both entry paths are covered. Subject markers use the existing SYS_Pin event rendering path; no new province button is defined. Pop Display button definitions are untouched.
+
+MODIFIED_FILE: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\redux-tweak\decisions\ReduxSubjectSelection.txt
+DIFF_FILE: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\subject-selection\subject-selection.diff
+VERIFICATION.txt: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\subject-selection\VERIFICATION.txt
+ROLLBACK.sh: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\subject-selection\ROLLBACK.sh
+Release archive: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\dist\redux-tweak-0.1.1.zip
+Release archive SHA256: 04542BBA17C35DCE3590BC5B6E3A8A5EF9A8E68102661C6D2A0DFC9F5EBD50F2
+Release archive bytes: 92368
+Archive contents: 12 runtime files and LICENSE, 13 entries total. No tests, verification records, developer scripts or local absolute paths.
+
+Original decision status: absent.
+Original MEIOU on-actions SHA256 before/after: CF512DD7F6FF8C52583374D811ACA1764DF62DF56C6A11611E027D69520A026A
+Modified Redux on-actions SHA256: 2E28AC5AD4C89EE9E5FD06CB7FC11EE60142CE4A4A902D9EB0C46992156BA4C5
+Original MEIOU SYS-Prov SHA256 before/after: 85B7EE4A862041F99B524C04FC13D87FFB50B4CCA8F6BA71E873CF7BF254C8CC
+Modified Redux SYS-Prov SHA256: D57E960EC3120EB6BBD3B43BDD957DFEB8B9A1054C5CF4A392A8C2376A044099
+Unchanged GUI SHA256: 697DF7DFD78B3B2266060730DCD0D3DDCCC17FCF22F45B89482E6CCDF81D2058
+Unchanged province button definition SHA256: 18598E2EF0C351D4C8A0A720B4A7263F7E24E901DFF3946DEC2F1451D3361B00
+Unchanged 0.1.0 release archive SHA256: 01C33C573292F777BC423BF6A3CFE9C302CC90983A812946E52E2FBCB1694321
+The baseline-hashes.sha256 and modified-hashes.sha256 files record all original and modified runtime file hashes.
+
+All commands below use D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux as the working directory.
+
+BASELINE command:
+node verification/subject-selection/VERIFY.mjs Baseline 'C:\Users\Vulon\AppData\Local\Temp\redux-subject-selection-20260930\baseline'
+Input: independent snapshot of the original Redux Tweak 0.1.0 sources taken before edits.
+Literal output: PASS: BASELINE toggle absent; province buttons unchanged; version=0.1.0
+Exit status: 0
+
+MODIFIED command:
+node verification/subject-selection/VERIFY.mjs Modified
+Input: modified repository scripts and a synthetic province/country fixture. The fixture executes the newly written decision, triggers and effects; it does not execute the EU4 engine.
+Literal output: PASS: MODIFIED 36 selection fixtures; six batch scopes; toggle and exclusions verified; buttons unchanged
+Exit status: 0
+Coverage: ON/OFF; mode 0 through 6; select/deselect; direct subject filtering; tributary, indirect subject, foreign and invalid exclusions; state/core filtering; country isolation; pending Pin_Show; UI_Freeze; decision title state; toggle preserves selection and scope; baseline byte equality after removing the four integration calls.
+
+MODIFIED live sync command:
+./Sync-ReduxTweak.ps1
+Input: modified repository version 0.1.1 and the existing live 0.1.0 installation. Upstream MEIOU and Pop Display files are checked but not modified.
+Literal output: SYNC PASS: 12 files verified in C:\Users\Vulon\OneDrive\文档\Paradox Interactive\Europa Universalis IV\mod
+Exit status: 0
+
+MODIFIED live verification command:
+./verification/province-pin/VERIFY.ps1 -Mode Modified -ModDirectory 'C:\Users\Vulon\OneDrive\文档\Paradox Interactive\Europa Universalis IV\mod'
+Input: live installation after synchronization.
+Literal output: PASS: MODIFIED Pop Display controls preserved; subject overlays=2; dependencies=2; twelve files verified
+Exit status: 0
+
+MODIFIED live fixture command:
+node verification/subject-selection/VERIFY.mjs Modified 'C:\Users\Vulon\OneDrive\文档\Paradox Interactive\Europa Universalis IV\mod'
+Input: scripts read from the actual installed mod, executed against the same synthetic fixture.
+Literal output: PASS: MODIFIED 36 selection fixtures; six batch scopes; toggle and exclusions verified; buttons unchanged
+Exit status: 0
+
+ROLLBACK command:
+sh ./verification/subject-selection/ROLLBACK.sh 'C:\Users\Vulon\AppData\Local\Temp\redux-subject-selection-20260930\rollback-test' 'C:\Users\Vulon\AppData\Local\Temp\redux-subject-selection-20260930\baseline'
+Input: a separate copy of the modified sources and the original 0.1.0 snapshot. The live installation and current repository are not rollback targets.
+Literal output: ROLLBACK PASS: baseline 0.1.0 restored; modified copy retained; release installation untouched
+Exit status: 0
+
+ROLLBACK verification command:
+node verification/subject-selection/VERIFY.mjs Rollback 'C:\Users\Vulon\AppData\Local\Temp\redux-subject-selection-20260930\rollback-test'
+Input: restored independent test copy.
+Literal output: PASS: ROLLBACK toggle absent; province buttons unchanged; version=0.1.0
+Exit status: 0
+Restored behavior/status: the independent copy again contains the original 0.1.0 runtime files, no new decision or hooks, and unchanged province buttons. The 0.1.1 source, live installation and release ZIP remain in place. The first rollback preflight detected CRLF in generated checksum manifests and exited before moving files; the manifests were normalized to LF and the rerun above passed.
+
+PACKAGE command:
+./verification/release/PACKAGE.ps1 -Mode Verify
+Input: dist/redux-tweak-0.1.1.zip and the recorded 0.1.1 source hashes.
+Literal output: PASS: VERIFIED 13 archive entries; hashes match source; relative install path; license retained
+Exit status: 0
+The ZIP was also extracted to C:\Users\Vulon\AppData\Local\Temp\redux-subject-selection-20260930\release-extracted and passed all 36 fixture checks.
+
+Runtime status: eu4.exe PID 44324 was observed running after synchronization. No in-game interaction or engine execution test was performed. Restart EU4 to load the new scripts, enable the Bulk Selection: Include Subjects (OFF/ON) decision, and use an existing batch scope to confirm selection and deselection in the game.

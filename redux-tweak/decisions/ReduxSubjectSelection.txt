@@ -1,0 +1,19 @@
+country_decisions = {
+    redux_toggle_subject_selection = {
+        major = yes
+        potential = { ai = no }
+        allow = { NOT = { has_country_flag = UI_Freeze } }
+        effect = {
+            if = {
+                limit = { has_country_flag = Redux_IncludeSubjects }
+                clr_country_flag = Redux_IncludeSubjects
+                custom_tooltip = redux_subject_selection_disabled
+            }
+            else = {
+                set_country_flag = Redux_IncludeSubjects
+                custom_tooltip = redux_subject_selection_enabled
+            }
+        }
+        ai_will_do = { factor = 0 }
+    }
+}

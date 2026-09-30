@@ -1,0 +1,35 @@
+Change: main / redux-tweak.mod and redux-tweak/descriptor.mod dependencies = "MEIOU and Taxes v3.0"
+Result: standalone EU4 sub-mod skeleton; no gameplay values changed yet.
+
+MODIFIED_FILE: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\redux-tweak.mod
+DIFF_FILE: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\redux-tweak.diff
+VERIFICATION.txt: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\VERIFICATION.txt
+ROLLBACK.sh: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\ROLLBACK.sh
+
+Original README.md SHA-256: BAF8007CC6E36012739AB6D675EDB7E3C38A3EFD9FAE253DDCFAD1277F7A888A
+Modified README.md SHA-256: 9D6D89BAC43CE239CECF700A91CE74204B4AB5D478561C7D693DC491764A33CB
+Modified redux-tweak.mod SHA-256: DD6868B34EC58D0FA316FEDB067ACCED762DFC43E862EC5E77FBC06EE430FC25
+Modified descriptor.mod SHA-256: 319E7FFD8EA39D9EF5CBECFD07471EDEA8A9087C10B706D5BCAAC2BC83994BC2
+
+BASELINE
+Input: clean clone of commit 15a1f3dde9aea4de6121aa30a86270a79c583924 at C:\Users\Vulon\AppData\Local\Temp\redux-tweak-rollback-15a1f3d, after rollback.
+Command: pwsh -NoProfile -File verification/VERIFY.ps1 -Root 'C:\Users\Vulon\AppData\Local\Temp\redux-tweak-rollback-15a1f3d'
+Literal output: FAIL: redux-tweak.mod missing
+Exit status: 1 (expected baseline state).
+
+MODIFIED
+Input: D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux with both new descriptors.
+Command: pwsh -NoProfile -File verification/VERIFY.ps1 -Root 'D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux'
+Literal output: PASS: descriptor parity, dependency, version, path, no replace_path
+Exit status: 0.
+Command: git -C 'C:\Users\Vulon\AppData\Local\Temp\redux-tweak-rollback-15a1f3d' apply --check 'D:\Astra-Paradox\repos\Meiou-Taxes-Re-Dux\verification\redux-tweak.diff'
+Literal output: (none); diff applies to the initial commit.
+Exit status: 0.
+
+ROLLBACK
+Input: a separate clone of the initial commit, with the diff applied and exact modified file bytes copied from the working tree.
+Command: & 'C:\Users\Vulon\scoop\apps\git\current\bin\bash.exe' $scriptPath $testPath
+Bindings: $scriptPath=/d/Astra-Paradox/repos/Meiou-Taxes-Re-Dux/verification/ROLLBACK.sh; $testPath=/c/Users/Vulon/AppData/Local/Temp/redux-tweak-rollback-15a1f3d
+Literal output: ROLLBACK PASS: README restored; redux-tweak removed
+Exit status: 0.
+Restored behavior/status: README.md SHA-256 BAF8007CC6E36012739AB6D675EDB7E3C38A3EFD9FAE253DDCFAD1277F7A888A; redux-tweak.mod absent; redux-tweak directory absent. Source MODIFIED_FILE remains changed.

@@ -1,0 +1,7 @@
+redux-tweak.mod
+redux-tweak/common/custom_gui/ReduxSubjectSelection.txt
+redux-tweak/common/scripted_effects/SYS-Construct.txt
+redux-tweak/descriptor.mod
+redux-tweak/interface/provinceview.gui
+redux-tweak/LICENSE
+redux-tweak/localisation/redux-tweak_l_english.yml

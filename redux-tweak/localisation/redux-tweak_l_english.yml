@@ -1,0 +1,8 @@
+﻿l_english:
+ redux_subject_select_tooltip:0 "Select or deselect this subject province (Redux Tweak)."
+ redux_toggle_subject_selection_title:0 "[GetReduxSubjectSelectionTitle]"
+ redux_toggle_subject_selection_desc:0 "Include provinces of direct non-tributary subjects in the current bulk selection scope. Individual selection and province buttons remain unchanged."
+ redux_subject_selection_title_on:0 "Bulk Selection: Include Subjects (ON)"
+ redux_subject_selection_title_off:0 "Bulk Selection: Include Subjects (OFF)"
+ redux_subject_selection_enabled:0 "Bulk selection now includes provinces of direct non-tributary subjects."
+ redux_subject_selection_disabled:0 "Bulk selection no longer includes subject provinces. Existing selections remain unchanged."

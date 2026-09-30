@@ -1,0 +1,7 @@
+Redux_SubjectSelectionTarget = {
+    isValidProv = yes
+    owner = {
+        is_subject_other_than_tributary_trigger = yes
+        is_subject_of = event_target:Redux_SelectionActor
+    }
+}

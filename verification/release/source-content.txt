@@ -1,0 +1,17 @@
+LICENSE
+README.md
+redux-tweak.mod
+redux-tweak/common/custom_gui/ReduxSubjectSelection.txt
+redux-tweak/common/scripted_effects/SYS-Construct.txt
+redux-tweak/descriptor.mod
+redux-tweak/interface/provinceview.gui
+redux-tweak/localisation/redux-tweak_l_english.yml
+Sync-ReduxTweak.ps1
+verification/province-pin/province-pin.diff
+verification/province-pin/ROLLBACK.sh
+verification/province-pin/VERIFICATION.txt
+verification/province-pin/VERIFY.ps1
+verification/redux-tweak.diff
+verification/ROLLBACK.sh
+verification/VERIFICATION.txt
+verification/VERIFY.ps1
