@@ -1,5 +1,5 @@
 ﻿l_english:
- redux_subject_select_tooltip:0 "Select or deselect using your current selection scope (Redux Tweak). Requires Include Subjects to be ON."
+ redux_subject_select_tooltip:0 "Select or deselect provinces (Redux Subject). Uses your current MT selection scope. Includes MT extended subject types; subject provinces require Include Subjects to be ON."
  redux_toggle_subject_selection_title:0 "[GetReduxSubjectSelectionTitle]"
  redux_toggle_subject_selection_desc:0 "Enable selection of direct non-tributary subject provinces. Province selection buttons use your current selection scope and include subject provinces when this option is ON. Turning it OFF preserves existing selections."
  redux_subject_selection_title_on:0 "Bulk Selection: Include Subjects (ON)"

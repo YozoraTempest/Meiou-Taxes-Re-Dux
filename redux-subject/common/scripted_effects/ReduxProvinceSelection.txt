@@ -1,0 +1,115 @@
+Redux_Subject_Mark_select = {
+    clr_province_flag = Pin_Hide
+    clr_province_flag = Pin_Show
+    set_province_flag = UI_Select
+    set_global_flag = UI_Select
+    POP_ChangePin = { inp = ID_Prov action = show }
+}
+
+Redux_Subject_Mark_deselect = {
+    clr_province_flag = Pin_Show
+    clr_province_flag = Pin_Hide
+    clr_province_flag = UI_Select
+    POP_ChangePin = { inp = ID_Prov action = hide }
+}
+
+Redux_Subject_SelectCountry = {
+    every_owned_province = {
+        limit = {
+            Redux_Subject_SelectionTarget = yes
+            Redux_Subject_SelectionChange_$action$ = yes
+            OR = {
+                FROM = { is_key_equal = { lhs = UI_SelectScope value = 5 } }
+                Redux_Subject_SelectionState_$action$ = yes
+            }
+        }
+        Redux_Subject_Mark_$action$ = yes
+    }
+}
+
+# FROM remains the player across province and country iterator scopes.
+Redux_Subject_ApplyScope = {
+    if = {
+        limit = { FROM = { is_key_equal = { lhs = UI_SelectScope value = 1 } } }
+        every_neighbor_province = {
+            limit = {
+                Redux_Subject_SelectionTarget = yes
+                Redux_Subject_SelectionChange_$action$ = yes
+            }
+            Redux_Subject_Mark_$action$ = yes
+        }
+    }
+    else_if = {
+        limit = { FROM = { is_key_equal = { lhs = UI_SelectScope value = 2 } } }
+        area = {
+            limit = {
+                Redux_Subject_SelectionTarget = yes
+                Redux_Subject_SelectionChange_$action$ = yes
+            }
+            Redux_Subject_Mark_$action$ = yes
+        }
+    }
+    else_if = {
+        limit = { FROM = { is_key_equal = { lhs = UI_SelectScope value = 3 } } }
+        region = {
+            limit = {
+                Redux_Subject_SelectionTarget = yes
+                Redux_Subject_SelectionChange_$action$ = yes
+            }
+            Redux_Subject_Mark_$action$ = yes
+        }
+    }
+    else_if = {
+        limit = {
+            FROM = {
+                OR = {
+                    is_key_equal = { lhs = UI_SelectScope value = 4 }
+                    is_key_equal = { lhs = UI_SelectScope value = 5 }
+                }
+            }
+        }
+        FROM = {
+            Redux_Subject_SelectCountry = { action = $action$ }
+            if = {
+                limit = { has_country_flag = Redux_IncludeSubjects }
+                every_subject_country = {
+                    limit = {
+                        is_subject_other_than_tributary_trigger = yes
+                        is_subject_of = FROM
+                    }
+                    Redux_Subject_SelectCountry = { action = $action$ }
+                }
+            }
+        }
+    }
+    else_if = {
+        limit = { FROM = { is_key_equal = { lhs = UI_SelectScope value = 6 } } }
+        every_trade_node_member_province = {
+            limit = {
+                Redux_Subject_SelectionTarget = yes
+                Redux_Subject_SelectionChange_$action$ = yes
+            }
+            Redux_Subject_Mark_$action$ = yes
+        }
+    }
+}
+
+Redux_Subject_ToggleSelection = {
+    if = {
+        limit = { Redux_Subject_SelectionAllowed = yes }
+        if = {
+            limit = {
+                OR = {
+                    has_province_flag = Pin_Show
+                    has_province_flag = UI_Select
+                }
+            }
+            Redux_Subject_Mark_deselect = yes
+            Redux_Subject_ApplyScope = { action = deselect }
+        }
+        else = {
+            Redux_Subject_Mark_select = yes
+            Redux_Subject_ApplyScope = { action = select }
+        }
+    }
+}

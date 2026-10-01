@@ -14,26 +14,51 @@
       "id": "redux-tweak",
       "name": "Redux Tweak",
       "files": [
-        "descriptor.mod",
-        "common/custom_gui/ReduxSubjectSelection.txt",
-        "common/on_actions/00_on_actions.txt",
-        "common/scripted_effects/ReduxSubjectSelection.txt",
-        "common/scripted_effects/SYS-Construct.txt",
-        "common/scripted_effects/SYS-Prov.txt",
-        "common/scripted_triggers/ReduxSubjectSelection.txt",
-        "customizable_localization/ReduxSubjectSelection.txt",
-        "decisions/ReduxSubjectSelection.txt",
-        "interface/provinceview.gui",
-        "localisation/redux-tweak_l_english.yml"
+        "descriptor.mod"
       ],
       "test_inputs": [
         "verification/VERIFY.sh",
-        "verification/VERIFY.mjs",
-        "verification/subject-selection/VERIFY.mjs"
+        "verification/VERIFY.mjs"
       ],
       "tests": [
-        ["sh", "verification/VERIFY.sh"],
-        ["node", "verification/subject-selection/VERIFY.mjs", "Modified"]
+        [
+          "sh",
+          "verification/VERIFY.sh"
+        ]
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "redux-subject",
+      "name": "Redux Subject",
+      "files": [
+        "descriptor.mod",
+        "interface/provinceview.gui",
+        "common/custom_gui/ReduxProvinceSelection.txt",
+        "common/scripted_effects/ReduxProvinceSelection.txt",
+        "common/scripted_effects/SYS-Construct.txt",
+        "common/scripted_triggers/ReduxProvinceSelection.txt",
+        "customizable_localization/ReduxSubjectSelection.txt",
+        "decisions/ReduxSubjectSelection.txt",
+        "localisation/redux-subject_l_english.yml"
+      ],
+      "test_inputs": [
+        "verification/VERIFY.mjs",
+        "verification/redux-subject/VERIFY.mjs",
+        "verification/redux-subject/mt-pin-dispatch.json",
+        "verification/redux-subject/mt-subject-types.json"
+      ],
+      "tests": [
+        [
+          "node",
+          "verification/VERIFY.mjs",
+          ".",
+          "redux-subject"
+        ],
+        [
+          "node",
+          "verification/redux-subject/VERIFY.mjs"
+        ]
       ],
       "depends_on": []
     }

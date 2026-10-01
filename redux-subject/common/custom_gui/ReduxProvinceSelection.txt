@@ -1,0 +1,7 @@
+custom_button = {
+    name = redux_subject_select
+    potential = { Redux_Subject_ProvinceAccessible = yes }
+    trigger = { Redux_Subject_SelectionAllowed = yes }
+    effect = { hidden_effect = { Redux_Subject_ToggleSelection = yes } }
+    tooltip = redux_subject_select_tooltip
+}

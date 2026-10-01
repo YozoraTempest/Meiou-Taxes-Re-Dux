@@ -1,0 +1,56 @@
+# MT's generic subject helper covers its extended subject types.
+# Direct ownership and tributary exclusions follow MT's relationship rules.
+Redux_Subject_ProvinceAccessible = {
+    isValidProv = yes
+    OR = {
+        owned_by = FROM
+        owner = {
+            is_subject_other_than_tributary_trigger = yes
+            is_subject_of = FROM
+        }
+    }
+}
+
+Redux_Subject_SelectionAllowed = {
+    Redux_Subject_ProvinceAccessible = yes
+    FROM = {
+        ai = no
+        NOT = { has_country_flag = UI_Freeze }
+    }
+    OR = {
+        owned_by = FROM
+        FROM = { has_country_flag = Redux_IncludeSubjects }
+    }
+}
+
+Redux_Subject_SelectionTarget = {
+    isValidProv = yes
+    OR = {
+        owned_by = FROM
+        AND = {
+            FROM = { has_country_flag = Redux_IncludeSubjects }
+            owner = {
+                is_subject_other_than_tributary_trigger = yes
+                is_subject_of = FROM
+            }
+        }
+    }
+}
+
+Redux_Subject_SelectionChange_select = {
+    NOT = { has_province_flag = UI_Select }
+}
+
+Redux_Subject_SelectionChange_deselect = {
+    has_province_flag = UI_Select
+}
+
+Redux_Subject_SelectionState_select = {
+    is_state = yes
+    is_state_core = owner
+}
+
+# Match MT's state-scope removal, which clears selected territories as well.
+Redux_Subject_SelectionState_deselect = {
+    always = yes
+}

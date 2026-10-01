@@ -2768,6 +2768,21 @@ guiTypes = {
         fixedsize = yes
       }
       guiButtonType = {
+        name = "redux_subject_select"
+        scripted = yes
+        position = {
+          x = 490
+          y = 65
+        }
+        quadTextureSprite = "GFX_actions_button_mod"
+        tooltip = ""
+        tooltipText = ""
+        delayedTooltipText = ""
+        buttonText = ""
+        buttonFont = "vic_18"
+        Orientation = "UPPER_LEFT"
+      }
+      guiButtonType = {
         name = "prod_base_increase_button"
         position = {
           x = 490
@@ -2781,16 +2796,6 @@ guiTypes = {
         buttonFont = "vic_18"
         Orientation = "UPPER_LEFT"
         shortcut = "d"
-      }
-      guiButtonType = {
-        name = "redux_subject_select_dip"
-        scripted = yes
-        position = {
-          x = 490
-          y = 157
-        }
-        quadTextureSprite = "GFX_actions_button_mod_1"
-        Orientation = "UPPER_LEFT"
       }
       guiButtonType = {
         name = "prod_base_exploit_button"
@@ -2855,16 +2860,6 @@ guiTypes = {
         buttonFont = "vic_18"
         Orientation = "UPPER_LEFT"
         shortcut = "d"
-      }
-      guiButtonType = {
-        name = "redux_subject_select_mil"
-        scripted = yes
-        position = {
-          x = 490
-          y = 184
-        }
-        quadTextureSprite = "GFX_actions_button_mod_2"
-        Orientation = "UPPER_LEFT"
       }
       guiButtonType = {
         name = "mp_base_exploit_button"

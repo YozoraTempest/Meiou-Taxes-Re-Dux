@@ -6,25 +6,48 @@
 
 | 名称 | 用途 | 状态 |
 | --- | --- | --- |
-| `redux-tweak` | 数值调整与 MEIOU 建设体验修正 | 已加入属国省份选择、建设脚本修正，待游戏内验证 |
+| `redux-tweak` | 数值调整，不包含 UI 或属国建设修正 | `0.1.3`，当前保留独立模组骨架 |
+| `redux-subject` | 属国管理：省份选择、批量选择范围与建设修正 | `0.1.3`，独立选择按钮使用完整图案并直接更新地图图钉 |
 
 ## redux-tweak
 
-`redux-tweak.mod` 是启动器入口，`redux-tweak/descriptor.mod` 是模组目录内的描述符。两者声明依赖 `MEIOU and Taxes v3.0` 与 `Pop Display`，并沿用上游描述符中的 EU4 版本 `v1.37.*.*`。这里不使用 `replace_path`，避免遮蔽本体的整个目录。
+`redux-tweak.mod` 与 `redux-tweak/descriptor.mod` 只依赖 `MEIOU and Taxes v3.0`。当前运行目录仅包含描述符，为后续数值调整保留独立模组入口。
 
-在 Windows 上从仓库运行 `./Sync-ReduxTweak.ps1`，脚本默认同步到系统“文档”中的 EU4 `mod` 目录；也可以用 `-ModDirectory` 指定目标。脚本按已安装的 Pop Display GUI 生成本机适配的子模组覆盖文件，并校验安装底本的哈希；底本版本变化时需要先重新核对界面差异。同步完成后，在同一播放集内启用 MEIOU and Taxes v3.0、Pop Display 与 Redux Tweak。依赖声明负责确定 Redux 对前两者的覆盖优先级，不能只依据启动器显示顺序判断。
+省份界面、选择决议和属国建设修正均归 Redux Subject。数值调整继续放在 Redux Tweak 中。
 
-当前覆盖 `interface/provinceview.gui` 和 `common/scripted_effects/SYS-Construct.txt`：GUI 以 Pop Display 版本为底本，保留其省份界面控件，再在 DIP/MIL“钉选省份”按钮位置叠加仅适用于直属非朝贡属国省份的脚本按钮，并将其纳入父窗口的可点击范围；本国省份仍沿用原生按钮。`common/custom_gui/ReduxSubjectSelection.txt` 负责属国省份的选择切换，专用提示文字可用于辨别是否命中脚本按钮。建设脚本统一属国省份在计算与实际施工时的资格判断，并在没有可施工省份时阻止扣款。由于 EU4 对同路径文件采用覆盖方式，覆盖文件从 Pop Display 复制，功能差异保持最小。尚未加入数值平衡调整，按钮改动尚待重启游戏验证。
+## redux-subject
 
-后续添加调整时，只把需要覆盖的游戏路径放入 `redux-tweak/`，记录所依据的上游文件与具体差异，再通过游戏验证效果。
+Redux Subject 用于属国管理，当前内容包括属国省份选择、批量选择开关和建设修正。省份界面中的脚本化按钮是这些管理功能的操作入口。
 
-### 批量选择属国
+`redux-subject.mod` 与 `redux-subject/descriptor.mod` 声明依赖 `MEIOU and Taxes v3.0` 和 `Pop Display`，版本沿用上游 EU4 `v1.37.*.*`。省份界面以 Pop Display 的 `provinceview.gui` 为底本，保留其余控件与非 UTF-8 字节。两个 mod 均不使用 `replace_path`，彼此没有依赖。启用 Redux Subject 及其上游依赖即可使用当前功能。
 
-`0.1.1` 新增 `Bulk Selection: Include Subjects (OFF/ON)` 开关决议，默认关闭，状态按玩家国家保存。开启后，原有选择范围决议的相邻、Area、Region、正式州、全部领土和贸易节点模式会额外包含直属非朝贡属国的有效省份。关闭开关不清空已有选择，本国按钮的单省模式不扩展属国。
+### 省份选择
 
-`0.1.2` 修正了属国按钮与范围决议的联动：开关关闭时属国选择按钮不可用，开启后可用。点击属国省份时，使用宗主国玩家的选择范围，而不是属国自己的范围；单省模式只切换当前省份，六种批量模式按当前起点扩展到本国和直属非朝贡属国。正式州模式选中时仅包含正式州核心，取消时沿用上游清除全部已选领土的逻辑。选择冻结时按钮和开关均不可用。
+保留 MT 原生 `prod_base_increase_button` 和 `mp_base_increase_button` 的名称、位置、快捷键及发展度回调。在原选择列上方新增一个 `redux_subject_select` 脚本化按钮，位置为 `x = 490, y = 65`，使用上游完整的 55 × 55 选择按钮图案；按钮下沿为 `y = 120`，与 `y = 125` 的原有文字留出 5 个界面单位的间距。新增按钮位于 `province_window` 的直接子层，本国和直属属国共用同一处理器。该按钮通过鼠标点击使用，不分配快捷键；原有 `d` 快捷键沿用 MT/Pop Display 的原逻辑。
 
-省份 GUI 布局、原生按钮和快捷键定义保持不变，属国脚本按钮改为调用玩家作用域的选择效果。`common/on_actions/00_on_actions.txt` 以当前安装的 MEIOU 文件为底本，只在两个原生选择回调中增加扩展调用；`common/scripted_effects/SYS-Prov.txt` 只在 `Pow_UI` 和 `Pow_UI_R` 中增加相同扩展入口。本国按钮继续执行原有逻辑，属国扩展使用相同选择范围和 `SYS_Pin.005/006` 显示路径。游戏内决议与批量操作仍待重启游戏验证。
+选择范围仍由 MT 的原有决议设置。按钮直接通过 `FROM` 读取玩家的 `UI_SelectScope`，不读取属国自己的范围，也不创建 `Redux_SelectionActor` 保存目标。单省模式只切换当前省份，批量模式覆盖相邻、Area、Region、正式州、全部领土和贸易节点。正式州选中只处理正式州核心；取消沿用 MT 清除已选领土的逻辑。每个省份更新 `UI_Select` 时直接调用 MT 的 `POP_ChangePin`，按该省份的 `ID_Prov` 显示或隐藏红色图钉，同时清除该省的 `Pin_Show/Pin_Hide` 待处理标记。新增按钮不再依赖 `SYS_Pin.005/006` 事件完成显示，原 MT/Pop Display 入口继续沿用其事件逻辑。
+
+`Bulk Selection: Include Subjects (OFF/ON)` 决议迁移到 Redux Subject，保留原来的决议 ID 和 `Redux_IncludeSubjects` 国家标志，已有存档状态不变。关闭时新增按钮仍可选择本国省份，选择属国省份需要开启；开启后六种批量范围可包含直属属国。切换开关不清空已有选择。`UI_Freeze` 建设冻结期间新增按钮和决议不可用。原发展度选择按钮和 Pop Display 的其他快捷选择控件保留其原有处理逻辑。
+
+属国资格使用 MT 的 `is_subject_other_than_tributary_trigger` 与 `is_subject_of = FROM`，覆盖分封附庸、分权和叛乱分权附庸、军阀、委任领、名义附庸、各类联合统治、殖民领及其他扩展类型。按 MT 当前定义排除 `tributary_state` 与 `close_tributary_state`；`muscovite_tributary_state` 沿用 MT 原条件，仍可选择。该条件按直属关系识别属国，间接属国与其他国家的属国不在选择范围内。验证样本包含本机 MT 声明的 28 种类型，样本放在 `verification/`，不进入玩家包。
+
+### 属国建设
+
+`common/scripted_effects/SYS-Construct.txt` 已从 Redux Tweak 原样迁入 Redux Subject。该效果统一了属国省份在费用计算与实际施工时的资格判断，并在没有可施工省份时阻止扣款。Pop Display 的建设事件调用此效果；本机 MT 普通建设事件使用已展开的脚本，仍需另行统一其施工条件和建设主体。
+
+Redux Subject 不覆盖 MT 的 `00_on_actions.txt` 或 `SYS-Prov.txt`。脚本与 GUI 结构已做本地检查，实际点击、快捷键、钉选渲染和施工状态仍需重启游戏验证。
+
+### 同步与升级
+
+使用 POSIX shell 和 Node.js，同步入口不需要 PowerShell：
+
+```sh
+sh Sync-ReduxMods.sh "C:/Users/Vulon/OneDrive/文档/Paradox Interactive/Europa Universalis IV/mod"
+```
+
+默认同步两个 mod；也可在目录参数后指定 `redux-tweak` 或 `redux-subject`。脚本直接覆盖目标运行文件，更新启动器描述符路径，并移除旧 Tweak 中十个已迁出的 UI 与建设文件。同步 Redux Subject 时也会移除旧 `redux-ui.mod` 和已知 Redux UI 运行文件。同步只复制和清理文件，不创建备份、同步记录或临时副本，也不校验目标文件的历史哈希。
+
+原有 `Sync-ReduxTweak.ps1` 仅保留为已经使用过的同步入口，内部转交同一个 shell/Node 实现。新文档与 CI 均使用 `.sh`。脚本不修改播放集，需要在启动器中启用 Redux Subject。直接从玩家 ZIP 升级时，移除旧 `redux-ui.mod` 和 `redux-ui/`，完整替换旧 `redux-tweak/` 目录，再解压两个新包。更名保留 `Redux_IncludeSubjects` 标志和原有决议 ID，存档中的属国选择开关继续沿用。
 
 ## 构建与发布
 
@@ -50,11 +73,14 @@ CI 全部使用 `.sh` 入口，不调用 PowerShell。需要 Node.js 26、POSIX 
 ```sh
 sh ci/test.sh
 sh ci/run.sh verify redux-tweak
+sh ci/run.sh verify redux-subject
 sh ci/run.sh build nightly redux-tweak
+sh ci/run.sh build nightly redux-subject
 sh ci/run.sh build release redux-tweak
+sh ci/run.sh build release redux-subject
 ```
 
-产物位于 `dist/redux-tweak/`，玩家 ZIP 仅包含运行文件和许可证；校验和、构建元数据存放在 ZIP 外部。重复执行本地构建前需移走同名旧产物，打包器不会覆盖已有 ZIP。
+产物位于 `dist/<mod-id>/`，两个 mod 独立计算输入指纹并分别构建。玩家 ZIP 仅包含运行文件和许可证；校验和、构建元数据存放在 ZIP 外部。重复执行本地构建前需移走同名旧产物，打包器不会覆盖已有 ZIP。
 
 ### 添加其他 mod
 

@@ -1,0 +1,126 @@
+{
+  "source": "MEIOU and Taxes v3.0",
+  "source_file": "common/scripted_triggers/MEC-diplomacy_triggers.txt",
+  "source_sha256": "e3ed058e50acf2b20a9cd9bb4e00ec31093645719d2ec0bdb5149c7c4efdc6af",
+  "trigger": "is_subject_other_than_tributary_trigger = { #Ie Tags that cannot conduct independent diplomacy\n\tAND = {\n\t\tis_subject = yes\n\t\tNOT = { is_subject_of_type = tributary_state }\n\t\tNOT = { is_subject_of_type = close_tributary_state }\n\t}\n}",
+  "types": [
+    {
+      "id": "vassal",
+      "selectable": true
+    },
+    {
+      "id": "march",
+      "selectable": true
+    },
+    {
+      "id": "personal_union",
+      "selectable": true
+    },
+    {
+      "id": "personal_union_limited",
+      "selectable": true
+    },
+    {
+      "id": "client_vassal",
+      "selectable": true
+    },
+    {
+      "id": "client_march",
+      "selectable": true
+    },
+    {
+      "id": "colony",
+      "selectable": true
+    },
+    {
+      "id": "tributary_state",
+      "selectable": false
+    },
+    {
+      "id": "protectorate",
+      "selectable": true
+    },
+    {
+      "id": "custom_vassal",
+      "selectable": true
+    },
+    {
+      "id": "appanage_subject",
+      "selectable": true
+    },
+    {
+      "id": "overseas_fief",
+      "selectable": true
+    },
+    {
+      "id": "permanent_union",
+      "selectable": true
+    },
+    {
+      "id": "permanent_union_limited",
+      "selectable": true
+    },
+    {
+      "id": "decentralized_vassal",
+      "selectable": true
+    },
+    {
+      "id": "rebellious_decentralized_vassal",
+      "selectable": true
+    },
+    {
+      "id": "temporary_union",
+      "selectable": true
+    },
+    {
+      "id": "temporary_union_limited",
+      "selectable": true
+    },
+    {
+      "id": "daimyo_vassal",
+      "selectable": true
+    },
+    {
+      "id": "warlord",
+      "selectable": true
+    },
+    {
+      "id": "commission",
+      "selectable": true
+    },
+    {
+      "id": "close_tributary_state",
+      "selectable": false
+    },
+    {
+      "id": "muscovite_tributary_state",
+      "selectable": true
+    },
+    {
+      "id": "crown_colony",
+      "selectable": true
+    },
+    {
+      "id": "private_enterprise",
+      "selectable": true
+    },
+    {
+      "id": "self_governing_colony",
+      "selectable": true
+    },
+    {
+      "id": "nominal_subject",
+      "selectable": true
+    },
+    {
+      "id": "uef_permanent_union",
+      "selectable": true
+    }
+  ],
+  "selection_sprite": {
+    "name": "GFX_actions_button_mod",
+    "width": 55,
+    "height": 55,
+    "source_sha256": "f7de9f1ec1c27b791640d9fa367c28627fbc812f855fd2ea409df29edde244d3"
+  }
+}
