@@ -1,0 +1,256 @@
+namespace = ReduxTest
+
+province_event = {
+    id = ReduxTest.1
+    title = redux_test_blocked_title
+    desc = redux_test_blocked_desc
+    is_triggered_only = yes
+    trigger = { ReduxTest_CanStartProvince = yes }
+    option = {
+        name = redux_test_start
+        hidden_effect = {
+            if = {
+                limit = { ReduxTest_CanStartProvince = yes }
+                ReduxTest_Begin = { scenario = 1 }
+                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 }
+                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 }
+                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 }
+                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 }
+                ReduxTest_StartOrder = { type = 10 payer = 0 amount = 10 width = 10 }
+                ReduxTest_EndSetup = yes
+            }
+            else = { province_event = { id = ReduxTest.99 } }
+        }
+    }
+    option = { name = redux_test_cancel }
+}
+
+province_event = {
+    id = ReduxTest.2
+    title = redux_test_same_type_title
+    desc = redux_test_same_type_desc
+    is_triggered_only = yes
+    trigger = { ReduxTest_CanStartProvince = yes }
+    option = {
+        name = redux_test_start
+        hidden_effect = {
+            if = {
+                limit = { ReduxTest_CanStartProvince = yes }
+                ReduxTest_Begin = { scenario = 2 }
+                ReduxTest_StartOrder = { type = 10 payer = 4 amount = 2 width = 2 }
+                ReduxTest_StartOrder = { type = 10 payer = 0 amount = 10 width = 10 }
+                ReduxTest_EndSetup = yes
+            }
+            else = { province_event = { id = ReduxTest.99 } }
+        }
+    }
+    option = { name = redux_test_cancel }
+}
+
+province_event = {
+    id = ReduxTest.3
+    title = redux_test_different_type_title
+    desc = redux_test_different_type_desc
+    is_triggered_only = yes
+    trigger = { ReduxTest_CanStartProvince = yes }
+    option = {
+        name = redux_test_start
+        hidden_effect = {
+            if = {
+                limit = { ReduxTest_CanStartProvince = yes }
+                ReduxTest_Begin = { scenario = 3 }
+                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 }
+                ReduxTest_StartOrder = { type = 10 payer = 0 amount = 10 width = 10 }
+                ReduxTest_EndSetup = yes
+            }
+            else = { province_event = { id = ReduxTest.99 } }
+        }
+    }
+    option = { name = redux_test_cancel }
+}
+
+province_event = {
+    id = ReduxTest.4
+    title = redux_test_width_two_title
+    desc = redux_test_width_two_desc
+    is_triggered_only = yes
+    trigger = { ReduxTest_CanStartProvince = yes }
+    option = {
+        name = redux_test_start
+        hidden_effect = {
+            if = {
+                limit = { ReduxTest_CanStartProvince = yes }
+                ReduxTest_Begin = { scenario = 4 }
+                ReduxTest_StartOrder = { type = 10 payer = 0 amount = 10 width = 2 }
+                ReduxTest_EndSetup = yes
+            }
+            else = { province_event = { id = ReduxTest.99 } }
+        }
+    }
+    option = { name = redux_test_cancel }
+}
+
+province_event = {
+    id = ReduxTest.5
+    title = redux_test_manual_title
+    desc = redux_test_manual_desc
+    is_triggered_only = yes
+    trigger = { ReduxTest_CanStartProvince = yes }
+    option = {
+        name = redux_test_start
+        hidden_effect = {
+            if = {
+                limit = { ReduxTest_CanStartProvince = yes }
+                ReduxTest_Begin = { scenario = 5 }
+                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 }
+                ReduxTest_EndSetup = yes
+            }
+            else = { province_event = { id = ReduxTest.99 } }
+        }
+    }
+    option = { name = redux_test_cancel }
+}
+
+province_event = {
+    id = ReduxTest.6
+    title = redux_test_release_title
+    desc = redux_test_release_desc
+    is_triggered_only = yes
+    trigger = { has_province_flag = ReduxTestProvince owner = { ai = no } }
+    option = {
+        name = redux_test_confirm
+        hidden_effect = {
+            if = { limit = { has_province_flag = ReduxTestProvince owner = { ai = no } is_variable_equal = { which = ReduxTestScenario value = 1 } NOT = { has_province_flag = ReduxTestReleased } }
+                ReduxTest_Release = yes
+            }
+            else = { province_event = { id = ReduxTest.99 } }
+        }
+    }
+    option = { name = redux_test_cancel }
+}
+
+province_event = {
+    id = ReduxTest.7
+    title = redux_test_refill_title
+    desc = redux_test_refill_desc
+    is_triggered_only = yes
+    trigger = { has_province_flag = ReduxTestProvince owner = { ai = no } }
+    option = {
+        name = redux_test_confirm
+        hidden_effect = {
+            if = { limit = { has_province_flag = ReduxTestProvince owner = { ai = no } ReduxTest_HasManualOrder = yes }
+                ReduxTest_Capture = yes
+                Redux_ConstructionRefill = yes
+                ReduxTest_Audit = yes
+            }
+            else = { province_event = { id = ReduxTest.99 } }
+        }
+    }
+    option = { name = redux_test_cancel }
+}
+
+province_event = {
+    id = ReduxTest.8
+    title = redux_test_advance_title
+    desc = redux_test_advance_desc
+    is_triggered_only = yes
+    trigger = { has_province_flag = ReduxTestProvince owner = { ai = no } }
+    option = {
+        name = redux_test_confirm
+        hidden_effect = {
+            if = { limit = { has_province_flag = ReduxTestProvince owner = { ai = no } ReduxTest_OnlyInfrastructure = yes NOT = { ReduxTest_EmptyProvince = yes } }
+                ReduxTest_Advance = yes
+            }
+            else = { province_event = { id = ReduxTest.99 } }
+        }
+    }
+    option = { name = redux_test_cancel }
+}
+
+province_event = {
+    id = ReduxTest.9
+    title = redux_test_cleanup_title
+    desc = redux_test_cleanup_desc
+    is_triggered_only = yes
+    trigger = { has_province_flag = ReduxTestProvince owner = { ai = no } }
+    option = {
+        name = redux_test_confirm
+        hidden_effect = {
+            if = { limit = { has_province_flag = ReduxTestProvince owner = { ai = no } always = yes }
+                ReduxTest_Cleanup = yes
+            }
+            else = { province_event = { id = ReduxTest.99 } }
+        }
+    }
+    option = { name = redux_test_cancel }
+}
+
+province_event = {
+    id = ReduxTest.10
+    title = redux_test_pass_title
+    desc = redux_test_audit_desc
+    is_triggered_only = yes
+    option = { name = redux_test_ok }
+}
+
+province_event = {
+    id = ReduxTest.11
+    title = redux_test_fail_title
+    desc = redux_test_audit_desc
+    is_triggered_only = yes
+    option = { name = redux_test_ok }
+}
+
+province_event = {
+    id = ReduxTest.20
+    title = redux_test_status_title
+    desc = redux_test_status_desc
+    is_triggered_only = yes
+    trigger = { has_province_flag = ReduxTestProvince owner = { ai = no } }
+    immediate = { ReduxTest_Measure = yes }
+    option = { name = redux_test_ok }
+}
+
+province_event = {
+    id = ReduxTest.21
+    title = redux_test_advance_result_title
+    desc = redux_test_advance_result_desc
+    is_triggered_only = yes
+    option = { name = redux_test_ok }
+}
+
+province_event = {
+    id = ReduxTest.22
+    title = redux_test_cleanup_result_title
+    desc = redux_test_cleanup_result_desc
+    is_triggered_only = yes
+    option = { name = redux_test_ok }
+}
+
+province_event = {
+    id = ReduxTest.99
+    title = redux_test_invalid_title
+    desc = redux_test_invalid_desc
+    is_triggered_only = yes
+    option = { name = redux_test_ok }
+}
+
+country_event = {
+    id = ReduxTest.30
+    title = redux_test_native_event_title
+    desc = redux_test_native_event_desc
+    is_triggered_only = yes
+    trigger = { ai = no exists = AAA any_owned_province = { has_province_flag = ReduxTestProvince } }
+    option = {
+        name = redux_test_confirm
+        hidden_effect = {
+            if = { limit = { exists = AAA NOT = { has_global_flag = POP_Sim }
+                any_owned_province = { has_province_flag = ReduxTestProvince } }
+                AAA = { country_event = { id = ReduxConstruction.1 } }
+                every_owned_province = { limit = { has_province_flag = ReduxTestProvince }
+                    province_event = { id = ReduxTest.20 days = 1 } }
+            }
+        }
+    }
+    option = { name = redux_test_cancel }
+}

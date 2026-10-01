@@ -24,6 +24,7 @@
         "verification/VERIFY.sh",
         "verification/VERIFY.mjs",
         "verification/redux-tweak/VERIFY.mjs",
+        "verification/redux-tweak/runtime.mjs",
         "verification/redux-tweak/mt-construction.json"
       ],
       "tests": [
@@ -57,6 +58,36 @@
         ["node", "verification/redux-subject/VERIFY.mjs"]
       ],
       "depends_on": []
+    },
+    {
+      "id": "redux-test",
+      "name": "Redux Test",
+      "files": [
+        "descriptor.mod",
+        "common/scripted_effects/ReduxTestConstruction.txt",
+        "common/scripted_triggers/ReduxTestConstruction.txt",
+        "customizable_localization/ReduxTestConstruction.txt",
+        "decisions/ReduxTestConstruction.txt",
+        "events/ReduxTestConstruction.txt",
+        "localisation/redux-test_l_english.yml"
+      ],
+      "test_inputs": [
+        "verification/VERIFY.mjs",
+        "verification/redux-test/VERIFY.mjs",
+        "verification/redux-test/LOCALISATION.mjs",
+        "verification/redux-tweak/runtime.mjs",
+        "verification/redux-tweak/mt-construction.json",
+        "localisation-src/redux-test_l_english.yml",
+        "ci/localisation.mjs",
+        "ci/vendor/eu4-special-escape/encode.mjs",
+        "ci/vendor/eu4-special-escape/LICENSE"
+      ],
+      "tests": [
+        ["node", "verification/VERIFY.mjs", ".", "redux-test"],
+        ["node", "verification/redux-test/VERIFY.mjs"],
+        ["node", "verification/redux-test/LOCALISATION.mjs"]
+      ],
+      "depends_on": ["redux-tweak"]
     }
   ]
 }

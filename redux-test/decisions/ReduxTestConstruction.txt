@@ -1,0 +1,93 @@
+country_decisions = {
+    redux_test_blocked = {
+        major = no
+        potential = { ai = no NOT = { any_owned_province = { has_province_flag = ReduxTestProvince } } }
+        allow = { custom_trigger_tooltip = { tooltip = redux_test_start_requirements ReduxTest_CanStart = yes } }
+        effect = { random_owned_province = { limit = { has_province_flag = UI_Select ReduxTest_EmptyProvince = yes }
+            province_event = { id = ReduxTest.1 } } }
+        ai_will_do = { factor = 0 }
+    }
+    redux_test_same_type = {
+        major = no
+        potential = { ai = no NOT = { any_owned_province = { has_province_flag = ReduxTestProvince } } }
+        allow = { custom_trigger_tooltip = { tooltip = redux_test_start_requirements ReduxTest_CanStart = yes } }
+        effect = { random_owned_province = { limit = { has_province_flag = UI_Select ReduxTest_EmptyProvince = yes }
+            province_event = { id = ReduxTest.2 } } }
+        ai_will_do = { factor = 0 }
+    }
+    redux_test_different_type = {
+        major = no
+        potential = { ai = no NOT = { any_owned_province = { has_province_flag = ReduxTestProvince } } }
+        allow = { custom_trigger_tooltip = { tooltip = redux_test_start_requirements ReduxTest_CanStart = yes } }
+        effect = { random_owned_province = { limit = { has_province_flag = UI_Select ReduxTest_EmptyProvince = yes }
+            province_event = { id = ReduxTest.3 } } }
+        ai_will_do = { factor = 0 }
+    }
+    redux_test_width_two = {
+        major = no
+        potential = { ai = no NOT = { any_owned_province = { has_province_flag = ReduxTestProvince } } }
+        allow = { custom_trigger_tooltip = { tooltip = redux_test_start_requirements ReduxTest_CanStart = yes } }
+        effect = { random_owned_province = { limit = { has_province_flag = UI_Select ReduxTest_EmptyProvince = yes }
+            province_event = { id = ReduxTest.4 } } }
+        ai_will_do = { factor = 0 }
+    }
+    redux_test_manual = {
+        major = no
+        potential = { ai = no NOT = { any_owned_province = { has_province_flag = ReduxTestProvince } } }
+        allow = { custom_trigger_tooltip = { tooltip = redux_test_start_requirements ReduxTest_CanStart = yes } }
+        effect = { random_owned_province = { limit = { has_province_flag = UI_Select ReduxTest_EmptyProvince = yes }
+            province_event = { id = ReduxTest.5 } } }
+        ai_will_do = { factor = 0 }
+    }
+    redux_test_release = {
+        major = no
+        potential = { ai = no any_owned_province = { has_province_flag = ReduxTestProvince } }
+        allow = { NOT = { has_country_flag = UI_Freeze } NOT = { has_global_flag = POP_Sim }
+            any_owned_province = { has_province_flag = ReduxTestProvince is_variable_equal = { which = ReduxTestScenario value = 1 } NOT = { has_province_flag = ReduxTestReleased } } }
+        effect = { every_owned_province = { limit = { has_province_flag = ReduxTestProvince is_variable_equal = { which = ReduxTestScenario value = 1 } NOT = { has_province_flag = ReduxTestReleased } }
+            province_event = { id = ReduxTest.6 } } }
+        ai_will_do = { factor = 0 }
+    }
+    redux_test_refill = {
+        major = no
+        potential = { ai = no any_owned_province = { has_province_flag = ReduxTestProvince } }
+        allow = { NOT = { has_country_flag = UI_Freeze } NOT = { has_global_flag = POP_Sim }
+            any_owned_province = { has_province_flag = ReduxTestProvince ReduxTest_HasManualOrder = yes } }
+        effect = { every_owned_province = { limit = { has_province_flag = ReduxTestProvince ReduxTest_HasManualOrder = yes }
+            province_event = { id = ReduxTest.7 } } }
+        ai_will_do = { factor = 0 }
+    }
+    redux_test_advance = {
+        major = no
+        potential = { ai = no any_owned_province = { has_province_flag = ReduxTestProvince } }
+        allow = { NOT = { has_country_flag = UI_Freeze } NOT = { has_global_flag = POP_Sim }
+            any_owned_province = { has_province_flag = ReduxTestProvince ReduxTest_OnlyInfrastructure = yes NOT = { ReduxTest_EmptyProvince = yes } } }
+        effect = { every_owned_province = { limit = { has_province_flag = ReduxTestProvince ReduxTest_OnlyInfrastructure = yes NOT = { ReduxTest_EmptyProvince = yes } }
+            province_event = { id = ReduxTest.8 } } }
+        ai_will_do = { factor = 0 }
+    }
+    redux_test_cleanup = {
+        major = no
+        potential = { ai = no any_owned_province = { has_province_flag = ReduxTestProvince } }
+        allow = { NOT = { has_country_flag = UI_Freeze } NOT = { has_global_flag = POP_Sim }
+            any_owned_province = { has_province_flag = ReduxTestProvince always = yes } }
+        effect = { every_owned_province = { limit = { has_province_flag = ReduxTestProvince always = yes }
+            province_event = { id = ReduxTest.9 } } }
+        ai_will_do = { factor = 0 }
+    }
+    redux_test_status = {
+        major = no
+        potential = { ai = no any_owned_province = { has_province_flag = ReduxTestProvince } }
+        allow = { always = yes }
+        effect = { every_owned_province = { limit = { has_province_flag = ReduxTestProvince }
+            province_event = { id = ReduxTest.20 } } }
+        ai_will_do = { factor = 0 }
+    }
+    redux_test_native_event = {
+        major = no
+        potential = { ai = no any_owned_province = { has_province_flag = ReduxTestProvince } }
+        allow = { exists = AAA NOT = { has_global_flag = POP_Sim } NOT = { has_country_flag = UI_Freeze } }
+        effect = { country_event = { id = ReduxTest.30 } }
+        ai_will_do = { factor = 0 }
+    }
+}

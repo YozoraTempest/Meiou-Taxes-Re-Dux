@@ -1,0 +1,379 @@
+# All fixtures use MT's own project allocator and resource costs.
+ReduxTest_StartOrder = {
+    set_key = { lhs = Construct_Amount value = $amount$ }
+    set_key = { lhs = Construct_Parallel value = $width$ }
+    Infra_StartProject = { id = $type$ owner = $payer$ height = Construct_Amount width = Construct_Parallel }
+}
+
+ReduxTest_Begin = {
+    set_province_flag = ReduxTestProvince
+    clr_province_flag = ReduxTestReleased
+    set_variable = { which = ReduxTestScenario value = $scenario$ }
+    set_var_from_key = { var = ReduxTestOriginalAmount key = Construct_Amount }
+    set_var_from_key = { var = ReduxTestOriginalParallel key = Construct_Parallel }
+}
+
+ReduxTest_PartialProgress = {
+    if = {
+        limit = { ReduxTest_ManualSlot = { slot = $slot$ } }
+        multiply_key = { lhs = Infra_S$slot$6 value = 0.5 }
+        multiply_key = { lhs = Infra_S$slot$10 value = 0.5 }
+        multiply_key = { lhs = Infra_S$slot$22 value = 0.5 }
+        multiply_key = { lhs = Infra_S$slot$23 value = 0.5 }
+        multiply_key = { lhs = Infra_S$slot$24 value = 0.5 }
+        multiply_key = { lhs = Infra_S$slot$41 value = 0.5 }
+        multiply_key = { lhs = Infra_S$slot$R value = 0.5 }
+        multiply_key = { lhs = Infra_S$slot$UL value = 0.5 }
+        set_key = { lhs = Infra_S$slot$Spend value = 0.123 }
+    }
+}
+
+ReduxTest_EndSetup = {
+    ReduxTest_PartialProgress = { slot = 0 }
+    ReduxTest_PartialProgress = { slot = 1 }
+    ReduxTest_PartialProgress = { slot = 2 }
+    ReduxTest_PartialProgress = { slot = 3 }
+    ReduxTest_PartialProgress = { slot = 4 }
+    ReduxTest_PartialProgress = { slot = 5 }
+    ReduxTest_PartialProgress = { slot = 6 }
+    ReduxTest_PartialProgress = { slot = 7 }
+    ReduxTest_PartialProgress = { slot = 8 }
+    ReduxTest_PartialProgress = { slot = 9 }
+    set_key_from_var = { key = Construct_Amount var = ReduxTestOriginalAmount }
+    set_key_from_var = { key = Construct_Parallel var = ReduxTestOriginalParallel }
+    ReduxTest_Measure = yes
+    province_event = { id = ReduxTest.20 }
+}
+
+ReduxTest_CountSlot = {
+    if = {
+        limit = { has_province_flag = Infra_S$slot$ }
+        change_variable = { which = ReduxTestActive value = 1 }
+        change_variable = { which = ReduxTestUnits value = 1 }
+        change_var_by_key = { var = ReduxTestUnits key = Infra_S$slot$Size }
+        if = {
+            limit = { ReduxTest_ManualSlot = { slot = $slot$ } }
+            change_variable = { which = ReduxTestManual value = 1 }
+            change_variable = { which = ReduxTestManualUnits value = 1 }
+            change_var_by_key = { var = ReduxTestManualUnits key = Infra_S$slot$Size }
+            if = {
+                limit = { is_variable_equal = { which = ReduxTestManual value = 1 } }
+                set_var_from_key = { var = ReduxTestWidth key = Infra_S$slot$Parallel }
+                set_var_from_key = { var = ReduxTestType key = Infra_S$slot$ }
+            }
+            else = {
+                set_var_from_key = { var = ReduxTestCurrent key = Infra_S$slot$Parallel }
+                if = { limit = { NOT = { is_variable_equal = { which = ReduxTestCurrent which = ReduxTestWidth } } }
+                    set_province_flag = ReduxTestMixedOrders }
+                set_var_from_key = { var = ReduxTestCurrent key = Infra_S$slot$ }
+                if = { limit = { NOT = { is_variable_equal = { which = ReduxTestCurrent which = ReduxTestType } } }
+                    set_province_flag = ReduxTestMixedOrders }
+            }
+        }
+        else = { change_variable = { which = ReduxTestOther value = 1 } }
+    }
+}
+
+ReduxTest_Measure = {
+    set_variable = { which = ReduxTestActive value = 0 }
+    set_variable = { which = ReduxTestUnits value = 0 }
+    set_variable = { which = ReduxTestManual value = 0 }
+    set_variable = { which = ReduxTestManualUnits value = 0 }
+    set_variable = { which = ReduxTestOther value = 0 }
+    set_variable = { which = ReduxTestWidth value = 0 }
+    set_variable = { which = ReduxTestType value = 0 }
+    clr_province_flag = ReduxTestMixedOrders
+    ReduxTest_CountSlot = { slot = 0 }
+    ReduxTest_CountSlot = { slot = 1 }
+    ReduxTest_CountSlot = { slot = 2 }
+    ReduxTest_CountSlot = { slot = 3 }
+    ReduxTest_CountSlot = { slot = 4 }
+    ReduxTest_CountSlot = { slot = 5 }
+    ReduxTest_CountSlot = { slot = 6 }
+    ReduxTest_CountSlot = { slot = 7 }
+    ReduxTest_CountSlot = { slot = 8 }
+    ReduxTest_CountSlot = { slot = 9 }
+    set_variable = { which = ReduxTestExpected which = ReduxTestWidth }
+    if = { limit = { check_variable = { which = ReduxTestExpected value = 10 } }
+        set_variable = { which = ReduxTestExpected value = 10 } }
+    if = { limit = { check_variable = { which = ReduxTestExpected which = ReduxTestManualUnits } }
+        set_variable = { which = ReduxTestExpected which = ReduxTestManualUnits } }
+    set_variable = { which = ReduxTestRoom value = 10 }
+    subtract_variable = { which = ReduxTestRoom which = ReduxTestOther }
+    if = { limit = { check_variable = { which = ReduxTestExpected which = ReduxTestRoom } }
+        set_variable = { which = ReduxTestExpected which = ReduxTestRoom } }
+    set_variable = { which = ReduxTestBuilt value = 0 }
+    change_var_by_key = { var = ReduxTestBuilt key = Infra_PathingSize }
+    change_var_by_key = { var = ReduxTestBuilt key = Infra_HarbourageSize }
+    change_var_by_key = { var = ReduxTestBuilt key = Infra_AmenitiesSize }
+    change_var_by_key = { var = ReduxTestBuilt key = Infra_IrrigationSize }
+    change_var_by_key = { var = ReduxTestBuilt key = Infra_CapitolSize }
+    change_var_by_key = { var = ReduxTestBuilt key = Infra_GarrisonSize }
+    owner = {
+        set_var_from_key = { var = ReduxTestWindowWidth key = Construct_Parallel }
+        change_variable = { which = ReduxTestWindowWidth value = 1 }
+    }
+}
+
+ReduxTest_CaptureSlot = {
+    clr_province_flag = ReduxTestBeforeS$slot$
+    if = {
+        limit = { has_province_flag = Infra_S$slot$ }
+        set_province_flag = ReduxTestBeforeS$slot$
+        set_var_from_key = { var = ReduxTestBeforeS$slot$Type key = Infra_S$slot$ }
+        set_var_from_key = { var = ReduxTestBeforeS$slot$Owner key = Infra_S$slot$Owner }
+        set_var_from_key = { var = ReduxTestBeforeS$slot$Parallel key = Infra_S$slot$Parallel }
+        set_var_from_key = { var = ReduxTestBeforeS$slot$Spend key = Infra_S$slot$Spend }
+        set_var_from_key = { var = ReduxTestBeforeS$slot$6 key = Infra_S$slot$6 }
+        set_var_from_key = { var = ReduxTestBeforeS$slot$10 key = Infra_S$slot$10 }
+        set_var_from_key = { var = ReduxTestBeforeS$slot$22 key = Infra_S$slot$22 }
+        set_var_from_key = { var = ReduxTestBeforeS$slot$23 key = Infra_S$slot$23 }
+        set_var_from_key = { var = ReduxTestBeforeS$slot$24 key = Infra_S$slot$24 }
+        set_var_from_key = { var = ReduxTestBeforeS$slot$41 key = Infra_S$slot$41 }
+        set_var_from_key = { var = ReduxTestBeforeS$slot$R key = Infra_S$slot$R }
+        set_var_from_key = { var = ReduxTestBeforeS$slot$UL key = Infra_S$slot$UL }
+    }
+}
+
+ReduxTest_Capture = {
+    ReduxTest_Measure = yes
+    set_variable = { which = ReduxTestBeforeActive which = ReduxTestActive }
+    set_variable = { which = ReduxTestBeforeManual which = ReduxTestManual }
+    set_variable = { which = ReduxTestBeforeManualUnits which = ReduxTestManualUnits }
+    set_variable = { which = ReduxTestBeforeExpected which = ReduxTestExpected }
+    set_variable = { which = ReduxTestBeforeUnits which = ReduxTestUnits }
+    set_variable = { which = ReduxTestBeforeBuilt which = ReduxTestBuilt }
+    clr_province_flag = ReduxTestSlotsFailed
+    clr_province_flag = ReduxTestTotalsFailed
+    clr_province_flag = ReduxTestProgressFailed
+    clr_province_flag = ReduxTestFundsFailed
+    set_var_from_key = { var = ReduxTestBeforeInfra_InConstPathing key = Infra_InConstPathing }
+    set_var_from_key = { var = ReduxTestBeforeInfra_InConstHarbourage key = Infra_InConstHarbourage }
+    set_var_from_key = { var = ReduxTestBeforeInfra_InConstAmenities key = Infra_InConstAmenities }
+    set_var_from_key = { var = ReduxTestBeforeInfra_InConstIrrigation key = Infra_InConstIrrigation }
+    set_var_from_key = { var = ReduxTestBeforeInfra_InConstCapitol key = Infra_InConstCapitol }
+    set_var_from_key = { var = ReduxTestBeforeInfra_InConstGarrison key = Infra_InConstGarrison }
+    set_var_from_key = { var = ReduxTestBeforeInfra_Wealth key = Infra_Wealth }
+    set_var_from_key = { var = ReduxTestBeforeBuilding_ProjectWealth key = Building_ProjectWealth }
+    set_var_from_key = { var = ReduxTestBeforeNO_Wealth key = NO_Wealth }
+    set_var_from_key = { var = ReduxTestBeforeNO_SpendPrp key = NO_SpendPrp }
+    set_var_from_key = { var = ReduxTestBeforeInfra_Spend key = Infra_Spend }
+    set_var_from_key = { var = ReduxTestBeforeBuilding_ProjectSpend key = Building_ProjectSpend }
+    ReduxTest_CaptureSlot = { slot = 0 }
+    ReduxTest_CaptureSlot = { slot = 1 }
+    ReduxTest_CaptureSlot = { slot = 2 }
+    ReduxTest_CaptureSlot = { slot = 3 }
+    ReduxTest_CaptureSlot = { slot = 4 }
+    ReduxTest_CaptureSlot = { slot = 5 }
+    ReduxTest_CaptureSlot = { slot = 6 }
+    ReduxTest_CaptureSlot = { slot = 7 }
+    ReduxTest_CaptureSlot = { slot = 8 }
+    ReduxTest_CaptureSlot = { slot = 9 }
+}
+
+ReduxTest_CompareKey = {
+    set_var_from_key = { var = ReduxTestCurrent key = $key$ }
+    if = { limit = { NOT = { is_variable_equal = { which = ReduxTestCurrent which = $before$ } } }
+        set_province_flag = $failure$ }
+}
+
+ReduxTest_CheckSlot = {
+    if = {
+        limit = { has_province_flag = ReduxTestBeforeS$slot$ }
+        if = { limit = { NOT = { has_province_flag = Infra_S$slot$ } }
+            set_province_flag = ReduxTestProgressFailed }
+        ReduxTest_CompareKey = { key = Infra_S$slot$ before = ReduxTestBeforeS$slot$Type failure = ReduxTestProgressFailed }
+        ReduxTest_CompareKey = { key = Infra_S$slot$Owner before = ReduxTestBeforeS$slot$Owner failure = ReduxTestProgressFailed }
+        ReduxTest_CompareKey = { key = Infra_S$slot$Parallel before = ReduxTestBeforeS$slot$Parallel failure = ReduxTestProgressFailed }
+        ReduxTest_CompareKey = { key = Infra_S$slot$Spend before = ReduxTestBeforeS$slot$Spend failure = ReduxTestProgressFailed }
+        ReduxTest_CompareKey = { key = Infra_S$slot$6 before = ReduxTestBeforeS$slot$6 failure = ReduxTestProgressFailed }
+        ReduxTest_CompareKey = { key = Infra_S$slot$10 before = ReduxTestBeforeS$slot$10 failure = ReduxTestProgressFailed }
+        ReduxTest_CompareKey = { key = Infra_S$slot$22 before = ReduxTestBeforeS$slot$22 failure = ReduxTestProgressFailed }
+        ReduxTest_CompareKey = { key = Infra_S$slot$23 before = ReduxTestBeforeS$slot$23 failure = ReduxTestProgressFailed }
+        ReduxTest_CompareKey = { key = Infra_S$slot$24 before = ReduxTestBeforeS$slot$24 failure = ReduxTestProgressFailed }
+        ReduxTest_CompareKey = { key = Infra_S$slot$41 before = ReduxTestBeforeS$slot$41 failure = ReduxTestProgressFailed }
+        ReduxTest_CompareKey = { key = Infra_S$slot$R before = ReduxTestBeforeS$slot$R failure = ReduxTestProgressFailed }
+        ReduxTest_CompareKey = { key = Infra_S$slot$UL before = ReduxTestBeforeS$slot$UL failure = ReduxTestProgressFailed }
+    }
+}
+
+ReduxTest_Audit = {
+    ReduxTest_Measure = yes
+    if = { limit = { OR = {
+        NOT = { is_variable_equal = { which = ReduxTestManual which = ReduxTestBeforeExpected } }
+        check_variable = { which = ReduxTestActive value = 11 }
+        has_province_flag = ReduxTestMixedOrders
+    } } set_province_flag = ReduxTestSlotsFailed }
+    if = { limit = { OR = {
+        NOT = { is_variable_equal = { which = ReduxTestUnits which = ReduxTestBeforeUnits } }
+        NOT = { is_variable_equal = { which = ReduxTestManualUnits which = ReduxTestBeforeManualUnits } }
+    } }
+        set_province_flag = ReduxTestTotalsFailed }
+    ReduxTest_CompareKey = { key = Infra_InConstPathing before = ReduxTestBeforeInfra_InConstPathing failure = ReduxTestTotalsFailed }
+    ReduxTest_CompareKey = { key = Infra_InConstHarbourage before = ReduxTestBeforeInfra_InConstHarbourage failure = ReduxTestTotalsFailed }
+    ReduxTest_CompareKey = { key = Infra_InConstAmenities before = ReduxTestBeforeInfra_InConstAmenities failure = ReduxTestTotalsFailed }
+    ReduxTest_CompareKey = { key = Infra_InConstIrrigation before = ReduxTestBeforeInfra_InConstIrrigation failure = ReduxTestTotalsFailed }
+    ReduxTest_CompareKey = { key = Infra_InConstCapitol before = ReduxTestBeforeInfra_InConstCapitol failure = ReduxTestTotalsFailed }
+    ReduxTest_CompareKey = { key = Infra_InConstGarrison before = ReduxTestBeforeInfra_InConstGarrison failure = ReduxTestTotalsFailed }
+    ReduxTest_CompareKey = { key = Infra_Wealth before = ReduxTestBeforeInfra_Wealth failure = ReduxTestFundsFailed }
+    ReduxTest_CompareKey = { key = Building_ProjectWealth before = ReduxTestBeforeBuilding_ProjectWealth failure = ReduxTestFundsFailed }
+    ReduxTest_CompareKey = { key = NO_Wealth before = ReduxTestBeforeNO_Wealth failure = ReduxTestFundsFailed }
+    ReduxTest_CompareKey = { key = NO_SpendPrp before = ReduxTestBeforeNO_SpendPrp failure = ReduxTestFundsFailed }
+    ReduxTest_CompareKey = { key = Infra_Spend before = ReduxTestBeforeInfra_Spend failure = ReduxTestFundsFailed }
+    ReduxTest_CompareKey = { key = Building_ProjectSpend before = ReduxTestBeforeBuilding_ProjectSpend failure = ReduxTestFundsFailed }
+    ReduxTest_CheckSlot = { slot = 0 }
+    ReduxTest_CheckSlot = { slot = 1 }
+    ReduxTest_CheckSlot = { slot = 2 }
+    ReduxTest_CheckSlot = { slot = 3 }
+    ReduxTest_CheckSlot = { slot = 4 }
+    ReduxTest_CheckSlot = { slot = 5 }
+    ReduxTest_CheckSlot = { slot = 6 }
+    ReduxTest_CheckSlot = { slot = 7 }
+    ReduxTest_CheckSlot = { slot = 8 }
+    ReduxTest_CheckSlot = { slot = 9 }
+    log = "Redux Test refill: [Root.GetName]; manual [Root.ReduxTestBeforeManual.GetValue] -> [Root.ReduxTestManual.GetValue]; expected [Root.ReduxTestExpected.GetValue]; units [Root.ReduxTestBeforeUnits.GetValue] -> [Root.ReduxTestUnits.GetValue]"
+    if = { limit = { OR = {
+        has_province_flag = ReduxTestSlotsFailed
+        has_province_flag = ReduxTestTotalsFailed
+        has_province_flag = ReduxTestProgressFailed
+        has_province_flag = ReduxTestFundsFailed
+    } } province_event = { id = ReduxTest.11 } }
+    else = { province_event = { id = ReduxTest.10 } }
+}
+
+# Cancel through MT's completion path to maintain its display counters, then
+# reverse the temporary completed unit. Previously completed units remain.
+ReduxTest_CancelInfrastructure = {
+    subtract_key = { lhs = Infra_InConst$infra$ which = Infra_S$slot$Size }
+    set_key = { lhs = Infra_S$slot$Size value = 0 }
+    set_key = { lhs = Infra_S$slot$6 value = 0 }
+    set_key = { lhs = Infra_S$slot$10 value = 0 }
+    set_key = { lhs = Infra_S$slot$22 value = 0 }
+    set_key = { lhs = Infra_S$slot$23 value = 0 }
+    set_key = { lhs = Infra_S$slot$24 value = 0 }
+    set_key = { lhs = Infra_S$slot$41 value = 0 }
+    set_key = { lhs = Infra_S$slot$R value = 0 }
+    set_key = { lhs = Infra_S$slot$UL value = 0 }
+    Infra_CheckProject = { slot = $slot$ }
+    subtract_key = { lhs = Infra_$infra$Size value = 1 }
+    Infra_SetRankInfra = { type = $infra$ }
+}
+
+ReduxTest_CancelSlot = {
+    if = {
+        limit = {
+            has_province_flag = Infra_S$slot$
+            check_key = { lhs = Infra_S$slot$ value = 8 }
+            NOT = { check_key = { lhs = Infra_S$slot$ value = 15 } }
+        }
+        Infra_RunScript = { id = Infra_S$slot$ script = ReduxTest_CancelInfrastructure paramInfra = slot inpInfra = $slot$ }
+    }
+}
+
+ReduxTest_ReleaseBlocker = {
+    if = {
+        limit = {
+            has_province_flag = Infra_S$slot$
+            is_key_equal = { lhs = Infra_S$slot$ value = 8 }
+            is_key_equal = { lhs = Infra_S$slot$Owner value = 4 }
+        }
+        ReduxTest_CancelSlot = { slot = $slot$ }
+    }
+}
+
+ReduxTest_Release = {
+    ReduxTest_ReleaseBlocker = { slot = 0 }
+    ReduxTest_ReleaseBlocker = { slot = 1 }
+    ReduxTest_ReleaseBlocker = { slot = 2 }
+    ReduxTest_ReleaseBlocker = { slot = 3 }
+    ReduxTest_ReleaseBlocker = { slot = 4 }
+    ReduxTest_ReleaseBlocker = { slot = 5 }
+    ReduxTest_ReleaseBlocker = { slot = 6 }
+    ReduxTest_ReleaseBlocker = { slot = 7 }
+    ReduxTest_ReleaseBlocker = { slot = 8 }
+    ReduxTest_ReleaseBlocker = { slot = 9 }
+    set_province_flag = ReduxTestReleased
+    Infra_RefreshModifier = yes
+    ReduxTest_Measure = yes
+    province_event = { id = ReduxTest.20 }
+}
+
+# One fully supplied MT construction check, without annual payment simulation.
+ReduxTest_Advance = {
+    ReduxTest_Measure = yes
+    set_variable = { which = ReduxTestBeforeActive which = ReduxTestActive }
+    set_variable = { which = ReduxTestBeforeUnits which = ReduxTestUnits }
+    set_variable = { which = ReduxTestBeforeBuilt which = ReduxTestBuilt }
+    set_var_from_key = { var = ReduxTestSupply6 key = TN_ProvFill6 }
+    set_key = { lhs = TN_ProvFill6 value = 100 }
+    set_var_from_key = { var = ReduxTestSupply10 key = TN_ProvFill10 }
+    set_key = { lhs = TN_ProvFill10 value = 100 }
+    set_var_from_key = { var = ReduxTestSupply22 key = TN_ProvFill22 }
+    set_key = { lhs = TN_ProvFill22 value = 100 }
+    set_var_from_key = { var = ReduxTestSupply23 key = TN_ProvFill23 }
+    set_key = { lhs = TN_ProvFill23 value = 100 }
+    set_var_from_key = { var = ReduxTestSupply24 key = TN_ProvFill24 }
+    set_key = { lhs = TN_ProvFill24 value = 100 }
+    set_var_from_key = { var = ReduxTestSupply41 key = TN_ProvFill41 }
+    set_key = { lhs = TN_ProvFill41 value = 100 }
+    set_var_from_key = { var = ReduxTestSupplyR key = Prod_FillR }
+    set_key = { lhs = Prod_FillR value = 100 }
+    set_var_from_key = { var = ReduxTestSupplyUL key = Prod_FillUL }
+    set_key = { lhs = Prod_FillUL value = 100 }
+    Infra_CheckProject = { slot = 0 }
+    Infra_CheckProject = { slot = 1 }
+    Infra_CheckProject = { slot = 2 }
+    Infra_CheckProject = { slot = 3 }
+    Infra_CheckProject = { slot = 4 }
+    Infra_CheckProject = { slot = 5 }
+    Infra_CheckProject = { slot = 6 }
+    Infra_CheckProject = { slot = 7 }
+    Infra_CheckProject = { slot = 8 }
+    Infra_CheckProject = { slot = 9 }
+    set_key_from_var = { key = TN_ProvFill6 var = ReduxTestSupply6 }
+    set_key_from_var = { key = TN_ProvFill10 var = ReduxTestSupply10 }
+    set_key_from_var = { key = TN_ProvFill22 var = ReduxTestSupply22 }
+    set_key_from_var = { key = TN_ProvFill23 var = ReduxTestSupply23 }
+    set_key_from_var = { key = TN_ProvFill24 var = ReduxTestSupply24 }
+    set_key_from_var = { key = TN_ProvFill41 var = ReduxTestSupply41 }
+    set_key_from_var = { key = Prod_FillR var = ReduxTestSupplyR }
+    set_key_from_var = { key = Prod_FillUL var = ReduxTestSupplyUL }
+    Infra_RefreshModifier = yes
+    ReduxTest_Measure = yes
+    set_variable = { which = ReduxTestCompleted which = ReduxTestBuilt }
+    subtract_variable = { which = ReduxTestCompleted which = ReduxTestBeforeBuilt }
+    set_variable = { which = ReduxTestConsumed which = ReduxTestBeforeUnits }
+    subtract_variable = { which = ReduxTestConsumed which = ReduxTestUnits }
+    province_event = { id = ReduxTest.21 }
+}
+
+ReduxTest_Cleanup = {
+    ReduxTest_CancelSlot = { slot = 0 }
+    ReduxTest_CancelSlot = { slot = 1 }
+    ReduxTest_CancelSlot = { slot = 2 }
+    ReduxTest_CancelSlot = { slot = 3 }
+    ReduxTest_CancelSlot = { slot = 4 }
+    ReduxTest_CancelSlot = { slot = 5 }
+    ReduxTest_CancelSlot = { slot = 6 }
+    ReduxTest_CancelSlot = { slot = 7 }
+    ReduxTest_CancelSlot = { slot = 8 }
+    ReduxTest_CancelSlot = { slot = 9 }
+    Infra_RefreshModifier = yes
+    ReduxTest_Measure = yes
+    if = { limit = { is_variable_equal = { which = ReduxTestActive value = 0 } }
+        clr_province_flag = ReduxTestProvince
+        clr_province_flag = ReduxTestReleased
+        clr_province_flag = ReduxTestBeforeS0
+        clr_province_flag = ReduxTestBeforeS1
+        clr_province_flag = ReduxTestBeforeS2
+        clr_province_flag = ReduxTestBeforeS3
+        clr_province_flag = ReduxTestBeforeS4
+        clr_province_flag = ReduxTestBeforeS5
+        clr_province_flag = ReduxTestBeforeS6
+        clr_province_flag = ReduxTestBeforeS7
+        clr_province_flag = ReduxTestBeforeS8
+        clr_province_flag = ReduxTestBeforeS9
+        province_event = { id = ReduxTest.22 }
+    }
+    else = { province_event = { id = ReduxTest.99 } }
+}

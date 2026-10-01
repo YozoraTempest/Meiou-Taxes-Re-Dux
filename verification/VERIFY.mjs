@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 
 const root = resolve(process.argv[2] ?? fileURLToPath(new URL('../', import.meta.url)));
 const id = process.argv[3] ?? 'redux-tweak';
-assert.ok(['redux-tweak', 'redux-subject'].includes(id));
+assert.ok(['redux-tweak', 'redux-subject', 'redux-test'].includes(id));
 const outer = readFileSync(resolve(root, `${id}.mod`), 'utf8');
 const inner = readFileSync(resolve(root, id, 'descriptor.mod'), 'utf8');
 assert.equal(outer.replace(/^path="[^"\r\n]*"\r?\n?/m, ''), inner, 'Descriptor mismatch');
@@ -14,6 +14,7 @@ assert.ok(outer.includes(`path="mod/${id}"`));
 assert.match(inner, /^supported_version="v1\.37\.\*\.\*"\r?$/m);
 assert.ok(inner.includes('"MEIOU and Taxes v3.0"'));
 assert.equal(inner.includes('"Pop Display"'), id === 'redux-subject');
+assert.equal(inner.match(/dependencies=\{([^}]*)\}/)?.[1].includes('"Redux Tweak"') ?? false, id === 'redux-test');
 assert.ok(!/^replace_path=/m.test(outer));
 if (id === 'redux-subject') {
     assert.equal(createHash('sha256').update(readFileSync(resolve(root, id, 'common/scripted_effects/SYS-Construct.txt')))

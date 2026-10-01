@@ -1,0 +1,75 @@
+ReduxTest_EmptyProvince = {
+    isValidProv = yes
+    NOT = { OR = {
+        has_province_flag = Infra_S0
+        has_province_flag = Infra_S1
+        has_province_flag = Infra_S2
+        has_province_flag = Infra_S3
+        has_province_flag = Infra_S4
+        has_province_flag = Infra_S5
+        has_province_flag = Infra_S6
+        has_province_flag = Infra_S7
+        has_province_flag = Infra_S8
+        has_province_flag = Infra_S9
+    } }
+}
+
+ReduxTest_CanStart = {
+    NOT = { has_global_flag = POP_Sim }
+    NOT = { has_country_flag = UI_Freeze }
+    NOT = { any_owned_province = { has_province_flag = ReduxTestProvince } }
+    num_of_owned_provinces_with = { value = 1 has_province_flag = UI_Select }
+    NOT = { num_of_owned_provinces_with = { value = 2 has_province_flag = UI_Select } }
+    any_owned_province = { has_province_flag = UI_Select ReduxTest_EmptyProvince = yes }
+}
+
+ReduxTest_CanStartProvince = {
+    ReduxTest_EmptyProvince = yes
+    has_province_flag = UI_Select
+    owner = { ai = no ReduxTest_CanStart = yes }
+}
+
+ReduxTest_ManualSlot = {
+    has_province_flag = Infra_S$slot$
+    check_key = { lhs = Infra_S$slot$ value = 8 }
+    NOT = { check_key = { lhs = Infra_S$slot$ value = 15 } }
+    is_key_equal = { lhs = Infra_S$slot$Owner value = 0 }
+}
+
+ReduxTest_HasManualOrder = {
+    OR = {
+        ReduxTest_ManualSlot = { slot = 0 }
+        ReduxTest_ManualSlot = { slot = 1 }
+        ReduxTest_ManualSlot = { slot = 2 }
+        ReduxTest_ManualSlot = { slot = 3 }
+        ReduxTest_ManualSlot = { slot = 4 }
+        ReduxTest_ManualSlot = { slot = 5 }
+        ReduxTest_ManualSlot = { slot = 6 }
+        ReduxTest_ManualSlot = { slot = 7 }
+        ReduxTest_ManualSlot = { slot = 8 }
+        ReduxTest_ManualSlot = { slot = 9 }
+    }
+}
+
+ReduxTest_SupportedSlot = {
+    OR = {
+        NOT = { has_province_flag = Infra_S$slot$ }
+        AND = {
+            check_key = { lhs = Infra_S$slot$ value = 8 }
+            NOT = { check_key = { lhs = Infra_S$slot$ value = 15 } }
+        }
+    }
+}
+
+ReduxTest_OnlyInfrastructure = {
+    ReduxTest_SupportedSlot = { slot = 0 }
+    ReduxTest_SupportedSlot = { slot = 1 }
+    ReduxTest_SupportedSlot = { slot = 2 }
+    ReduxTest_SupportedSlot = { slot = 3 }
+    ReduxTest_SupportedSlot = { slot = 4 }
+    ReduxTest_SupportedSlot = { slot = 5 }
+    ReduxTest_SupportedSlot = { slot = 6 }
+    ReduxTest_SupportedSlot = { slot = 7 }
+    ReduxTest_SupportedSlot = { slot = 8 }
+    ReduxTest_SupportedSlot = { slot = 9 }
+}

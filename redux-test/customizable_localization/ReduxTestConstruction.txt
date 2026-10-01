@@ -1,0 +1,23 @@
+defined_text = {
+    name = GetReduxTestSlotsResult
+    text = { localisation_key = redux_test_fail trigger = { has_province_flag = ReduxTestSlotsFailed } }
+    text = { localisation_key = redux_test_pass trigger = { NOT = { has_province_flag = ReduxTestSlotsFailed } } }
+}
+
+defined_text = {
+    name = GetReduxTestTotalsResult
+    text = { localisation_key = redux_test_fail trigger = { has_province_flag = ReduxTestTotalsFailed } }
+    text = { localisation_key = redux_test_pass trigger = { NOT = { has_province_flag = ReduxTestTotalsFailed } } }
+}
+
+defined_text = {
+    name = GetReduxTestProgressResult
+    text = { localisation_key = redux_test_fail trigger = { has_province_flag = ReduxTestProgressFailed } }
+    text = { localisation_key = redux_test_pass trigger = { NOT = { has_province_flag = ReduxTestProgressFailed } } }
+}
+
+defined_text = {
+    name = GetReduxTestFundsResult
+    text = { localisation_key = redux_test_fail trigger = { has_province_flag = ReduxTestFundsFailed } }
+    text = { localisation_key = redux_test_pass trigger = { NOT = { has_province_flag = ReduxTestFundsFailed } } }
+}
