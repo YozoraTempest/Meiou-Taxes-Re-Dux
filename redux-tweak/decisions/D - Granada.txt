@@ -1,0 +1,1506 @@
+country_decisions = { 
+	castillian_end_of_granada = { 
+		potential = { 
+			OR = { 
+				tag = CAS
+				tag = SPA
+			}
+			GRA = { 
+				is_subject_of = ROOT
+			}
+		}
+		provinces_to_highlight = { 
+			OR = { 
+				region = aragon_region
+				region = portugal_region
+			}
+		}
+		allow = { 
+			OR = { 
+				check_variable = { 
+					which = "Demesne_in_Aragon"
+					value = 15
+				}
+				check_variable = { 
+					which = "Demesne_in_Portugal"
+					value = 10
+				}
+				AND = { 
+					ARA = { 
+						is_subject_of = ROOT
+					}
+					check_variable = { 
+						which = "Demesne_in_Aragon"
+						value = 10
+					}
+				}
+				AND = { 
+					POR = { 
+						is_subject_of = ROOT
+					}
+					check_variable = { 
+						which = "Demesne_in_Portugal"
+						value = 7
+					}
+				}
+				is_year = 1500
+			}
+		}
+		effect = { 
+			GRA = { 
+				grant_independence = yes
+				if = { 
+					limit = { 
+						has_country_flag = has_overriden_color_flag
+						NOT = { 
+							AND = { 
+								has_global_flag = country_color_follows_overlord
+								is_subject = yes
+								OR = { 
+									is_subject_of_type = overseas_fief
+									is_subject_of_type = permanent_union
+									is_subject_of_type = permanent_union_limited
+									is_subject_of_type = personal_union
+									is_subject_of_type = personal_union_limited
+									is_subject_of_type = appanage_subject
+									is_subject_of_type = vassal
+									is_subject_of_type = custom_vassal
+									is_subject_of_type = decentralized_vassal
+								}
+								overlord = { 
+									NOT = { 
+										is_subject_of_type = overseas_fief
+										is_subject_of_type = permanent_union
+										is_subject_of_type = permanent_union_limited
+										is_subject_of_type = personal_union
+										is_subject_of_type = personal_union_limited
+										is_subject_of_type = appanage_subject
+										is_subject_of_type = vassal
+										is_subject_of_type = custom_vassal
+										is_subject_of_type = decentralized_vassal
+									}
+								}
+							}
+						}
+					}
+					restore_country_color = yes
+					clr_country_flag = has_overriden_color_flag
+				}
+				every_subject_country = { 
+					if = { 
+						limit = { 
+							has_country_flag = has_overriden_color_flag
+						}
+						restore_country_color = yes
+						clr_country_flag = has_overriden_color_flag
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								has_global_flag = country_color_follows_overlord
+								is_subject = yes
+								OR = { 
+									is_subject_of_type = overseas_fief
+									is_subject_of_type = permanent_union
+									is_subject_of_type = permanent_union_limited
+									is_subject_of_type = personal_union
+									is_subject_of_type = personal_union_limited
+									is_subject_of_type = appanage_subject
+									is_subject_of_type = vassal
+									is_subject_of_type = custom_vassal
+									is_subject_of_type = decentralized_vassal
+								}
+								overlord = { 
+									NOT = { 
+										is_subject_of_type = overseas_fief
+										is_subject_of_type = permanent_union
+										is_subject_of_type = permanent_union_limited
+										is_subject_of_type = personal_union
+										is_subject_of_type = personal_union_limited
+										is_subject_of_type = appanage_subject
+										is_subject_of_type = vassal
+										is_subject_of_type = custom_vassal
+										is_subject_of_type = decentralized_vassal
+									}
+								}
+							}
+						}
+						change_country_color = { 
+							country = overlord
+						}
+						set_country_flag = has_overriden_color_flag
+					}
+				}
+			}
+			add_truce_with = GRA
+			GRA = { 
+				add_truce_with = PREV
+			}
+			andalucia_region = { 
+				limit = { 
+					NOT = { 
+						owned_by = ROOT
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+		ai_will_do = { 
+			factor = 1
+		}
+		ai_importance = 100
+	}
+	granadan_freedom = { 
+		potential = { 
+			tag = GRA
+			GRA = { 
+				OR = { 
+					is_subject_of = SPA
+					is_subject_of = CAS
+				}
+			}
+		}
+		provinces_to_highlight = { 
+			OR = { 
+				region = andalucia_region
+				region = west_maghreb_region
+				region = central_maghreb_region
+				region = east_maghreb_region
+			}
+		}
+		allow = { 
+			OR = { 
+				check_variable = { 
+					which = "Demesne_in_Morocco"
+					value = 25
+				}
+				check_variable = { 
+					which = "Demesne_in_Almohad"
+					value = 40
+				}
+				owns_core_province = 225
+			}
+		}
+		effect = { 
+			if = { 
+				limit = { 
+					vassal_of = SPA
+				}
+				add_truce_with = SPA
+				SPA = { 
+					add_truce_with = PREV
+				}
+			}
+			else_if = { 
+				limit = { 
+					vassal_of = CAS
+				}
+				add_truce_with = CAS
+				CAS = { 
+					add_truce_with = PREV
+				}
+			}
+			andalucia_region = { 
+				limit = { 
+					NOT = { 
+						owned_by = ROOT
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			grant_independence = yes
+			if = { 
+				limit = { 
+					has_country_flag = has_overriden_color_flag
+					NOT = { 
+						AND = { 
+							has_global_flag = country_color_follows_overlord
+							is_subject = yes
+							OR = { 
+								is_subject_of_type = overseas_fief
+								is_subject_of_type = permanent_union
+								is_subject_of_type = permanent_union_limited
+								is_subject_of_type = personal_union
+								is_subject_of_type = personal_union_limited
+								is_subject_of_type = appanage_subject
+								is_subject_of_type = vassal
+								is_subject_of_type = custom_vassal
+								is_subject_of_type = decentralized_vassal
+							}
+							overlord = { 
+								NOT = { 
+									is_subject_of_type = overseas_fief
+									is_subject_of_type = permanent_union
+									is_subject_of_type = permanent_union_limited
+									is_subject_of_type = personal_union
+									is_subject_of_type = personal_union_limited
+									is_subject_of_type = appanage_subject
+									is_subject_of_type = vassal
+									is_subject_of_type = custom_vassal
+									is_subject_of_type = decentralized_vassal
+								}
+							}
+						}
+					}
+				}
+				restore_country_color = yes
+				clr_country_flag = has_overriden_color_flag
+			}
+			every_subject_country = { 
+				if = { 
+					limit = { 
+						has_country_flag = has_overriden_color_flag
+					}
+					restore_country_color = yes
+					clr_country_flag = has_overriden_color_flag
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							has_global_flag = country_color_follows_overlord
+							is_subject = yes
+							OR = { 
+								is_subject_of_type = overseas_fief
+								is_subject_of_type = permanent_union
+								is_subject_of_type = permanent_union_limited
+								is_subject_of_type = personal_union
+								is_subject_of_type = personal_union_limited
+								is_subject_of_type = appanage_subject
+								is_subject_of_type = vassal
+								is_subject_of_type = custom_vassal
+								is_subject_of_type = decentralized_vassal
+							}
+							overlord = { 
+								NOT = { 
+									is_subject_of_type = overseas_fief
+									is_subject_of_type = permanent_union
+									is_subject_of_type = permanent_union_limited
+									is_subject_of_type = personal_union
+									is_subject_of_type = personal_union_limited
+									is_subject_of_type = appanage_subject
+									is_subject_of_type = vassal
+									is_subject_of_type = custom_vassal
+									is_subject_of_type = decentralized_vassal
+								}
+							}
+						}
+					}
+					change_country_color = { 
+						country = overlord
+					}
+					set_country_flag = has_overriden_color_flag
+				}
+			}
+		}
+		ai_will_do = { 
+			factor = 1
+		}
+		ai_importance = 100
+	}
+	restore_cordoba = { 
+		potential = { 
+			tag = GRA
+			owns_core_province = 225
+			NOT = { 
+				has_country_flag = cordoba_restored
+			}
+			NOT = { 
+				is_subject = yes
+			}
+		}
+		provinces_to_highlight = { 
+			region = andalucia_region
+		}
+		allow = { 
+			treasury = 1000
+			check_variable = { 
+				which = "Demesne_in_Andalusia"
+				value = 15
+			}
+			is_at_war = no
+		}
+		effect = { 
+			add_treasury = -750
+			hidden_effect = { 
+				clr_country_flag = changed_capital_by_event
+				set_country_flag = changed_capital_by_event
+			}
+			set_capital = 225
+			andalucia_region = { 
+				limit = { 
+					owned_by = ROOT
+				}
+				hidden_effect = { 
+					remove_core = ROOT
+				}
+				add_core = ROOT
+			}
+			andalucia_region = { 
+				limit = { 
+					NOT = { 
+						owned_by = ROOT
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			if = { 
+				limit = { 
+					government = monarchy
+					NOT = { 
+						has_country_modifier = title_5
+						has_country_modifier = title_6
+					}
+				}
+				remove_country_modifier = title_1
+				remove_country_modifier = title_2
+				remove_country_modifier = title_3
+				remove_country_modifier = title_4
+				remove_country_modifier = title_6
+				add_country_modifier = { 
+					name = title_5
+					duration = -1
+				}
+				clr_country_flag = title_1
+				clr_country_flag = title_2
+				clr_country_flag = title_3
+				clr_country_flag = title_4
+				clr_country_flag = title_5
+				clr_country_flag = title_6
+			}
+			override_country_name = CORDOBA_NAME
+			set_country_flag = cordoba_restored
+			hidden_effect = { 
+				country_event = { 
+					id = ideagroups.9000
+					days = 1
+				}
+			}
+			custom_tooltip = swap_national_ideas
+			225 = { 
+				hidden_effect = { 
+					if = { 
+						limit = { 
+							NOT = { 
+								AND = { 
+									check_variable = { 
+										which = gck
+										value = 2.001
+									}
+								}
+							}
+						}
+						set_variable = { 
+							which = ggx
+							value = 3
+						}
+						set_variable = { 
+							which = ggy
+							value = 3
+						}
+						set_variable = { 
+							which = ggz
+							value = 3
+						}
+						if = { 
+							limit = { 
+								Infra_CanConstruct = yes
+								AND = { 
+									AND = { 
+										check_variable = { 
+											which = aas
+											value = 0.001
+										}
+									}
+									has_province_flag = City_Present
+								}
+								AND = { 
+									check_variable = { 
+										which = ggz
+										value = 0.001
+									}
+								}
+							}
+							subtract_variable = { 
+								which = ggz
+								value = 1
+							}
+							if = { 
+								limit = { 
+									OR = { 
+										owner = { 
+											AND = { 
+												is_variable_equal = { 
+													which = gha
+													value = 0
+												}
+											}
+										}
+										overlord = { 
+											AND = { 
+												is_variable_equal = { 
+													which = gha
+													value = 0
+												}
+											}
+										}
+									}
+								}
+								if = { 
+									limit = { 
+										AND = { 
+											check_variable = { 
+												which = ggz
+												value = 7
+											}
+										}
+									}
+									set_variable = { 
+										which = ghh
+										which = gen
+									}
+								}
+								else = { 
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = ggz
+													value = 3
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = ggz
+														value = 4
+													}
+												}
+											}
+											if = { 
+												limit = { 
+													AND = { 
+														check_variable = { 
+															which = ggz
+															value = 6
+														}
+													}
+												}
+												set_variable = { 
+													which = ghh
+													value = 400
+												}
+											}
+											else_if = { 
+												limit = { 
+													AND = { 
+														check_variable = { 
+															which = ggz
+															value = 5
+														}
+													}
+												}
+												set_variable = { 
+													which = ghh
+													value = 200
+												}
+											}
+											else = { 
+												set_variable = { 
+													which = ghh
+													value = 100
+												}
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = ghh
+												value = 40
+											}
+										}
+									}
+									else = { 
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = ggz
+														value = 1
+													}
+												}
+											}
+											if = { 
+												limit = { 
+													AND = { 
+														check_variable = { 
+															which = ggz
+															value = 2
+														}
+													}
+												}
+												set_variable = { 
+													which = ghh
+													value = 20
+												}
+											}
+											else = { 
+												set_variable = { 
+													which = ghh
+													value = 7
+												}
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = ghh
+												value = 3
+											}
+										}
+									}
+								}
+								change_variable = { 
+									which = ghh
+									which = ntp
+								}
+								subtract_variable = { 
+									which = ghh
+									which = gen
+								}
+								subtract_variable = { 
+									which = ghh
+									which = giy
+								}
+								if = { 
+									limit = { 
+										NOT = { 
+											AND = { 
+												check_variable = { 
+													which = ghh
+													value = 0
+												}
+											}
+										}
+									}
+									set_variable = { 
+										which = ghh
+										value = 0
+									}
+								}
+								set_variable = { 
+									which = ggz
+									value = 0
+								}
+								set_variable = { 
+									which = ggz
+									which = ghh
+								}
+								set_variable = { 
+									which = nut
+									which = ggz
+								}
+								subtract_variable = { 
+									which = nut
+									which = ntp
+								}
+								multiply_variable = { 
+									which = ghh
+									which = gfb
+								}
+							}
+							else_if = { 
+								limit = { 
+									OR = { 
+										owner = { 
+											AND = { 
+												is_variable_equal = { 
+													which = gha
+													value = 1
+												}
+											}
+										}
+										overlord = { 
+											AND = { 
+												is_variable_equal = { 
+													which = gha
+													value = 1
+												}
+											}
+										}
+									}
+								}
+								if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 7
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 7
+									}
+								}
+								else_if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 6
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 6
+									}
+								}
+								else_if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 5
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 5
+									}
+								}
+								else_if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 4
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 4
+									}
+								}
+								else_if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 3
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 3
+									}
+								}
+								else_if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 2
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 2
+									}
+								}
+								else_if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 1
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 1
+									}
+								}
+								else = { 
+									set_variable = { 
+										which = gho
+										value = 0
+									}
+								}
+								change_variable = { 
+									which = gho
+									which = ggz
+								}
+								if = { 
+									limit = { 
+										AND = { 
+											check_variable = { 
+												which = gho
+												value = 7
+											}
+										}
+									}
+									set_variable = { 
+										which = ghh
+										which = gen
+									}
+								}
+								else = { 
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = gho
+													value = 3
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = gho
+														value = 4
+													}
+												}
+											}
+											if = { 
+												limit = { 
+													AND = { 
+														check_variable = { 
+															which = gho
+															value = 6
+														}
+													}
+												}
+												set_variable = { 
+													which = ghh
+													value = 400
+												}
+											}
+											else_if = { 
+												limit = { 
+													AND = { 
+														check_variable = { 
+															which = gho
+															value = 5
+														}
+													}
+												}
+												set_variable = { 
+													which = ghh
+													value = 200
+												}
+											}
+											else = { 
+												set_variable = { 
+													which = ghh
+													value = 100
+												}
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = ghh
+												value = 40
+											}
+										}
+									}
+									else = { 
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = gho
+														value = 1
+													}
+												}
+											}
+											if = { 
+												limit = { 
+													AND = { 
+														check_variable = { 
+															which = gho
+															value = 2
+														}
+													}
+												}
+												set_variable = { 
+													which = ghh
+													value = 20
+												}
+											}
+											else = { 
+												set_variable = { 
+													which = ghh
+													value = 7
+												}
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = ghh
+												value = 3
+											}
+										}
+									}
+								}
+								change_variable = { 
+									which = ghh
+									which = ntp
+								}
+								subtract_variable = { 
+									which = ghh
+									which = gen
+								}
+								subtract_variable = { 
+									which = ghh
+									which = giy
+								}
+								if = { 
+									limit = { 
+										NOT = { 
+											AND = { 
+												check_variable = { 
+													which = ghh
+													value = 0
+												}
+											}
+										}
+									}
+									set_variable = { 
+										which = ghh
+										value = 0
+									}
+								}
+								set_variable = { 
+									which = ggz
+									value = 0
+								}
+								set_variable = { 
+									which = ggz
+									which = ghh
+								}
+								set_variable = { 
+									which = nut
+									which = ggz
+								}
+								multiply_variable = { 
+									which = ghh
+									which = gfb
+								}
+								set_variable = { 
+									which = gho
+									value = 0
+								}
+								set_variable = { 
+									which = ghp
+									value = 0
+								}
+							}
+							else = { 
+								set_variable = { 
+									which = ggz
+									value = 0
+								}
+							}
+						}
+						else = { 
+							set_variable = { 
+								which = ggz
+								value = 0
+							}
+						}
+						set_variable = { 
+							which = gnj
+							value = 10
+						}
+						if = { 
+							limit = { 
+								has_province_flag = comes_from_manual
+							}
+							clr_province_flag = comes_from_manual
+						}
+						Redux_ConstructionSubmit = { id = 10 height = Construct_Amount width = Construct_Parallel owner = 0 origin = 1 }
+						change_variable = { 
+							which = gcx
+							which = ghh
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								is_variable_equal = { 
+									which = gck
+									value = 3
+								}
+							}
+						}
+						set_variable = { 
+							which = ggx
+							value = 3
+						}
+						set_variable = { 
+							which = ggy
+							value = 3
+						}
+						set_variable = { 
+							which = ggz
+							value = 4
+						}
+						if = { 
+							limit = { 
+								Infra_CanConstruct = yes
+								AND = { 
+									AND = { 
+										check_variable = { 
+											which = aas
+											value = 0.001
+										}
+									}
+									has_province_flag = City_Present
+								}
+								AND = { 
+									check_variable = { 
+										which = ggz
+										value = 0.001
+									}
+								}
+							}
+							subtract_variable = { 
+								which = ggz
+								value = 1
+							}
+							if = { 
+								limit = { 
+									OR = { 
+										owner = { 
+											AND = { 
+												is_variable_equal = { 
+													which = gha
+													value = 0
+												}
+											}
+										}
+										overlord = { 
+											AND = { 
+												is_variable_equal = { 
+													which = gha
+													value = 0
+												}
+											}
+										}
+									}
+								}
+								if = { 
+									limit = { 
+										AND = { 
+											check_variable = { 
+												which = ggz
+												value = 7
+											}
+										}
+									}
+									set_variable = { 
+										which = ghh
+										which = gen
+									}
+								}
+								else = { 
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = ggz
+													value = 3
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = ggz
+														value = 4
+													}
+												}
+											}
+											if = { 
+												limit = { 
+													AND = { 
+														check_variable = { 
+															which = ggz
+															value = 6
+														}
+													}
+												}
+												set_variable = { 
+													which = ghh
+													value = 400
+												}
+											}
+											else_if = { 
+												limit = { 
+													AND = { 
+														check_variable = { 
+															which = ggz
+															value = 5
+														}
+													}
+												}
+												set_variable = { 
+													which = ghh
+													value = 200
+												}
+											}
+											else = { 
+												set_variable = { 
+													which = ghh
+													value = 100
+												}
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = ghh
+												value = 40
+											}
+										}
+									}
+									else = { 
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = ggz
+														value = 1
+													}
+												}
+											}
+											if = { 
+												limit = { 
+													AND = { 
+														check_variable = { 
+															which = ggz
+															value = 2
+														}
+													}
+												}
+												set_variable = { 
+													which = ghh
+													value = 20
+												}
+											}
+											else = { 
+												set_variable = { 
+													which = ghh
+													value = 7
+												}
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = ghh
+												value = 3
+											}
+										}
+									}
+								}
+								change_variable = { 
+									which = ghh
+									which = ntp
+								}
+								subtract_variable = { 
+									which = ghh
+									which = gen
+								}
+								subtract_variable = { 
+									which = ghh
+									which = giy
+								}
+								if = { 
+									limit = { 
+										NOT = { 
+											AND = { 
+												check_variable = { 
+													which = ghh
+													value = 0
+												}
+											}
+										}
+									}
+									set_variable = { 
+										which = ghh
+										value = 0
+									}
+								}
+								set_variable = { 
+									which = ggz
+									value = 0
+								}
+								set_variable = { 
+									which = ggz
+									which = ghh
+								}
+								set_variable = { 
+									which = nut
+									which = ggz
+								}
+								subtract_variable = { 
+									which = nut
+									which = ntp
+								}
+								multiply_variable = { 
+									which = ghh
+									which = gfb
+								}
+							}
+							else_if = { 
+								limit = { 
+									OR = { 
+										owner = { 
+											AND = { 
+												is_variable_equal = { 
+													which = gha
+													value = 1
+												}
+											}
+										}
+										overlord = { 
+											AND = { 
+												is_variable_equal = { 
+													which = gha
+													value = 1
+												}
+											}
+										}
+									}
+								}
+								if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 7
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 7
+									}
+								}
+								else_if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 6
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 6
+									}
+								}
+								else_if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 5
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 5
+									}
+								}
+								else_if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 4
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 4
+									}
+								}
+								else_if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 3
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 3
+									}
+								}
+								else_if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 2
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 2
+									}
+								}
+								else_if = { 
+									limit = { 
+										AND = { 
+											is_variable_equal = { 
+												which = gck
+												value = 1
+											}
+										}
+									}
+									set_variable = { 
+										which = gho
+										value = 1
+									}
+								}
+								else = { 
+									set_variable = { 
+										which = gho
+										value = 0
+									}
+								}
+								change_variable = { 
+									which = gho
+									which = ggz
+								}
+								if = { 
+									limit = { 
+										AND = { 
+											check_variable = { 
+												which = gho
+												value = 7
+											}
+										}
+									}
+									set_variable = { 
+										which = ghh
+										which = gen
+									}
+								}
+								else = { 
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = gho
+													value = 3
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = gho
+														value = 4
+													}
+												}
+											}
+											if = { 
+												limit = { 
+													AND = { 
+														check_variable = { 
+															which = gho
+															value = 6
+														}
+													}
+												}
+												set_variable = { 
+													which = ghh
+													value = 400
+												}
+											}
+											else_if = { 
+												limit = { 
+													AND = { 
+														check_variable = { 
+															which = gho
+															value = 5
+														}
+													}
+												}
+												set_variable = { 
+													which = ghh
+													value = 200
+												}
+											}
+											else = { 
+												set_variable = { 
+													which = ghh
+													value = 100
+												}
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = ghh
+												value = 40
+											}
+										}
+									}
+									else = { 
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = gho
+														value = 1
+													}
+												}
+											}
+											if = { 
+												limit = { 
+													AND = { 
+														check_variable = { 
+															which = gho
+															value = 2
+														}
+													}
+												}
+												set_variable = { 
+													which = ghh
+													value = 20
+												}
+											}
+											else = { 
+												set_variable = { 
+													which = ghh
+													value = 7
+												}
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = ghh
+												value = 3
+											}
+										}
+									}
+								}
+								change_variable = { 
+									which = ghh
+									which = ntp
+								}
+								subtract_variable = { 
+									which = ghh
+									which = gen
+								}
+								subtract_variable = { 
+									which = ghh
+									which = giy
+								}
+								if = { 
+									limit = { 
+										NOT = { 
+											AND = { 
+												check_variable = { 
+													which = ghh
+													value = 0
+												}
+											}
+										}
+									}
+									set_variable = { 
+										which = ghh
+										value = 0
+									}
+								}
+								set_variable = { 
+									which = ggz
+									value = 0
+								}
+								set_variable = { 
+									which = ggz
+									which = ghh
+								}
+								set_variable = { 
+									which = nut
+									which = ggz
+								}
+								multiply_variable = { 
+									which = ghh
+									which = gfb
+								}
+								set_variable = { 
+									which = gho
+									value = 0
+								}
+								set_variable = { 
+									which = ghp
+									value = 0
+								}
+							}
+							else = { 
+								set_variable = { 
+									which = ggz
+									value = 0
+								}
+							}
+						}
+						else = { 
+							set_variable = { 
+								which = ggz
+								value = 0
+							}
+						}
+						set_variable = { 
+							which = gnj
+							value = 10
+						}
+						if = { 
+							limit = { 
+								has_province_flag = comes_from_manual
+							}
+							clr_province_flag = comes_from_manual
+						}
+						Redux_ConstructionSubmit = { id = 10 height = Construct_Amount width = Construct_Parallel owner = 0 origin = 1 }
+						change_variable = { 
+							which = gcx
+							which = ghh
+						}
+					}
+				}
+				hidden_effect = { 
+					province_event = { 
+						id = DG_Convert.005
+					}
+				}
+				add_province_modifier = { 
+					name = cordoba_restoration
+					duration = 3650
+				}
+			}
+		}
+		ai_will_do = { 
+			factor = 1
+		}
+		ai_importance = 100
+	}
+}

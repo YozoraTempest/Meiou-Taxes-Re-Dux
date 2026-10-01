@@ -12,11 +12,11 @@ province_event = {
             if = {
                 limit = { ReduxTest_CanStartProvince = yes }
                 ReduxTest_Begin = { scenario = 1 }
-                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 }
-                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 }
-                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 }
-                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 }
-                ReduxTest_StartOrder = { type = 10 payer = 0 amount = 10 width = 10 }
+                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 origin = 2 }
+                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 origin = 2 }
+                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 origin = 2 }
+                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 origin = 2 }
+                ReduxTest_StartOrder = { type = 10 payer = 0 amount = 10 width = 10 origin = 1 }
                 ReduxTest_EndSetup = yes
             }
             else = { province_event = { id = ReduxTest.99 } }
@@ -37,8 +37,8 @@ province_event = {
             if = {
                 limit = { ReduxTest_CanStartProvince = yes }
                 ReduxTest_Begin = { scenario = 2 }
-                ReduxTest_StartOrder = { type = 10 payer = 4 amount = 2 width = 2 }
-                ReduxTest_StartOrder = { type = 10 payer = 0 amount = 10 width = 10 }
+                ReduxTest_StartOrder = { type = 10 payer = 4 amount = 2 width = 2 origin = 2 }
+                ReduxTest_StartOrder = { type = 10 payer = 0 amount = 10 width = 10 origin = 1 }
                 ReduxTest_EndSetup = yes
             }
             else = { province_event = { id = ReduxTest.99 } }
@@ -59,8 +59,8 @@ province_event = {
             if = {
                 limit = { ReduxTest_CanStartProvince = yes }
                 ReduxTest_Begin = { scenario = 3 }
-                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 }
-                ReduxTest_StartOrder = { type = 10 payer = 0 amount = 10 width = 10 }
+                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 origin = 2 }
+                ReduxTest_StartOrder = { type = 10 payer = 0 amount = 10 width = 10 origin = 1 }
                 ReduxTest_EndSetup = yes
             }
             else = { province_event = { id = ReduxTest.99 } }
@@ -81,7 +81,7 @@ province_event = {
             if = {
                 limit = { ReduxTest_CanStartProvince = yes }
                 ReduxTest_Begin = { scenario = 4 }
-                ReduxTest_StartOrder = { type = 10 payer = 0 amount = 10 width = 2 }
+                ReduxTest_StartOrder = { type = 10 payer = 0 amount = 10 width = 2 origin = 1 }
                 ReduxTest_EndSetup = yes
             }
             else = { province_event = { id = ReduxTest.99 } }
@@ -102,7 +102,7 @@ province_event = {
             if = {
                 limit = { ReduxTest_CanStartProvince = yes }
                 ReduxTest_Begin = { scenario = 5 }
-                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 }
+                ReduxTest_StartOrder = { type = 8 payer = 4 amount = 2 width = 2 origin = 2 }
                 ReduxTest_EndSetup = yes
             }
             else = { province_event = { id = ReduxTest.99 } }
@@ -250,6 +250,52 @@ country_event = {
                 every_owned_province = { limit = { has_province_flag = ReduxTestProvince }
                     province_event = { id = ReduxTest.20 days = 1 } }
             }
+        }
+    }
+    option = { name = redux_test_cancel }
+}
+
+province_event = {
+    id = ReduxTest.40
+    title = redux_test_full_player_title
+    desc = redux_test_full_player_desc
+    is_triggered_only = yes
+    trigger = { ReduxTest_CanStartProvince = yes }
+    option = {
+        name = redux_test_start
+        hidden_effect = {
+            if = { limit = { ReduxTest_CanStartProvince = yes }
+                ReduxTest_Begin = { scenario = 6 }
+                ReduxTest_StartOrder = { type = 9 payer = 0 amount = 20 width = 10 origin = 1 }
+                ReduxTest_StartOrder = { type = 14 payer = 0 amount = 2 width = 2 origin = 2 }
+                ReduxTest_StartOrder = { type = 8 payer = 0 amount = 2 width = 2 origin = 2 }
+                ReduxTest_EndSetup = yes
+            }
+            else = { province_event = { id = ReduxTest.99 } }
+        }
+    }
+    option = { name = redux_test_cancel }
+}
+
+province_event = {
+    id = ReduxTest.41
+    title = redux_test_class_yield_title
+    desc = redux_test_class_yield_desc
+    is_triggered_only = yes
+    trigger = { ReduxTest_CanStartProvince = yes }
+    option = {
+        name = redux_test_start
+        hidden_effect = {
+            if = { limit = { ReduxTest_CanStartProvince = yes }
+                ReduxTest_Begin = { scenario = 7 }
+                ReduxTest_StartOrder = { type = 8 payer = 0 amount = 4 width = 2 origin = 2 }
+                ReduxTest_StartOrder = { type = 8 payer = 0 amount = 4 width = 2 origin = 2 }
+                ReduxTest_StartOrder = { type = 8 payer = 0 amount = 4 width = 2 origin = 2 }
+                ReduxTest_StartOrder = { type = 8 payer = 0 amount = 4 width = 2 origin = 2 }
+                ReduxTest_StartOrder = { type = 9 payer = 0 amount = 10 width = 10 origin = 1 }
+                ReduxTest_EndSetup = yes
+            }
+            else = { province_event = { id = ReduxTest.99 } }
         }
     }
     option = { name = redux_test_cancel }

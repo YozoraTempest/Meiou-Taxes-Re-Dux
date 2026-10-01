@@ -57,5 +57,5 @@ for (const [plain, escaped] of [
 }
 assert.throws(() => encodeLocalisation(runtime), /pre-escaped/);
 const keys = [...source.matchAll(/^ ([A-Za-z0-9_.]+):0 /gm)].map(match => match[1]);
-assert.equal(keys.length, 38);
+assert.equal(keys.length, 42);
 console.log(`PASS: REDUX TEST ${keys.length} localisations; CP1252/escape round trip; fixed byte vectors; scope brackets and color codes preserved`);

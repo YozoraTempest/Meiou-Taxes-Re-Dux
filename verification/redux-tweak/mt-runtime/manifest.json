@@ -1,0 +1,114 @@
+{
+  "source": "Installed MEIOU and Taxes v3.0 release",
+  "aliases": {
+    "Public_Tmp1": "amo",
+    "Public_Tmp2": "amp",
+    "Public_Tmp3": "amq",
+    "Public_Tmp4": "amr",
+    "Public_Tmp5": "ams",
+    "Public_Tmp6": "amt",
+    "Public_Tmp7": "amu",
+    "Public_Tmp8": "amv",
+    "Public_Tmp9": "amw",
+    "Tmp_0": "arg",
+    "Tmp_1": "arh",
+    "Tmp_2": "ari",
+    "Tmp_3": "arj",
+    "Tmp_4": "ark",
+    "Tmp_5": "arl",
+    "Tmp_6": "arm",
+    "Tmp_7": "arn",
+    "Tmp_8": "aro",
+    "Tmp_9": "arp",
+    "Construct_Amount": "ggz",
+    "Infra_S0": "gjd",
+    "Infra_S06": "gje",
+    "Infra_S0Owner": "gjm",
+    "Infra_S1": "gjo",
+    "Infra_S16": "gjp",
+    "Infra_S1Owner": "gjx",
+    "Infra_S2": "gjz",
+    "Infra_S26": "gka",
+    "Infra_S2Owner": "gki",
+    "Infra_S3": "gkk",
+    "Infra_S36": "gkl",
+    "Infra_S3Owner": "gkt",
+    "Infra_S4": "gkv",
+    "Infra_S46": "gkw",
+    "Infra_S4Owner": "gle",
+    "Infra_S5": "glg",
+    "Infra_S56": "glh",
+    "Infra_S5Owner": "glp",
+    "Infra_S6": "glr",
+    "Infra_S66": "gls",
+    "Infra_S6Owner": "gma",
+    "Infra_S7": "gmc",
+    "Infra_S76": "gmd",
+    "Infra_S7Owner": "gml",
+    "Infra_S8": "gmn",
+    "Infra_S86": "gmo",
+    "Infra_S8Owner": "gmw",
+    "Infra_S9": "gmy",
+    "Infra_S96": "gmz",
+    "Infra_S9Owner": "gnh",
+    "Construct_Parallel": "gnj",
+    "Public_Tmp0": "hxy",
+    "Public_Tmp10": "jwn",
+    "Public_Tmp11": "jwo",
+    "Public_Tmp12": "jwp",
+    "Courthouse_Amount": "nts",
+    "Courthouse_Parallel": "nuf",
+    "Infra_S0Parallel": "nug",
+    "Infra_S1Parallel": "nuh",
+    "Infra_S2Parallel": "nui",
+    "Infra_S3Parallel": "nuj",
+    "Infra_S4Parallel": "nuk",
+    "Infra_S5Parallel": "nul",
+    "Infra_S6Parallel": "num",
+    "Infra_S7Parallel": "nun",
+    "Infra_S8Parallel": "nuo",
+    "Infra_S9Parallel": "nup"
+  },
+  "files": [
+    {
+      "path": "common/scripted_effects/SYS-Infra.txt",
+      "fixture": "0.txt.gz",
+      "sha256": "fe7a642b22086c8edf0a3e5b34cbd76b2cbb70a4524cee5e7da1aecc3a38eea1"
+    },
+    {
+      "path": "common/scripted_triggers/SYS-Infra.txt",
+      "fixture": "1.txt.gz",
+      "sha256": "5060d28fa00a109efb6ac563cdd47ac7f29c25a9da3b9933aa3973b219360777"
+    },
+    {
+      "path": "events/SYS-CensusNew.txt",
+      "fixture": "2.txt.gz",
+      "sha256": "3a25182b3cb396dfa02835d1b34543eb10b6c702c83ca14f5e9a9e2e3620f468"
+    },
+    {
+      "path": "events/SYS-Construct.txt",
+      "fixture": "3.txt.gz",
+      "sha256": "3bf6dc3bb37c8023ea2de68734197cfc4b1fd4fd30cd6bffd030f6206d7472c1"
+    },
+    {
+      "path": "events/SYS-AI.txt",
+      "fixture": "4.txt.gz",
+      "sha256": "81348a8e115bd328d1dd7a59ce1348c1b845894ad17a4b9cfd45c3fd4a9b6a75"
+    },
+    {
+      "path": "events/SYS-Courthouse.txt",
+      "fixture": "5.txt.gz",
+      "sha256": "acc120b13ab91a5553da1114f9823356e5e5819d0fa2f18ad175bf7a505759c5"
+    },
+    {
+      "path": "events/E-BurghersEvents.txt",
+      "fixture": "6.txt.gz",
+      "sha256": "ac0cc029a2e400a61cb34c494392b3f461ae410375e17dce41c7be5b7f837330"
+    },
+    {
+      "path": "decisions/D - Granada.txt",
+      "fixture": "7.txt.gz",
+      "sha256": "a37d9de6c9fb5596a93229c184e2549ed617c0a7efe7d3f9c7686edc4864e500"
+    }
+  ]
+}

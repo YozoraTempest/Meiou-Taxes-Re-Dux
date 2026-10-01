@@ -1,0 +1,5434 @@
+namespace = burghers_estate_events
+country_event = { 
+	id = burghers_estate_events.1
+	title = burghers_estate_events.1.t
+	desc = burghers_estate_events.1.d
+	picture = BURGHER_ESTATE_eventPicture
+	trigger = { 
+		AND = { 
+			check_variable = { 
+				which = ast
+				value = 40
+			}
+		}
+		AND = { 
+			if = { 
+				limit = { 
+					always = yes
+				}
+				custom_trigger_tooltip = { 
+					tooltip = Advisor_HasCL2
+					OR = { 
+						ai = yes
+						philosopher_BG = 2
+						natural_scientist_BG = 2
+						artist_BG = 2
+						treasurer_BG = 2
+						master_of_mint_BG = 2
+						statesman_BG = 2
+						naval_reformer_BG = 2
+						trader_BG = 2
+						spymaster_BG = 2
+						colonial_governor_BG = 2
+						diplomat_BG = 2
+						navigator_BG = 2
+						grand_captain_BG = 2
+						alderman_BG = 2
+						architect_BG = 2
+						banker_BG = 2
+						grand_admiral_BG = 2
+						lord_proprietor_BG = 2
+						astronomist_BG = 2
+						composer_BG = 2
+					}
+				}
+			}
+		}
+	}
+	is_triggered_only = yes
+	mean_time_to_happen = { 
+		days = 1
+	}
+	option = { 
+		name = OPT.DULYNOTED2
+		custom_tooltip = BG_FactionBoost_20
+		hidden_effect = { 
+			set_variable = { 
+				which = opx
+				value = 20
+			}
+			country_event = { 
+				id = PTM_Politics.001
+			}
+		}
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 65
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = FC_BG_Boost_L
+				duration = 1825
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 35
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = FC_BG_Boost_M
+				duration = 1825
+			}
+		}
+		else = { 
+			add_country_modifier = { 
+				name = FC_BG_Boost_S
+				duration = 1825
+			}
+		}
+		hidden_effect = { 
+			if = { 
+				limit = { 
+					always = yes
+				}
+				if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_NO
+							influence = 50
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdr
+								value = -25
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdr
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdr
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdr
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdr
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdr
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdr
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = NO_RelationState_-25
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxj
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxj
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxj
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxj
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxj
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxj
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxj
+								value = 1000
+							}
+						}
+					}
+				}
+				else_if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_NO
+							influence = 30
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdr
+								value = -15
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdr
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdr
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdr
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdr
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdr
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdr
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = NO_RelationState_-15
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxj
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxj
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxj
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxj
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxj
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxj
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxj
+								value = 1000
+							}
+						}
+					}
+				}
+				else = { 
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdr
+								value = -5
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdr
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdr
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdr
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdr
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdr
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdr
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = NO_RelationState_-5
+						}
+					}
+				}
+			}
+			if = { 
+				limit = { 
+					always = yes
+				}
+				if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_CL
+							influence = 50
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdt
+								value = -25
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdt
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdt
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdt
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdt
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdt
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdt
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = CL_RelationState_-25
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxl
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxl
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxl
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxl
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxl
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxl
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxl
+								value = 1000
+							}
+						}
+					}
+				}
+				else_if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_CL
+							influence = 30
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdt
+								value = -15
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdt
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdt
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdt
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdt
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdt
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdt
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = CL_RelationState_-15
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxl
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxl
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxl
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxl
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxl
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxl
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxl
+								value = 1000
+							}
+						}
+					}
+				}
+				else = { 
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdt
+								value = -5
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdt
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdt
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdt
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdt
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdt
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdt
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = CL_RelationState_-5
+						}
+					}
+				}
+			}
+			if = { 
+				limit = { 
+					always = yes
+				}
+				if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_TR
+							influence = 50
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdu
+								value = -25
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdu
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdu
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdu
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdu
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdu
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdu
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = TR_RelationState_-25
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxm
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxm
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxm
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxm
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxm
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxm
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxm
+								value = 1000
+							}
+						}
+					}
+				}
+				else_if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_TR
+							influence = 30
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdu
+								value = -15
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdu
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdu
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdu
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdu
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdu
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdu
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = TR_RelationState_-15
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxm
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxm
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxm
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxm
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxm
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxm
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxm
+								value = 1000
+							}
+						}
+					}
+				}
+				else = { 
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdu
+								value = -5
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdu
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdu
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdu
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdu
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdu
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdu
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = TR_RelationState_-5
+						}
+					}
+				}
+			}
+			if = { 
+				limit = { 
+					always = yes
+				}
+				if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_BU
+							influence = 50
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdv
+								value = -25
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdv
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdv
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdv
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdv
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdv
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdv
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = BU_RelationState_-25
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxn
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxn
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxn
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxn
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxn
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxn
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxn
+								value = 1000
+							}
+						}
+					}
+				}
+				else_if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_BU
+							influence = 30
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdv
+								value = -15
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdv
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdv
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdv
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdv
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdv
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdv
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = BU_RelationState_-15
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxn
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxn
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxn
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxn
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxn
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxn
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxn
+								value = 1000
+							}
+						}
+					}
+				}
+				else = { 
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdv
+								value = -5
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdv
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdv
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdv
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdv
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdv
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdv
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = BU_RelationState_-5
+						}
+					}
+				}
+			}
+		}
+	}
+}
+country_event = { 
+	id = burghers_estate_events.2
+	title = burghers_estate_events.2.t
+	desc = burghers_estate_events.2.d
+	picture = BURGHER_ESTATE_eventPicture
+	trigger = { 
+		AND = { 
+			check_variable = { 
+				which = aso
+				value = 60
+			}
+		}
+		any_owned_province = { 
+			is_capital = no
+			is_overseas = no
+			AND = { 
+				check_variable = { 
+					which = ast
+					value = 40
+				}
+			}
+			AND = { 
+				check_variable = { 
+					which = aso
+					value = 60
+				}
+			}
+			OR = { 
+				has_province_modifier = TN_Minor
+				has_province_modifier = TN_Important
+				has_province_modifier = TN_Major
+				has_province_modifier = TN_Dominant
+			}
+		}
+		NOT = { 
+			has_country_modifier = minor_trade_crisis
+		}
+	}
+	is_triggered_only = yes
+	mean_time_to_happen = { 
+		days = 1
+	}
+	option = { 
+		name = burghers_estate_events.2.a
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asr
+							value = 25
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 1.2
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asr
+							value = 50
+						}
+					}
+				}
+			}
+		}
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = aso
+						value = 90
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = minor_trade_crisis
+				duration = 4000
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = aso
+						value = 80
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = minor_trade_crisis
+				duration = 3200
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = aso
+						value = 70
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = minor_trade_crisis
+				duration = 2400
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = aso
+						value = 60
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = minor_trade_crisis
+				duration = 1600
+			}
+		}
+		else = { 
+			add_country_modifier = { 
+				name = minor_trade_crisis
+				duration = 800
+			}
+		}
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = aso
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asr
+					value = 5
+				}
+				change_variable = { 
+					which = ass
+					value = 5
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asr
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asr
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asr
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asr
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_NOLoyProv_5
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = -10
+				}
+				change_variable = { 
+					which = asx
+					value = -10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_-10
+	}
+	option = { 
+		name = burghers_estate_events.2.b
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				AND = { 
+					check_variable = { 
+						which = asr
+						value = 75
+					}
+				}
+			}
+		}
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = aso
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asr
+					value = -10
+				}
+				change_variable = { 
+					which = ass
+					value = -10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asr
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asr
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asr
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asr
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_NOLoyProv_-10
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = 5
+				}
+				change_variable = { 
+					which = asx
+					value = 5
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_5
+	}
+}
+country_event = { 
+	id = burghers_estate_events.3
+	title = burghers_estate_events.3.t
+	desc = burghers_estate_events.3.d
+	picture = BURGHER_ESTATE_eventPicture
+	trigger = { 
+		AND = { 
+			check_variable = { 
+				which = ast
+				value = 5
+			}
+		}
+		NOT = { 
+			AND = { 
+				check_variable = { 
+					which = ast
+					value = 30
+				}
+			}
+		}
+	}
+	is_triggered_only = yes
+	mean_time_to_happen = { 
+		days = 1
+	}
+	option = { 
+		name = burghers_estate_events.3.a
+		custom_tooltip = BG_FactionBoost_-10
+		hidden_effect = { 
+			set_variable = { 
+				which = opx
+				value = -10
+			}
+			country_event = { 
+				id = PTM_Politics.001
+			}
+		}
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 65
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = FC_BG_Crackdown_L
+				duration = 1825
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 35
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = FC_BG_Crackdown_M
+				duration = 1825
+			}
+		}
+		else = { 
+			add_country_modifier = { 
+				name = FC_BG_Crackdown_S
+				duration = 1825
+			}
+		}
+	}
+}
+country_event = { 
+	id = burghers_estate_events.4
+	title = burghers_estate_events.4.t
+	desc = burghers_estate_events.4.d
+	picture = BURGHER_ESTATE_eventPicture
+	goto = growing_city
+	is_triggered_only = yes
+	trigger = { 
+		any_owned_province = { 
+			AND = { 
+				check_variable = { 
+					which = ast
+					value = 40
+				}
+			}
+			OR = { 
+				has_province_modifier = TN_Minor
+				has_province_modifier = TN_Important
+				has_province_modifier = TN_Major
+				has_province_modifier = TN_Dominant
+			}
+		}
+	}
+	mean_time_to_happen = { 
+		days = 1
+	}
+	immediate = { 
+		hidden_effect = { 
+			random_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 40
+						}
+					}
+					OR = { 
+						has_province_modifier = TN_Minor
+						has_province_modifier = TN_Important
+						has_province_modifier = TN_Major
+						has_province_modifier = TN_Dominant
+					}
+				}
+				save_event_target_as = growing_city
+			}
+		}
+	}
+	option = { 
+		name = OPT.ACCEPTPETITION
+		custom_tooltip = city_privileges_tooltip
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = 5
+				}
+				change_variable = { 
+					which = asx
+					value = 5
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_5
+		hidden_effect = { 
+			event_target:growing_city = { 
+				hidden_effect = { 
+					set_variable = { 
+						which = aro
+						value = 20
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						if = { 
+							limit = { 
+								AND = { 
+									check_variable = { 
+										which = atd
+										value = 0.001
+									}
+								}
+							}
+							if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = ati
+											value = 0.001
+										}
+									}
+								}
+								set_variable = { 
+									which = arp
+									which = ast
+								}
+								change_variable = { 
+									which = arp
+									which = aro
+								}
+								if = { 
+									limit = { 
+										AND = { 
+											check_variable = { 
+												which = arp
+												which = ati
+											}
+										}
+									}
+									set_variable = { 
+										which = aro
+										which = ati
+									}
+									subtract_variable = { 
+										which = aro
+										which = ast
+									}
+								}
+								set_variable = { 
+									which = arp
+									value = 0
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = ast
+											value = 0.001
+										}
+									}
+								}
+								set_variable = { 
+									which = aro
+									value = 0
+								}
+								subtract_variable = { 
+									which = aro
+									which = ast
+								}
+							}
+						}
+					}
+					change_variable = { 
+						which = ast
+						which = aro
+					}
+					change_variable = { 
+						which = asv
+						which = aro
+					}
+					multiply_variable = { 
+						which = ast
+						value = 0.1
+					}
+					multiply_variable = { 
+						which = ast
+						value = 10
+					}
+					multiply_variable = { 
+						which = asv
+						value = 0.1
+					}
+					multiply_variable = { 
+						which = asv
+						value = 10
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ast
+									value = 100
+								}
+							}
+						}
+						set_variable = { 
+							which = ast
+							value = 100
+						}
+					}
+					else_if = { 
+						limit = { 
+							NOT = { 
+								AND = { 
+									check_variable = { 
+										which = ast
+										value = 0
+									}
+								}
+							}
+						}
+						set_variable = { 
+							which = ast
+							value = 0
+						}
+					}
+					set_variable = { 
+						which = aro
+						value = 0
+					}
+					set_province_flag = Unrest_Update
+				}
+			}
+		}
+	}
+	option = { 
+		name = OPT.REJECTPETITION
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = -5
+				}
+				change_variable = { 
+					which = asx
+					value = -5
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_-5
+	}
+}
+country_event = { 
+	id = burghers_estate_events.6
+	title = burghers_estate_events.6.t
+	desc = burghers_estate_events.6.d
+	picture = BURGHER_ESTATE_UPSET_eventPicture
+	trigger = { 
+		faction_influence = { 
+			faction = FC_BG
+			influence = 20
+		}
+		faction_influence = { 
+			faction = FC_CL
+			influence = 20
+		}
+	}
+	is_triggered_only = yes
+	mean_time_to_happen = { 
+		days = 1
+	}
+	option = { 
+		name = burghers_estate_events.6.a
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asw
+							value = 30
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 1.5
+				AND = { 
+					check_variable = { 
+						which = atb
+						value = 70
+					}
+				}
+			}
+		}
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = 10
+				}
+				change_variable = { 
+					which = asx
+					value = 10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_10
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = asy
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = atb
+					value = -10
+				}
+				change_variable = { 
+					which = atc
+					value = -10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = atb
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = atb
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = atb
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = atb
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_CLLoyProv_-10
+		add_faction_influence = { 
+			faction = FC_BG
+			influence = 10
+		}
+		add_faction_influence = { 
+			faction = FC_CL
+			influence = -10
+		}
+	}
+	option = { 
+		name = burghers_estate_events.6.b
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = atb
+							value = 30
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 1.5
+				AND = { 
+					check_variable = { 
+						which = asw
+						value = 70
+					}
+				}
+			}
+		}
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = -10
+				}
+				change_variable = { 
+					which = asx
+					value = -10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_-10
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = asy
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = atb
+					value = 10
+				}
+				change_variable = { 
+					which = atc
+					value = 10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = atb
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = atb
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = atb
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = atb
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_CLLoyProv_10
+		add_faction_influence = { 
+			faction = FC_BG
+			influence = -10
+		}
+		add_faction_influence = { 
+			faction = FC_CL
+			influence = 10
+		}
+	}
+}
+country_event = { 
+	id = burghers_estate_events.7
+	title = burghers_estate_events.7.t
+	desc = burghers_estate_events.7.d
+	picture = BURGHER_ESTATE_UPSET_eventPicture
+	trigger = { 
+		faction_influence = { 
+			faction = FC_BG
+			influence = 25
+		}
+	}
+	is_triggered_only = yes
+	mean_time_to_happen = { 
+		days = 1
+	}
+	option = { 
+		name = burghers_estate_events.7.a
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asw
+							value = 25
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 1.2
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asw
+							value = 50
+						}
+					}
+				}
+			}
+		}
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 65
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = BG_TaxRelief_L
+				duration = 3650
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 35
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = BG_TaxRelief_M
+				duration = 3650
+			}
+		}
+		else = { 
+			add_country_modifier = { 
+				name = BG_TaxRelief_S
+				duration = 3650
+			}
+		}
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = 7.5
+				}
+				change_variable = { 
+					which = asx
+					value = 7.5
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_7.5
+		custom_tooltip = BG_TaxRelief_expl
+	}
+	option = { 
+		name = burghers_estate_events.7.b
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				AND = { 
+					check_variable = { 
+						which = asw
+						value = 70
+					}
+				}
+			}
+		}
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = -10
+				}
+				change_variable = { 
+					which = asx
+					value = -10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_-10
+	}
+}
+country_event = { 
+	id = burghers_estate_events.10
+	title = burghers_estate_events.10.t
+	desc = burghers_estate_events.10.d
+	picture = BURGHER_ESTATE_UPSET_eventPicture
+	trigger = { 
+		OR = { 
+			faction_influence = { 
+				faction = FC_BG
+				influence = 30
+			}
+			AND = { 
+				if = { 
+					limit = { 
+						always = yes
+					}
+					custom_trigger_tooltip = { 
+						tooltip = Advisor_HasCL1
+						OR = { 
+							ai = yes
+							philosopher_BG = 1
+							natural_scientist_BG = 1
+							artist_BG = 1
+							treasurer_BG = 1
+							master_of_mint_BG = 1
+							statesman_BG = 1
+							naval_reformer_BG = 1
+							trader_BG = 1
+							spymaster_BG = 1
+							colonial_governor_BG = 1
+							diplomat_BG = 1
+							navigator_BG = 1
+							grand_captain_BG = 1
+							alderman_BG = 1
+							architect_BG = 1
+							banker_BG = 1
+							grand_admiral_BG = 1
+							lord_proprietor_BG = 1
+							astronomist_BG = 1
+							composer_BG = 1
+						}
+					}
+				}
+			}
+		}
+	}
+	is_triggered_only = yes
+	mean_time_to_happen = { 
+		days = 1
+	}
+	option = { 
+		name = burghers_estate_events.10.a
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asw
+							value = 25
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 1.2
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asw
+							value = 50
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = BG_FactionBoost_20
+		hidden_effect = { 
+			set_variable = { 
+				which = opx
+				value = 20
+			}
+			country_event = { 
+				id = PTM_Politics.001
+			}
+		}
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 65
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = FC_BG_Boost_L
+				duration = 1825
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 35
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = FC_BG_Boost_M
+				duration = 1825
+			}
+		}
+		else = { 
+			add_country_modifier = { 
+				name = FC_BG_Boost_S
+				duration = 1825
+			}
+		}
+		hidden_effect = { 
+			if = { 
+				limit = { 
+					always = yes
+				}
+				if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_NO
+							influence = 50
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdr
+								value = -25
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdr
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdr
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdr
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdr
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdr
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdr
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = NO_RelationState_-25
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxj
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxj
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxj
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxj
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxj
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxj
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxj
+								value = 1000
+							}
+						}
+					}
+				}
+				else_if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_NO
+							influence = 30
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdr
+								value = -15
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdr
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdr
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdr
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdr
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdr
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdr
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = NO_RelationState_-15
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxj
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxj
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxj
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxj
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxj
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxj
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxj
+								value = 1000
+							}
+						}
+					}
+				}
+				else = { 
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdr
+								value = -5
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdr
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdr
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdr
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdr
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdr
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdr
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = NO_RelationState_-5
+						}
+					}
+				}
+			}
+			if = { 
+				limit = { 
+					always = yes
+				}
+				if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_CL
+							influence = 50
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdt
+								value = -25
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdt
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdt
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdt
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdt
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdt
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdt
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = CL_RelationState_-25
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxl
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxl
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxl
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxl
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxl
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxl
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxl
+								value = 1000
+							}
+						}
+					}
+				}
+				else_if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_CL
+							influence = 30
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdt
+								value = -15
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdt
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdt
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdt
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdt
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdt
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdt
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = CL_RelationState_-15
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxl
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxl
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxl
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxl
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxl
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxl
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxl
+								value = 1000
+							}
+						}
+					}
+				}
+				else = { 
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdt
+								value = -5
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdt
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdt
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdt
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdt
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdt
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdt
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = CL_RelationState_-5
+						}
+					}
+				}
+			}
+			if = { 
+				limit = { 
+					always = yes
+				}
+				if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_TR
+							influence = 50
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdu
+								value = -25
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdu
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdu
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdu
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdu
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdu
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdu
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = TR_RelationState_-25
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxm
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxm
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxm
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxm
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxm
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxm
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxm
+								value = 1000
+							}
+						}
+					}
+				}
+				else_if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_TR
+							influence = 30
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdu
+								value = -15
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdu
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdu
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdu
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdu
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdu
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdu
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = TR_RelationState_-15
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxm
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxm
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxm
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxm
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxm
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxm
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxm
+								value = 1000
+							}
+						}
+					}
+				}
+				else = { 
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdu
+								value = -5
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdu
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdu
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdu
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdu
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdu
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdu
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = TR_RelationState_-5
+						}
+					}
+				}
+			}
+			if = { 
+				limit = { 
+					always = yes
+				}
+				if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_BU
+							influence = 50
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdv
+								value = -25
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdv
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdv
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdv
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdv
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdv
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdv
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = BU_RelationState_-25
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxn
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxn
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxn
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxn
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxn
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxn
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxn
+								value = 1000
+							}
+						}
+					}
+				}
+				else_if = { 
+					limit = { 
+						faction_influence = { 
+							faction = FC_BU
+							influence = 30
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdv
+								value = -15
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdv
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdv
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdv
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdv
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdv
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdv
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = BU_RelationState_-15
+						}
+					}
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = hxn
+								value = -1
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = hxn
+												value = -5
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = hxn
+									value = -5
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = hxn
+											value = 5.001
+										}
+									}
+								}
+								set_variable = { 
+									which = hxn
+									value = 5
+								}
+							}
+							multiply_variable = { 
+								which = hxn
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = hxn
+								value = 1000
+							}
+						}
+					}
+				}
+				else = { 
+					if = { 
+						limit = { 
+							always = yes
+						}
+						hidden_effect = { 
+							change_variable = { 
+								which = bdv
+								value = -5
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = bdv
+												value = -100
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = bdv
+									value = -100
+								}
+							}
+							else_if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = bdv
+											value = 100.001
+										}
+									}
+								}
+								set_variable = { 
+									which = bdv
+									value = 100
+								}
+							}
+							multiply_variable = { 
+								which = bdv
+								value = 0.001
+							}
+							multiply_variable = { 
+								which = bdv
+								value = 1000
+							}
+						}
+						if = { 
+							limit = { 
+								always = yes
+							}
+							custom_tooltip = BU_RelationState_-5
+						}
+					}
+				}
+			}
+		}
+		define_advisor = { 
+			type = trader_BG
+			discount = yes
+		}
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = 10
+				}
+				change_variable = { 
+					which = asx
+					value = 10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_10
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = aso
+						value = 50
+					}
+				}
+			}
+			hidden_effect = { 
+				every_owned_province = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = aso
+								value = 0.001
+							}
+						}
+					}
+					change_variable = { 
+						which = asr
+						value = -10
+					}
+					change_variable = { 
+						which = ass
+						value = -10
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = asr
+									value = 100.001
+								}
+							}
+						}
+						set_variable = { 
+							which = asr
+							value = 100
+						}
+					}
+					else_if = { 
+						limit = { 
+							NOT = { 
+								AND = { 
+									check_variable = { 
+										which = asr
+										value = 0
+									}
+								}
+							}
+						}
+						set_variable = { 
+							which = asr
+							value = 0
+						}
+					}
+					set_province_flag = Unrest_Update
+				}
+			}
+			custom_tooltip = POP_NOLoyProv_-10
+		}
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = asy
+						value = 50
+					}
+				}
+			}
+			hidden_effect = { 
+				every_owned_province = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asy
+								value = 0.001
+							}
+						}
+					}
+					change_variable = { 
+						which = atb
+						value = -10
+					}
+					change_variable = { 
+						which = atc
+						value = -10
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = atb
+									value = 100.001
+								}
+							}
+						}
+						set_variable = { 
+							which = atb
+							value = 100
+						}
+					}
+					else_if = { 
+						limit = { 
+							NOT = { 
+								AND = { 
+									check_variable = { 
+										which = atb
+										value = 0
+									}
+								}
+							}
+						}
+						set_variable = { 
+							which = atb
+							value = 0
+						}
+					}
+					set_province_flag = Unrest_Update
+				}
+			}
+			custom_tooltip = POP_CLLoyProv_-10
+		}
+	}
+	option = { 
+		name = burghers_estate_events.10.b
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asr
+							value = 25
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 1.2
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asr
+							value = 50
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 1.5
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = atb
+							value = 25
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 1.2
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = atb
+							value = 50
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = BG_FactionBoost_-10
+		hidden_effect = { 
+			set_variable = { 
+				which = opx
+				value = -10
+			}
+			country_event = { 
+				id = PTM_Politics.001
+			}
+		}
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 65
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = FC_BG_Crackdown_L
+				duration = 1825
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 35
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = FC_BG_Crackdown_M
+				duration = 1825
+			}
+		}
+		else = { 
+			add_country_modifier = { 
+				name = FC_BG_Crackdown_S
+				duration = 1825
+			}
+		}
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = -10
+				}
+				change_variable = { 
+					which = asx
+					value = -10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_-10
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = aso
+						value = 50
+					}
+				}
+			}
+			hidden_effect = { 
+				every_owned_province = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = aso
+								value = 0.001
+							}
+						}
+					}
+					change_variable = { 
+						which = asr
+						value = 5
+					}
+					change_variable = { 
+						which = ass
+						value = 5
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = asr
+									value = 100.001
+								}
+							}
+						}
+						set_variable = { 
+							which = asr
+							value = 100
+						}
+					}
+					else_if = { 
+						limit = { 
+							NOT = { 
+								AND = { 
+									check_variable = { 
+										which = asr
+										value = 0
+									}
+								}
+							}
+						}
+						set_variable = { 
+							which = asr
+							value = 0
+						}
+					}
+					set_province_flag = Unrest_Update
+				}
+			}
+			custom_tooltip = POP_NOLoyProv_5
+		}
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = asy
+						value = 50
+					}
+				}
+			}
+			hidden_effect = { 
+				every_owned_province = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asy
+								value = 0.001
+							}
+						}
+					}
+					change_variable = { 
+						which = atb
+						value = 5
+					}
+					change_variable = { 
+						which = atc
+						value = 5
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = atb
+									value = 100.001
+								}
+							}
+						}
+						set_variable = { 
+							which = atb
+							value = 100
+						}
+					}
+					else_if = { 
+						limit = { 
+							NOT = { 
+								AND = { 
+									check_variable = { 
+										which = atb
+										value = 0
+									}
+								}
+							}
+						}
+						set_variable = { 
+							which = atb
+							value = 0
+						}
+					}
+					set_province_flag = Unrest_Update
+				}
+			}
+			custom_tooltip = POP_CLLoyProv_5
+		}
+	}
+}
+country_event = { 
+	id = burghers_estate_events.11
+	title = burghers_estate_events.11.t
+	desc = burghers_estate_events.11.d
+	picture = BURGHER_ESTATE_eventPicture
+	is_triggered_only = yes
+	trigger = { 
+		AND = { 
+			check_variable = { 
+				which = asw
+				value = 60
+			}
+		}
+		AND = { 
+			check_variable = { 
+				which = ast
+				value = 40
+			}
+		}
+	}
+	mean_time_to_happen = { 
+		days = 1
+	}
+	option = { 
+		name = OPT.GREAT
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 80
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = trusted_merchants
+				duration = 4000
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 70
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = trusted_merchants
+				duration = 3200
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 60
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = trusted_merchants
+				duration = 2400
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 50
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = trusted_merchants
+				duration = 1600
+			}
+		}
+		else = { 
+			add_country_modifier = { 
+				name = trusted_merchants
+				duration = 800
+			}
+		}
+	}
+}
+country_event = { 
+	id = burghers_estate_events.12
+	title = burghers_estate_events.12.t
+	desc = burghers_estate_events.12.d
+	picture = BURGHER_ESTATE_eventPicture
+	goto = bankrupted_merchants_province
+	is_triggered_only = yes
+	trigger = { 
+		any_owned_province = { 
+			AND = { 
+				check_variable = { 
+					which = ast
+					value = 30
+				}
+			}
+			OR = { 
+				has_province_modifier = TN_Minor
+				has_province_modifier = TN_Important
+				has_province_modifier = TN_Major
+				has_province_modifier = TN_Dominant
+			}
+		}
+	}
+	mean_time_to_happen = { 
+		days = 1
+	}
+	immediate = { 
+		hidden_effect = { 
+			random_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 30
+						}
+					}
+					OR = { 
+						has_province_modifier = TN_Minor
+						has_province_modifier = TN_Important
+						has_province_modifier = TN_Major
+						has_province_modifier = TN_Dominant
+					}
+				}
+				save_event_target_as = bankrupted_merchants_province
+			}
+		}
+	}
+	option = { 
+		name = burghers_estate_events.12.a
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asw
+							value = 25
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 1.2
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asw
+							value = 50
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 0.3
+				num_of_loans = 1
+			}
+			modifier = { 
+				factor = 0.3
+				NOT = { 
+					treasury = 50
+				}
+			}
+			modifier = { 
+				factor = 0.5
+				NOT = { 
+					treasury = 25
+				}
+			}
+		}
+		add_treasury = -25
+		if = { 
+			limit = { 
+				always = yes
+			}
+			hidden_effect = { 
+				change_variable = { 
+					which = bds
+					value = 2
+				}
+				if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = bds
+									value = -100
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = bds
+						value = -100
+					}
+				}
+				else_if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = bds
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = bds
+						value = 100
+					}
+				}
+				multiply_variable = { 
+					which = bds
+					value = 0.001
+				}
+				multiply_variable = { 
+					which = bds
+					value = 1000
+				}
+			}
+			if = { 
+				limit = { 
+					always = yes
+				}
+				custom_tooltip = BG_RelationState_2
+			}
+		}
+		event_target:bankrupted_merchants_province = { 
+			hidden_effect = { 
+				change_variable = { 
+					which = asw
+					value = 10
+				}
+				change_variable = { 
+					which = asx
+					value = 10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+			custom_tooltip = POP_BGLoyProv_10
+		}
+	}
+	option = { 
+		name = burghers_estate_events.12.b
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				AND = { 
+					check_variable = { 
+						which = asw
+						value = 70
+					}
+				}
+			}
+		}
+		add_country_modifier = { 
+			name = minor_trade_crisis
+			duration = 730
+		}
+		if = { 
+			limit = { 
+				always = yes
+			}
+			hidden_effect = { 
+				change_variable = { 
+					which = bds
+					value = -2
+				}
+				if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = bds
+									value = -100
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = bds
+						value = -100
+					}
+				}
+				else_if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = bds
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = bds
+						value = 100
+					}
+				}
+				multiply_variable = { 
+					which = bds
+					value = 0.001
+				}
+				multiply_variable = { 
+					which = bds
+					value = 1000
+				}
+			}
+			if = { 
+				limit = { 
+					always = yes
+				}
+				custom_tooltip = BG_RelationState_-2
+			}
+		}
+		event_target:bankrupted_merchants_province = { 
+			change_variable = { 
+				which = aan
+				value = -25
+			}
+			if = { 
+				limit = { 
+					NOT = { 
+						AND = { 
+							check_variable = { 
+								which = aan
+								value = 1.0
+							}
+						}
+					}
+				}
+				set_variable = { 
+					which = aan
+					value = 1.0
+				}
+			}
+			set_province_flag = POP_ChangedWealth
+			hidden_effect = { 
+				change_variable = { 
+					which = asw
+					value = -15
+				}
+				change_variable = { 
+					which = asx
+					value = -15
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+			custom_tooltip = POP_BGLoyProv_-15
+		}
+	}
+}
+country_event = { 
+	id = burghers_estate_events.13
+	title = burghers_estate_events.13.t
+	desc = burghers_estate_events.13.d
+	picture = BURGHER_ESTATE_eventPicture
+	goto = urbanization_province
+	is_triggered_only = yes
+	trigger = { 
+		any_owned_province = { 
+			AND = { 
+				check_variable = { 
+					which = ast
+					value = 25
+				}
+			}
+			OR = { 
+				AND = { 
+					AND = { 
+						check_variable = { 
+							which = aay
+							value = 10
+						}
+					}
+					NOT = { 
+						OR = { 
+							has_building = urban_infrastructure_2
+							custom_trigger_tooltip = { 
+								tooltip = hasbuildingorbetter_tooltip
+								OR = { 
+									has_building = urban_infrastructure_3
+									has_building = urban_infrastructure_4
+									has_building = urban_infrastructure_5
+									has_building = urban_infrastructure_7
+								}
+							}
+						}
+					}
+				}
+				AND = { 
+					AND = { 
+						check_variable = { 
+							which = aay
+							value = 30
+						}
+					}
+					NOT = { 
+						OR = { 
+							has_building = urban_infrastructure_3
+							custom_trigger_tooltip = { 
+								tooltip = hasbuildingorbetter_tooltip
+								OR = { 
+									has_building = urban_infrastructure_4
+									has_building = urban_infrastructure_5
+									has_building = urban_infrastructure_6
+									has_building = urban_infrastructure_7
+								}
+							}
+						}
+					}
+				}
+				AND = { 
+					AND = { 
+						check_variable = { 
+							which = aay
+							value = 80
+						}
+					}
+					NOT = { 
+						OR = { 
+							has_building = urban_infrastructure_4
+							custom_trigger_tooltip = { 
+								tooltip = hasbuildingorbetter_tooltip
+								OR = { 
+									has_building = urban_infrastructure_5
+									has_building = urban_infrastructure_6
+									has_building = urban_infrastructure_7
+								}
+							}
+						}
+					}
+				}
+				AND = { 
+					AND = { 
+						check_variable = { 
+							which = aay
+							value = 200
+						}
+					}
+					NOT = { 
+						OR = { 
+							has_building = urban_infrastructure_5
+							custom_trigger_tooltip = { 
+								tooltip = hasbuildingorbetter_tooltip
+								OR = { 
+									has_building = urban_infrastructure_6
+									has_building = urban_infrastructure_7
+								}
+							}
+						}
+					}
+				}
+				AND = { 
+					check_variable = { 
+						which = aay
+						value = 500
+					}
+				}
+			}
+			NOT = { 
+				has_province_modifier = unsanitary_suburbs
+			}
+		}
+	}
+	immediate = { 
+		hidden_effect = { 
+			random_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 25
+						}
+					}
+					OR = { 
+						AND = { 
+							AND = { 
+								check_variable = { 
+									which = aay
+									value = 10
+								}
+							}
+							NOT = { 
+								OR = { 
+									has_building = urban_infrastructure_2
+									custom_trigger_tooltip = { 
+										tooltip = hasbuildingorbetter_tooltip
+										OR = { 
+											has_building = urban_infrastructure_3
+											has_building = urban_infrastructure_4
+											has_building = urban_infrastructure_5
+											has_building = urban_infrastructure_7
+										}
+									}
+								}
+							}
+						}
+						AND = { 
+							AND = { 
+								check_variable = { 
+									which = aay
+									value = 30
+								}
+							}
+							NOT = { 
+								OR = { 
+									has_building = urban_infrastructure_3
+									custom_trigger_tooltip = { 
+										tooltip = hasbuildingorbetter_tooltip
+										OR = { 
+											has_building = urban_infrastructure_4
+											has_building = urban_infrastructure_5
+											has_building = urban_infrastructure_6
+											has_building = urban_infrastructure_7
+										}
+									}
+								}
+							}
+						}
+						AND = { 
+							AND = { 
+								check_variable = { 
+									which = aay
+									value = 80
+								}
+							}
+							NOT = { 
+								OR = { 
+									has_building = urban_infrastructure_4
+									custom_trigger_tooltip = { 
+										tooltip = hasbuildingorbetter_tooltip
+										OR = { 
+											has_building = urban_infrastructure_5
+											has_building = urban_infrastructure_6
+											has_building = urban_infrastructure_7
+										}
+									}
+								}
+							}
+						}
+						AND = { 
+							AND = { 
+								check_variable = { 
+									which = aay
+									value = 200
+								}
+							}
+							NOT = { 
+								OR = { 
+									has_building = urban_infrastructure_5
+									custom_trigger_tooltip = { 
+										tooltip = hasbuildingorbetter_tooltip
+										OR = { 
+											has_building = urban_infrastructure_6
+											has_building = urban_infrastructure_7
+										}
+									}
+								}
+							}
+						}
+						AND = { 
+							check_variable = { 
+								which = aay
+								value = 500
+							}
+						}
+					}
+					NOT = { 
+						has_province_modifier = unsanitary_suburbs
+					}
+				}
+				save_event_target_as = urbanization_province
+			}
+		}
+	}
+	mean_time_to_happen = { 
+		days = 1
+	}
+	option = {
+trigger = { event_target:urbanization_province = { Redux_ConstructionCanQueue = yes } }
+ 
+		name = burghers_estate_events.13.a
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asw
+							value = 25
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 1.2
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asw
+							value = 50
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 0.3
+				num_of_loans = 1
+			}
+			modifier = { 
+				factor = 0.3
+				NOT = { 
+					treasury = 80
+				}
+			}
+		}
+		add_treasury = -80
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = 10
+				}
+				change_variable = { 
+					which = asx
+					value = 10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_10
+		hidden_effect = { 
+			event_target:urbanization_province = { 
+				change_variable = { 
+					which = gcx
+					value = 80
+				}
+				set_variable = { 
+					which = arh
+					value = 2
+				}
+				set_variable = { 
+					which = ari
+					value = 2
+				}
+				Redux_ConstructionSubmit = { id = 10 height = Tmp_1 width = Tmp_2 owner = 0 origin = 2 }
+				set_variable = { 
+					which = arh
+					value = 0
+				}
+				set_variable = { 
+					which = ari
+					value = 2
+				}
+			}
+		}
+	}
+	option = { 
+		name = burghers_estate_events.13.b
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				AND = { 
+					check_variable = { 
+						which = asw
+						value = 70
+					}
+				}
+			}
+		}
+		event_target:urbanization_province = { 
+			add_province_modifier = { 
+				name = "unsanitary_suburbs"
+				duration = 7300
+			}
+		}
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = -5
+				}
+				change_variable = { 
+					which = asx
+					value = -5
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_-5
+	}
+}
+country_event = { 
+	id = burghers_estate_events.14
+	title = burghers_estate_events.14.t
+	desc = burghers_estate_events.14.d
+	picture = BURGHER_ESTATE_UPSET_eventPicture
+	is_triggered_only = yes
+	trigger = { 
+		faction_influence = { 
+			faction = FC_BG
+			influence = 30
+		}
+		OR = { 
+			AND = { 
+				is_variable_equal = { 
+					which = bbj
+					value = -4
+				}
+			}
+			AND = { 
+				is_variable_equal = { 
+					which = bbj
+					value = -3
+				}
+			}
+			AND = { 
+				is_variable_equal = { 
+					which = bbj
+					value = -2
+				}
+			}
+			AND = { 
+				is_variable_equal = { 
+					which = bbj
+					value = -1
+				}
+			}
+			AND = { 
+				is_variable_equal = { 
+					which = bbj
+					value = 0
+				}
+			}
+		}
+	}
+	mean_time_to_happen = { 
+		days = 1
+	}
+	option = { 
+		name = burghers_estate_events.14.a
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asw
+							value = 25
+						}
+					}
+				}
+			}
+			modifier = { 
+				factor = 1.2
+				NOT = { 
+					AND = { 
+						check_variable = { 
+							which = asw
+							value = 50
+						}
+					}
+				}
+			}
+		}
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 65
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = BG_TaxRelief_L
+				duration = 3650
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 35
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = BG_TaxRelief_M
+				duration = 3650
+			}
+		}
+		else = { 
+			add_country_modifier = { 
+				name = BG_TaxRelief_S
+				duration = 3650
+			}
+		}
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = 7.5
+				}
+				change_variable = { 
+					which = asx
+					value = 7.5
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_7.5
+		custom_tooltip = BG_TaxRelief_expl
+	}
+	option = { 
+		name = burghers_estate_events.14.b
+		ai_chance = { 
+			factor = 50
+			modifier = { 
+				factor = 1.5
+				AND = { 
+					check_variable = { 
+						which = asw
+						value = 70
+					}
+				}
+			}
+		}
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = -10
+				}
+				change_variable = { 
+					which = asx
+					value = -10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_-10
+	}
+}
+country_event = { 
+	id = burghers_estate_events.15
+	title = burghers_estate_events.15.t
+	desc = burghers_estate_events.15.d
+	picture = BURGHER_ESTATE_UPSET_eventPicture
+	goto = city_protests_province
+	trigger = { 
+		num_of_cities = 5
+		NOT = { 
+			AND = { 
+				check_variable = { 
+					which = asw
+					value = 30
+				}
+			}
+		}
+		any_owned_province = { 
+			AND = { 
+				check_variable = { 
+					which = ast
+					value = 40
+				}
+			}
+			AND = { 
+				check_variable = { 
+					which = aay
+					value = 10
+				}
+			}
+		}
+	}
+	is_triggered_only = yes
+	mean_time_to_happen = { 
+		days = 1
+	}
+	immediate = { 
+		hidden_effect = { 
+			random_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 40
+						}
+					}
+					AND = { 
+						check_variable = { 
+							which = aay
+							value = 10
+						}
+					}
+				}
+				save_event_target_as = city_protests_province
+			}
+		}
+	}
+	mean_time_to_happen = { 
+		days = 1
+		modifier = { 
+			factor = 2.0
+			NOT = { 
+				AND = { 
+					check_variable = { 
+						which = asw
+						value = 20
+					}
+				}
+			}
+		}
+	}
+	option = { 
+		name = burghers_estate_events.15.a
+		ai_chance = { 
+			factor = 0
+		}
+		event_target:city_protests_province = { 
+			spawn_rebels = { 
+				type = mob_rebels
+				size = 0.5
+			}
+		}
+	}
+	option = { 
+		name = burghers_estate_events.15.b
+		ai_chance = { 
+			factor = 1
+		}
+		if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 65
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = BG_Autonomy_L
+				duration = 3650
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = ast
+						value = 35
+					}
+				}
+			}
+			add_country_modifier = { 
+				name = BG_Autonomy_M
+				duration = 3650
+			}
+		}
+		else = { 
+			add_country_modifier = { 
+				name = BG_Autonomy_S
+				duration = 3650
+			}
+		}
+		custom_tooltip = BG_Autonomy_effect
+		hidden_effect = { 
+			every_owned_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = ast
+							value = 0.001
+						}
+					}
+				}
+				change_variable = { 
+					which = asw
+					value = 10
+				}
+				change_variable = { 
+					which = asx
+					value = 10
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = asw
+								value = 100.001
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 100
+					}
+				}
+				else_if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = asw
+									value = 0
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = asw
+						value = 0
+					}
+				}
+				set_province_flag = Unrest_Update
+			}
+		}
+		custom_tooltip = POP_BGLoyProv_10
+		custom_tooltip = BG_Autonomy_expl
+	}
+}

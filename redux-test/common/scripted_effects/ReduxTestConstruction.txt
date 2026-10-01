@@ -2,7 +2,7 @@
 ReduxTest_StartOrder = {
     set_key = { lhs = Construct_Amount value = $amount$ }
     set_key = { lhs = Construct_Parallel value = $width$ }
-    Infra_StartProject = { id = $type$ owner = $payer$ height = Construct_Amount width = Construct_Parallel }
+    Redux_ConstructionSubmit = { id = $type$ owner = $payer$ height = Construct_Amount width = Construct_Parallel origin = $origin$ }
 }
 
 ReduxTest_Begin = {
@@ -53,6 +53,9 @@ ReduxTest_CountSlot = {
         change_var_by_key = { var = ReduxTestUnits key = Infra_S$slot$Size }
         if = {
             limit = { ReduxTest_ManualSlot = { slot = $slot$ } }
+            if = { limit = { NOT = { is_key_equal = { lhs = Infra_S$slot$Owner value = 0 } } }
+                set_province_flag = ReduxTestSlotsFailed
+            }
             change_variable = { which = ReduxTestManual value = 1 }
             change_variable = { which = ReduxTestManualUnits value = 1 }
             change_var_by_key = { var = ReduxTestManualUnits key = Infra_S$slot$Size }
@@ -71,10 +74,19 @@ ReduxTest_CountSlot = {
             }
         }
         else = { change_variable = { which = ReduxTestOther value = 1 } }
+        if = { limit = { is_variable_equal = { which = Redux_ConstructionS$slot$Origin value = 2 } }
+            change_variable = { which = ReduxTestClassActive value = 1 }
+        }
     }
 }
 
 ReduxTest_Measure = {
+    Redux_ConstructionPrepare = yes
+    Redux_ConstructionRefresh = yes
+    set_variable = { which = ReduxTestClassActive value = 0 }
+    set_variable = { which = ReduxTestWaiting value = 0 }
+    set_variable = { which = ReduxTestClassWaiting value = 0 }
+    set_variable = { which = ReduxTestOrders value = 0 }
     set_variable = { which = ReduxTestActive value = 0 }
     set_variable = { which = ReduxTestUnits value = 0 }
     set_variable = { which = ReduxTestManual value = 0 }
@@ -93,6 +105,7 @@ ReduxTest_Measure = {
     ReduxTest_CountSlot = { slot = 7 }
     ReduxTest_CountSlot = { slot = 8 }
     ReduxTest_CountSlot = { slot = 9 }
+    ReduxTest_CountOrders = yes
     set_variable = { which = ReduxTestExpected which = ReduxTestWidth }
     if = { limit = { check_variable = { which = ReduxTestExpected value = 10 } }
         set_variable = { which = ReduxTestExpected value = 10 } }
@@ -282,6 +295,7 @@ ReduxTest_ReleaseBlocker = {
 }
 
 ReduxTest_Release = {
+    set_province_flag = Redux_ConstructionSuspended
     ReduxTest_ReleaseBlocker = { slot = 0 }
     ReduxTest_ReleaseBlocker = { slot = 1 }
     ReduxTest_ReleaseBlocker = { slot = 2 }
@@ -292,6 +306,8 @@ ReduxTest_Release = {
     ReduxTest_ReleaseBlocker = { slot = 7 }
     ReduxTest_ReleaseBlocker = { slot = 8 }
     ReduxTest_ReleaseBlocker = { slot = 9 }
+    clr_province_flag = Redux_ConstructionSuspended
+    Redux_ConstructionDispatch = yes
     set_province_flag = ReduxTestReleased
     Infra_RefreshModifier = yes
     ReduxTest_Measure = yes
@@ -320,16 +336,18 @@ ReduxTest_Advance = {
     set_key = { lhs = Prod_FillR value = 100 }
     set_var_from_key = { var = ReduxTestSupplyUL key = Prod_FillUL }
     set_key = { lhs = Prod_FillUL value = 100 }
-    Infra_CheckProject = { slot = 0 }
-    Infra_CheckProject = { slot = 1 }
-    Infra_CheckProject = { slot = 2 }
-    Infra_CheckProject = { slot = 3 }
-    Infra_CheckProject = { slot = 4 }
-    Infra_CheckProject = { slot = 5 }
-    Infra_CheckProject = { slot = 6 }
-    Infra_CheckProject = { slot = 7 }
-    Infra_CheckProject = { slot = 8 }
-    Infra_CheckProject = { slot = 9 }
+    Redux_ConstructionAnnualBegin = yes
+    Redux_ConstructionAnnualCheck = { slot = 0 }
+    Redux_ConstructionAnnualCheck = { slot = 1 }
+    Redux_ConstructionAnnualCheck = { slot = 2 }
+    Redux_ConstructionAnnualCheck = { slot = 3 }
+    Redux_ConstructionAnnualCheck = { slot = 4 }
+    Redux_ConstructionAnnualCheck = { slot = 5 }
+    Redux_ConstructionAnnualCheck = { slot = 6 }
+    Redux_ConstructionAnnualCheck = { slot = 7 }
+    Redux_ConstructionAnnualCheck = { slot = 8 }
+    Redux_ConstructionAnnualCheck = { slot = 9 }
+    Redux_ConstructionAnnualEnd = yes
     set_key_from_var = { key = TN_ProvFill6 var = ReduxTestSupply6 }
     set_key_from_var = { key = TN_ProvFill10 var = ReduxTestSupply10 }
     set_key_from_var = { key = TN_ProvFill22 var = ReduxTestSupply22 }
@@ -348,6 +366,9 @@ ReduxTest_Advance = {
 }
 
 ReduxTest_Cleanup = {
+    set_province_flag = Redux_ConstructionSuspended
+    Redux_ConstructionPrepare = yes
+    Redux_ConstructionCancelWaiting = yes
     ReduxTest_CancelSlot = { slot = 0 }
     ReduxTest_CancelSlot = { slot = 1 }
     ReduxTest_CancelSlot = { slot = 2 }
@@ -358,6 +379,8 @@ ReduxTest_Cleanup = {
     ReduxTest_CancelSlot = { slot = 7 }
     ReduxTest_CancelSlot = { slot = 8 }
     ReduxTest_CancelSlot = { slot = 9 }
+    clr_province_flag = Redux_ConstructionSuspended
+    Redux_ConstructionRefresh = yes
     Infra_RefreshModifier = yes
     ReduxTest_Measure = yes
     if = { limit = { is_variable_equal = { which = ReduxTestActive value = 0 } }
@@ -376,4 +399,56 @@ ReduxTest_Cleanup = {
         province_event = { id = ReduxTest.22 }
     }
     else = { province_event = { id = ReduxTest.99 } }
+}
+
+ReduxTest_CountOrder = {
+    if = { limit = { has_province_flag = Redux_ConstructionQ$order$ }
+        change_variable = { which = ReduxTestOrders value = 1 }
+        change_variable = { which = ReduxTestUnits which = Redux_ConstructionQ$order$Pending }
+        change_variable = { which = ReduxTestWaiting which = Redux_ConstructionQ$order$Pending }
+        if = { limit = { is_variable_equal = { which = Redux_ConstructionQ$order$Origin value = 1 } }
+            change_variable = { which = ReduxTestManualUnits which = Redux_ConstructionQ$order$Pending }
+            if = { limit = { is_variable_equal = { which = ReduxTestWidth value = 0 } }
+                set_variable = { which = ReduxTestWidth which = Redux_ConstructionQ$order$Width }
+                set_variable = { which = ReduxTestType which = Redux_ConstructionQ$order$Type }
+            }
+        }
+        else_if = { limit = { is_variable_equal = { which = Redux_ConstructionQ$order$Origin value = 2 } }
+            change_variable = { which = ReduxTestClassWaiting which = Redux_ConstructionQ$order$Pending }
+        }
+    }
+}
+ReduxTest_CountOrders = {
+    ReduxTest_CountOrder = { order = 1 }
+    ReduxTest_CountOrder = { order = 2 }
+    ReduxTest_CountOrder = { order = 3 }
+    ReduxTest_CountOrder = { order = 4 }
+    ReduxTest_CountOrder = { order = 5 }
+    ReduxTest_CountOrder = { order = 6 }
+    ReduxTest_CountOrder = { order = 7 }
+    ReduxTest_CountOrder = { order = 8 }
+    ReduxTest_CountOrder = { order = 9 }
+    ReduxTest_CountOrder = { order = 10 }
+    ReduxTest_CountOrder = { order = 11 }
+    ReduxTest_CountOrder = { order = 12 }
+    ReduxTest_CountOrder = { order = 13 }
+    ReduxTest_CountOrder = { order = 14 }
+    ReduxTest_CountOrder = { order = 15 }
+    ReduxTest_CountOrder = { order = 16 }
+    ReduxTest_CountOrder = { order = 17 }
+    ReduxTest_CountOrder = { order = 18 }
+    ReduxTest_CountOrder = { order = 19 }
+    ReduxTest_CountOrder = { order = 20 }
+    ReduxTest_CountOrder = { order = 21 }
+    ReduxTest_CountOrder = { order = 22 }
+    ReduxTest_CountOrder = { order = 23 }
+    ReduxTest_CountOrder = { order = 24 }
+    ReduxTest_CountOrder = { order = 25 }
+    ReduxTest_CountOrder = { order = 26 }
+    ReduxTest_CountOrder = { order = 27 }
+    ReduxTest_CountOrder = { order = 28 }
+    ReduxTest_CountOrder = { order = 29 }
+    ReduxTest_CountOrder = { order = 30 }
+    ReduxTest_CountOrder = { order = 31 }
+    ReduxTest_CountOrder = { order = 32 }
 }

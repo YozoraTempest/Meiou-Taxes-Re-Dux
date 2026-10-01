@@ -1,0 +1,3238 @@
+namespace = SYS_Courthouse
+country_event = { 
+	id = SYS_Courthouse.100
+	title = no_localisation
+	desc = no_localisation
+	picture = CITY_DEVELOPMENT_eventPicture
+	is_triggered_only = yes
+	hidden = yes
+	immediate = { }
+	option = { 
+		name = PTM_EXIT
+		highlight = yes
+		hidden_effect = { 
+			country_event = { 
+				id = SYS_Courthouse.001
+			}
+		}
+	}
+}
+country_event = { 
+	id = SYS_Courthouse.001
+	title = SYS_Courthouse.001.t
+	desc = SYS_Courthouse.001.desc
+	picture = CITY_DEVELOPMENT_eventPicture
+	is_triggered_only = yes
+	immediate = { 
+		hidden_effect = { 
+			set_variable = { 
+				which = nuq
+				value = 0
+			}
+			set_variable = { 
+				which = nua
+				value = 0
+			}
+			set_variable = { 
+				which = nuq
+				value = 0
+			}
+			every_owned_province = { 
+				set_variable = { 
+					which = nua
+					value = 0
+				}
+				set_variable = { 
+					which = nts
+					which = PREV
+				}
+				if = { 
+					limit = { 
+						OR = { 
+							has_province_flag = UI_Select
+							PREV = { 
+								ai = yes
+							}
+						}
+					}
+					if = { 
+						limit = { 
+							always = no
+							always = no
+							AND = { 
+								check_variable = { 
+									which = nts
+									value = 0.001
+								}
+							}
+						}
+						subtract_variable = { 
+							which = nts
+							value = 1
+						}
+						if = { 
+							limit = { 
+								OR = { 
+									owner = { 
+										AND = { 
+											is_variable_equal = { 
+												which = ntt
+												value = 0
+											}
+										}
+									}
+									overlord = { 
+										AND = { 
+											is_variable_equal = { 
+												which = ntt
+												value = 0
+											}
+										}
+									}
+								}
+							}
+							if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = nts
+											value = 7
+										}
+									}
+								}
+								set_variable = { 
+									which = nua
+									which = geq
+								}
+							}
+							else = { 
+								if = { 
+									limit = { 
+										AND = { 
+											check_variable = { 
+												which = nts
+												value = 3
+											}
+										}
+									}
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = nts
+													value = 4
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nts
+														value = 6
+													}
+												}
+											}
+											set_variable = { 
+												which = nua
+												value = 45
+											}
+										}
+										else_if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nts
+														value = 5
+													}
+												}
+											}
+											set_variable = { 
+												which = nua
+												value = 31
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = nua
+												value = 15
+											}
+										}
+									}
+									else = { 
+										set_variable = { 
+											which = nua
+											value = 10
+										}
+									}
+								}
+								else = { 
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = nts
+													value = 1
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nts
+														value = 2
+													}
+												}
+											}
+											set_variable = { 
+												which = nua
+												value = 6
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = nua
+												value = 3
+											}
+										}
+									}
+									else = { 
+										set_variable = { 
+											which = nua
+											value = 1
+										}
+									}
+								}
+							}
+							change_variable = { 
+								which = nua
+								which = nue
+							}
+							subtract_variable = { 
+								which = nua
+								which = geq
+							}
+							subtract_variable = { 
+								which = nua
+								which = gjb
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = nua
+												value = 0
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = nua
+									value = 0
+								}
+							}
+							set_variable = { 
+								which = nts
+								value = 0
+							}
+							set_variable = { 
+								which = nts
+								which = nua
+							}
+							set_variable = { 
+								which = nuq
+								which = nts
+							}
+							multiply_variable = { 
+								which = nua
+								which = gfe
+							}
+						}
+						else_if = { 
+							limit = { 
+								OR = { 
+									owner = { 
+										AND = { 
+											is_variable_equal = { 
+												which = ntt
+												value = 1
+											}
+										}
+									}
+									overlord = { 
+										AND = { 
+											is_variable_equal = { 
+												which = ntt
+												value = 1
+											}
+										}
+									}
+								}
+							}
+							if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = nts
+											value = 7
+										}
+									}
+								}
+								set_variable = { 
+									which = nua
+									which = geq
+								}
+							}
+							else = { 
+								if = { 
+									limit = { 
+										AND = { 
+											check_variable = { 
+												which = nts
+												value = 3
+											}
+										}
+									}
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = nts
+													value = 4
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nts
+														value = 6
+													}
+												}
+											}
+											set_variable = { 
+												which = nua
+												value = 45
+											}
+										}
+										else_if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nts
+														value = 5
+													}
+												}
+											}
+											set_variable = { 
+												which = nua
+												value = 31
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = nua
+												value = 15
+											}
+										}
+									}
+									else = { 
+										set_variable = { 
+											which = nua
+											value = 10
+										}
+									}
+								}
+								else = { 
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = nts
+													value = 1
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nts
+														value = 2
+													}
+												}
+											}
+											set_variable = { 
+												which = nua
+												value = 6
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = nua
+												value = 3
+											}
+										}
+									}
+									else = { 
+										set_variable = { 
+											which = nua
+											value = 1
+										}
+									}
+								}
+							}
+							change_variable = { 
+								which = nua
+								which = nue
+							}
+							set_variable = { 
+								which = nuc
+								value = 5
+							}
+							if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = nuc
+											value = 7
+										}
+									}
+								}
+								set_variable = { 
+									which = nub
+									which = geq
+								}
+							}
+							else = { 
+								if = { 
+									limit = { 
+										AND = { 
+											check_variable = { 
+												which = nuc
+												value = 3
+											}
+										}
+									}
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = nuc
+													value = 4
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nuc
+														value = 6
+													}
+												}
+											}
+											set_variable = { 
+												which = nub
+												value = 45
+											}
+										}
+										else_if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nuc
+														value = 5
+													}
+												}
+											}
+											set_variable = { 
+												which = nub
+												value = 31
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = nub
+												value = 15
+											}
+										}
+									}
+									else = { 
+										set_variable = { 
+											which = nub
+											value = 10
+										}
+									}
+								}
+								else = { 
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = nuc
+													value = 1
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nuc
+														value = 2
+													}
+												}
+											}
+											set_variable = { 
+												which = nub
+												value = 6
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = nub
+												value = 3
+											}
+										}
+									}
+									else = { 
+										set_variable = { 
+											which = nub
+											value = 1
+										}
+									}
+								}
+							}
+							subtract_variable = { 
+								which = nub
+								which = geq
+							}
+							subtract_variable = { 
+								which = nub
+								which = gjb
+							}
+							if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = nua
+											which = nub
+										}
+									}
+								}
+								set_variable = { 
+									which = nua
+									which = nub
+								}
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = nua
+												value = 0
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = nua
+									value = 0
+								}
+							}
+							set_variable = { 
+								which = nts
+								value = 0
+							}
+							set_variable = { 
+								which = nts
+								which = nua
+							}
+							set_variable = { 
+								which = nuq
+								which = nts
+							}
+							multiply_variable = { 
+								which = nua
+								which = gfe
+							}
+							set_variable = { 
+								which = nub
+								value = 0
+							}
+							set_variable = { 
+								which = nuc
+								value = 0
+							}
+						}
+						else = { 
+							set_variable = { 
+								which = nts
+								value = 0
+							}
+						}
+					}
+					else = { 
+						set_variable = { 
+							which = nts
+							value = 0
+						}
+					}
+					PREV = { 
+						change_variable = { 
+							which = nua
+							which = PREV
+						}
+						change_variable = { 
+							which = nuq
+							which = PREV
+						}
+					}
+				}
+				else = { 
+					set_variable = { 
+						which = nts
+						value = 0
+					}
+				}
+			}
+			set_country_flag = UI_Freeze
+			export_to_variable = { 
+				which = export
+				value = treasury
+			}
+			set_variable = { 
+				which = nuc
+				which = export
+			}
+			set_variable = { 
+				which = nub
+				which = nua
+			}
+			set_variable = { 
+				which = nud
+				which = nuf
+			}
+			change_variable = { 
+				which = nud
+				value = 1
+			}
+			if = { 
+				limit = { 
+					NOT = { 
+						OR = { 
+							AND = { 
+								is_variable_equal = { 
+									which = nue
+									value = 1
+								}
+							}
+							AND = { 
+								is_variable_equal = { 
+									which = nue
+									value = 2
+								}
+							}
+							AND = { 
+								is_variable_equal = { 
+									which = nue
+									value = 3
+								}
+							}
+							AND = { 
+								is_variable_equal = { 
+									which = nue
+									value = 4
+								}
+							}
+							AND = { 
+								is_variable_equal = { 
+									which = nue
+									value = 5
+								}
+							}
+						}
+					}
+				}
+				set_variable = { 
+					which = nue
+					value = 0
+				}
+			}
+			set_variable = { 
+				which = nus
+				value = 0
+			}
+			every_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = nts
+							value = 0.001
+						}
+					}
+					AND = { 
+						OR = { 
+							is_city = yes
+							is_colony = yes
+						}
+						NOT = { 
+							province_id = 5154
+						}
+					}
+					OR = { 
+						owned_by = ROOT
+						owner = { 
+							OR = { 
+								OR = { 
+									is_subject_of_type = vassal
+									is_subject_of_type = custom_vassal
+								}
+								is_subject_of_type = march
+								is_subject_of_type = appanage_subject
+								is_subject_of_type = daimyo_vassal
+								is_subject_of_type = decentralized_vassal
+								is_subject_of_type = rebellious_decentralized_vassal
+								is_subject_of_type = warlord
+								is_subject_of_type = commission
+								is_subject_of_type = client_vassal
+								is_subject_of_type = client_march
+								is_subject_of_type = colony
+							}
+							is_subject_of = ROOT
+						}
+					}
+				}
+				set_variable = { 
+					which = nur
+					which = anj
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = nur
+								value = 100
+							}
+						}
+					}
+					set_variable = { 
+						which = nur
+						value = 100
+					}
+				}
+				if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 1
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = nur
+						value = 1
+					}
+				}
+				divide_variable = { 
+					which = nur
+					value = 100
+				}
+				set_variable = { 
+					which = nus
+					value = 1
+				}
+				subtract_variable = { 
+					which = nus
+					which = nur
+				}
+				multiply_variable = { 
+					which = nus
+					value = 0.5
+				}
+				change_variable = { 
+					which = nus
+					value = 0.5
+				}
+				multiply_variable = { 
+					which = nus
+					which = anj
+				}
+				multiply_variable = { 
+					which = nus
+					value = 5
+				}
+				set_variable = { 
+					which = nur
+					which = gcn
+				}
+				change_variable = { 
+					which = nur
+					which = nts
+				}
+				set_variable = { 
+					which = nue
+					which = nts
+				}
+				set_variable = { 
+					which = nud
+					value = 0
+				}
+				while = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = nue
+								value = 1
+							}
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 7
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 4
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 6
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 3.5
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 5
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 3
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 4
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 2.5
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 3
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 2
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 2
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 1.5
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 1
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 1
+						}
+					}
+					subtract_variable = { 
+						which = nur
+						value = 1
+					}
+					subtract_variable = { 
+						which = nue
+						value = 1
+					}
+				}
+				multiply_variable = { 
+					which = nus
+					which = nud
+				}
+				PREV = { 
+					change_variable = { 
+						which = nus
+						which = PREV
+					}
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.001.a
+		trigger = { 
+			any_owned_province = { 
+				has_province_flag = UI_Select
+				OR = { 
+					owned_by = ROOT
+					owner = { 
+						AND = { 
+							is_subject = yes
+							NOT = { 
+								is_subject_of_type = tributary_state
+							}
+							NOT = { 
+								is_subject_of_type = close_tributary_state
+							}
+						}
+						is_subject_of = ROOT
+					}
+				}
+			}
+			AND = { 
+				check_variable = { 
+					which = nts
+					value = 0.001
+				}
+			}
+		}
+		hidden_effect = { 
+			set_variable = { 
+				which = nua
+				value = 0
+			}
+			set_variable = { 
+				which = nuq
+				value = 0
+			}
+			every_owned_province = { 
+				set_variable = { 
+					which = nua
+					value = 0
+				}
+				set_variable = { 
+					which = nts
+					which = PREV
+				}
+				if = { 
+					limit = { 
+						OR = { 
+							has_province_flag = UI_Select
+							PREV = { 
+								ai = yes
+							}
+						}
+					}
+					if = { 
+						limit = { 
+							always = no
+							always = no
+							AND = { 
+								check_variable = { 
+									which = nts
+									value = 0.001
+								}
+							}
+						}
+						subtract_variable = { 
+							which = nts
+							value = 1
+						}
+						if = { 
+							limit = { 
+								OR = { 
+									owner = { 
+										AND = { 
+											is_variable_equal = { 
+												which = ntt
+												value = 0
+											}
+										}
+									}
+									overlord = { 
+										AND = { 
+											is_variable_equal = { 
+												which = ntt
+												value = 0
+											}
+										}
+									}
+								}
+							}
+							if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = nts
+											value = 7
+										}
+									}
+								}
+								set_variable = { 
+									which = nua
+									which = geq
+								}
+							}
+							else = { 
+								if = { 
+									limit = { 
+										AND = { 
+											check_variable = { 
+												which = nts
+												value = 3
+											}
+										}
+									}
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = nts
+													value = 4
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nts
+														value = 6
+													}
+												}
+											}
+											set_variable = { 
+												which = nua
+												value = 45
+											}
+										}
+										else_if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nts
+														value = 5
+													}
+												}
+											}
+											set_variable = { 
+												which = nua
+												value = 31
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = nua
+												value = 15
+											}
+										}
+									}
+									else = { 
+										set_variable = { 
+											which = nua
+											value = 10
+										}
+									}
+								}
+								else = { 
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = nts
+													value = 1
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nts
+														value = 2
+													}
+												}
+											}
+											set_variable = { 
+												which = nua
+												value = 6
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = nua
+												value = 3
+											}
+										}
+									}
+									else = { 
+										set_variable = { 
+											which = nua
+											value = 1
+										}
+									}
+								}
+							}
+							change_variable = { 
+								which = nua
+								which = nue
+							}
+							subtract_variable = { 
+								which = nua
+								which = geq
+							}
+							subtract_variable = { 
+								which = nua
+								which = gjb
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = nua
+												value = 0
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = nua
+									value = 0
+								}
+							}
+							set_variable = { 
+								which = nts
+								value = 0
+							}
+							set_variable = { 
+								which = nts
+								which = nua
+							}
+							set_variable = { 
+								which = nuq
+								which = nts
+							}
+							multiply_variable = { 
+								which = nua
+								which = gfe
+							}
+						}
+						else_if = { 
+							limit = { 
+								OR = { 
+									owner = { 
+										AND = { 
+											is_variable_equal = { 
+												which = ntt
+												value = 1
+											}
+										}
+									}
+									overlord = { 
+										AND = { 
+											is_variable_equal = { 
+												which = ntt
+												value = 1
+											}
+										}
+									}
+								}
+							}
+							if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = nts
+											value = 7
+										}
+									}
+								}
+								set_variable = { 
+									which = nua
+									which = geq
+								}
+							}
+							else = { 
+								if = { 
+									limit = { 
+										AND = { 
+											check_variable = { 
+												which = nts
+												value = 3
+											}
+										}
+									}
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = nts
+													value = 4
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nts
+														value = 6
+													}
+												}
+											}
+											set_variable = { 
+												which = nua
+												value = 45
+											}
+										}
+										else_if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nts
+														value = 5
+													}
+												}
+											}
+											set_variable = { 
+												which = nua
+												value = 31
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = nua
+												value = 15
+											}
+										}
+									}
+									else = { 
+										set_variable = { 
+											which = nua
+											value = 10
+										}
+									}
+								}
+								else = { 
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = nts
+													value = 1
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nts
+														value = 2
+													}
+												}
+											}
+											set_variable = { 
+												which = nua
+												value = 6
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = nua
+												value = 3
+											}
+										}
+									}
+									else = { 
+										set_variable = { 
+											which = nua
+											value = 1
+										}
+									}
+								}
+							}
+							change_variable = { 
+								which = nua
+								which = nue
+							}
+							set_variable = { 
+								which = nuc
+								value = 5
+							}
+							if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = nuc
+											value = 7
+										}
+									}
+								}
+								set_variable = { 
+									which = nub
+									which = geq
+								}
+							}
+							else = { 
+								if = { 
+									limit = { 
+										AND = { 
+											check_variable = { 
+												which = nuc
+												value = 3
+											}
+										}
+									}
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = nuc
+													value = 4
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nuc
+														value = 6
+													}
+												}
+											}
+											set_variable = { 
+												which = nub
+												value = 45
+											}
+										}
+										else_if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nuc
+														value = 5
+													}
+												}
+											}
+											set_variable = { 
+												which = nub
+												value = 31
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = nub
+												value = 15
+											}
+										}
+									}
+									else = { 
+										set_variable = { 
+											which = nub
+											value = 10
+										}
+									}
+								}
+								else = { 
+									if = { 
+										limit = { 
+											AND = { 
+												check_variable = { 
+													which = nuc
+													value = 1
+												}
+											}
+										}
+										if = { 
+											limit = { 
+												AND = { 
+													check_variable = { 
+														which = nuc
+														value = 2
+													}
+												}
+											}
+											set_variable = { 
+												which = nub
+												value = 6
+											}
+										}
+										else = { 
+											set_variable = { 
+												which = nub
+												value = 3
+											}
+										}
+									}
+									else = { 
+										set_variable = { 
+											which = nub
+											value = 1
+										}
+									}
+								}
+							}
+							subtract_variable = { 
+								which = nub
+								which = geq
+							}
+							subtract_variable = { 
+								which = nub
+								which = gjb
+							}
+							if = { 
+								limit = { 
+									AND = { 
+										check_variable = { 
+											which = nua
+											which = nub
+										}
+									}
+								}
+								set_variable = { 
+									which = nua
+									which = nub
+								}
+							}
+							if = { 
+								limit = { 
+									NOT = { 
+										AND = { 
+											check_variable = { 
+												which = nua
+												value = 0
+											}
+										}
+									}
+								}
+								set_variable = { 
+									which = nua
+									value = 0
+								}
+							}
+							set_variable = { 
+								which = nts
+								value = 0
+							}
+							set_variable = { 
+								which = nts
+								which = nua
+							}
+							set_variable = { 
+								which = nuq
+								which = nts
+							}
+							multiply_variable = { 
+								which = nua
+								which = gfe
+							}
+							set_variable = { 
+								which = nub
+								value = 0
+							}
+							set_variable = { 
+								which = nuc
+								value = 0
+							}
+						}
+						else = { 
+							set_variable = { 
+								which = nts
+								value = 0
+							}
+						}
+					}
+					else = { 
+						set_variable = { 
+							which = nts
+							value = 0
+						}
+					}
+					PREV = { 
+						change_variable = { 
+							which = nua
+							which = PREV
+						}
+						change_variable = { 
+							which = nuq
+							which = PREV
+						}
+					}
+				}
+				else = { 
+					set_variable = { 
+						which = nts
+						value = 0
+					}
+				}
+			}
+			export_to_variable = { 
+				which = export
+				value = treasury
+			}
+			set_variable = { 
+				which = nuc
+				which = export
+			}
+			set_variable = { 
+				which = nub
+				which = nua
+			}
+			set_variable = { 
+				which = nus
+				value = 0
+			}
+			every_province = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = nts
+							value = 0.001
+						}
+					}
+					AND = { 
+						OR = { 
+							is_city = yes
+							is_colony = yes
+						}
+						NOT = { 
+							province_id = 5154
+						}
+					}
+					OR = { 
+						owned_by = ROOT
+						owner = { 
+							OR = { 
+								OR = { 
+									is_subject_of_type = vassal
+									is_subject_of_type = custom_vassal
+								}
+								is_subject_of_type = march
+								is_subject_of_type = appanage_subject
+								is_subject_of_type = daimyo_vassal
+								is_subject_of_type = decentralized_vassal
+								is_subject_of_type = rebellious_decentralized_vassal
+								is_subject_of_type = warlord
+								is_subject_of_type = commission
+								is_subject_of_type = client_vassal
+								is_subject_of_type = client_march
+								is_subject_of_type = colony
+							}
+							is_subject_of = ROOT
+						}
+					}
+				}
+				set_variable = { 
+					which = nur
+					which = anj
+				}
+				if = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = nur
+								value = 100
+							}
+						}
+					}
+					set_variable = { 
+						which = nur
+						value = 100
+					}
+				}
+				if = { 
+					limit = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 1
+								}
+							}
+						}
+					}
+					set_variable = { 
+						which = nur
+						value = 1
+					}
+				}
+				divide_variable = { 
+					which = nur
+					value = 100
+				}
+				set_variable = { 
+					which = nus
+					value = 1
+				}
+				subtract_variable = { 
+					which = nus
+					which = nur
+				}
+				multiply_variable = { 
+					which = nus
+					value = 0.5
+				}
+				change_variable = { 
+					which = nus
+					value = 0.5
+				}
+				multiply_variable = { 
+					which = nus
+					which = anj
+				}
+				multiply_variable = { 
+					which = nus
+					value = 5
+				}
+				set_variable = { 
+					which = nur
+					which = gcn
+				}
+				change_variable = { 
+					which = nur
+					which = nts
+				}
+				set_variable = { 
+					which = nue
+					which = nts
+				}
+				set_variable = { 
+					which = nud
+					value = 0
+				}
+				while = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = nue
+								value = 1
+							}
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 7
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 4
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 6
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 3.5
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 5
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 3
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 4
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 2.5
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 3
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 2
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 2
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 1.5
+						}
+					}
+					else_if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nur
+									value = 1
+								}
+							}
+						}
+						change_variable = { 
+							which = nud
+							value = 1
+						}
+					}
+					subtract_variable = { 
+						which = nur
+						value = 1
+					}
+					subtract_variable = { 
+						which = nue
+						value = 1
+					}
+				}
+				multiply_variable = { 
+					which = nus
+					which = nud
+				}
+				PREV = { 
+					change_variable = { 
+						which = nus
+						which = PREV
+					}
+				}
+			}
+		}
+		if = { 
+			limit = { 
+				all_owned_province = { 
+					NOT = { 
+						AND = { 
+							check_variable = { 
+								which = nts
+								value = 0.001
+							}
+						}
+					}
+				}
+				all_subject_country = { 
+					AND = { 
+						is_subject = yes
+						NOT = { 
+							is_subject_of_type = tributary_state
+						}
+						NOT = { 
+							is_subject_of_type = close_tributary_state
+						}
+					}
+					all_owned_province = { 
+						NOT = { 
+							AND = { 
+								check_variable = { 
+									which = ggz
+									value = 0.001
+								}
+							}
+						}
+					}
+				}
+			}
+			custom_tooltip = SYS_Courthouse.001.aNOPEAMOUNT
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.100
+				}
+			}
+		}
+		else_if = { 
+			limit = { 
+				AND = { 
+					check_variable = { 
+						which = nuc
+						which = nub
+					}
+				}
+			}
+			custom_tooltip = SYS_Courthouse.001.aYEPCOST
+			hidden_effect = { 
+				hidden_effect = { 
+					set_variable = { 
+						which = ghq
+						which = nub
+					}
+					while = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 32768
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 32768
+						}
+						add_treasury = -32768
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 16384
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 16384
+						}
+						add_treasury = -16384
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 8192
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 8192
+						}
+						add_treasury = -8192
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 4096
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 4096
+						}
+						add_treasury = -4096
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 2048
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 2048
+						}
+						add_treasury = -2048
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 1024
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 1024
+						}
+						add_treasury = -1024
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 512
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 512
+						}
+						add_treasury = -512
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 256
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 256
+						}
+						add_treasury = -256
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 128
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 128
+						}
+						add_treasury = -128
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 64
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 64
+						}
+						add_treasury = -64
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 32
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 32
+						}
+						add_treasury = -32
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 16
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 16
+						}
+						add_treasury = -16
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 8
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 8
+						}
+						add_treasury = -8
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 4
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 4
+						}
+						add_treasury = -4
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 2
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 2
+						}
+						add_treasury = -2
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = ghq
+									value = 1
+								}
+							}
+						}
+						subtract_variable = { 
+							which = ghq
+							value = 1
+						}
+						add_treasury = -1
+					}
+					set_variable = { 
+						which = ghq
+						value = 0
+					}
+					set_variable = { 
+						which = nur
+						which = nus
+					}
+					while = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 1024
+								}
+							}
+						}
+						add_adm_power = -1024
+						subtract_variable = { 
+							which = nus
+							value = 1024
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 512
+								}
+							}
+						}
+						add_adm_power = -512
+						subtract_variable = { 
+							which = nus
+							value = 512
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 256
+								}
+							}
+						}
+						add_adm_power = -256
+						subtract_variable = { 
+							which = nus
+							value = 256
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 128
+								}
+							}
+						}
+						add_adm_power = -128
+						subtract_variable = { 
+							which = nus
+							value = 128
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 64
+								}
+							}
+						}
+						add_adm_power = -64
+						subtract_variable = { 
+							which = nus
+							value = 64
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 32
+								}
+							}
+						}
+						add_adm_power = -32
+						subtract_variable = { 
+							which = nus
+							value = 32
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 16
+								}
+							}
+						}
+						add_adm_power = -16
+						subtract_variable = { 
+							which = nus
+							value = 16
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 8
+								}
+							}
+						}
+						add_adm_power = -8
+						subtract_variable = { 
+							which = nus
+							value = 8
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 4
+								}
+							}
+						}
+						add_adm_power = -4
+						subtract_variable = { 
+							which = nus
+							value = 4
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 2
+								}
+							}
+						}
+						add_adm_power = -2
+						subtract_variable = { 
+							which = nus
+							value = 2
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 1
+								}
+							}
+						}
+						add_adm_power = -1
+						subtract_variable = { 
+							which = nus
+							value = 1
+						}
+					}
+					set_variable = { 
+						which = nus
+						value = 0
+					}
+					set_variable = { 
+						which = nus
+						which = nur
+					}
+					while = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 1024
+								}
+							}
+						}
+						add_dip_power = -1024
+						subtract_variable = { 
+							which = nus
+							value = 1024
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 512
+								}
+							}
+						}
+						add_dip_power = -512
+						subtract_variable = { 
+							which = nus
+							value = 512
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 256
+								}
+							}
+						}
+						add_dip_power = -256
+						subtract_variable = { 
+							which = nus
+							value = 256
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 128
+								}
+							}
+						}
+						add_dip_power = -128
+						subtract_variable = { 
+							which = nus
+							value = 128
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 64
+								}
+							}
+						}
+						add_dip_power = -64
+						subtract_variable = { 
+							which = nus
+							value = 64
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 32
+								}
+							}
+						}
+						add_dip_power = -32
+						subtract_variable = { 
+							which = nus
+							value = 32
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 16
+								}
+							}
+						}
+						add_dip_power = -16
+						subtract_variable = { 
+							which = nus
+							value = 16
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 8
+								}
+							}
+						}
+						add_dip_power = -8
+						subtract_variable = { 
+							which = nus
+							value = 8
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 4
+								}
+							}
+						}
+						add_dip_power = -4
+						subtract_variable = { 
+							which = nus
+							value = 4
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 2
+								}
+							}
+						}
+						add_dip_power = -2
+						subtract_variable = { 
+							which = nus
+							value = 2
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 1
+								}
+							}
+						}
+						add_dip_power = -1
+						subtract_variable = { 
+							which = nus
+							value = 1
+						}
+					}
+					set_variable = { 
+						which = nus
+						value = 0
+					}
+					set_variable = { 
+						which = nus
+						which = nur
+					}
+					while = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 1024
+								}
+							}
+						}
+						add_mil_power = -1024
+						subtract_variable = { 
+							which = nus
+							value = 1024
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 512
+								}
+							}
+						}
+						add_mil_power = -512
+						subtract_variable = { 
+							which = nus
+							value = 512
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 256
+								}
+							}
+						}
+						add_mil_power = -256
+						subtract_variable = { 
+							which = nus
+							value = 256
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 128
+								}
+							}
+						}
+						add_mil_power = -128
+						subtract_variable = { 
+							which = nus
+							value = 128
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 64
+								}
+							}
+						}
+						add_mil_power = -64
+						subtract_variable = { 
+							which = nus
+							value = 64
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 32
+								}
+							}
+						}
+						add_mil_power = -32
+						subtract_variable = { 
+							which = nus
+							value = 32
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 16
+								}
+							}
+						}
+						add_mil_power = -16
+						subtract_variable = { 
+							which = nus
+							value = 16
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 8
+								}
+							}
+						}
+						add_mil_power = -8
+						subtract_variable = { 
+							which = nus
+							value = 8
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 4
+								}
+							}
+						}
+						add_mil_power = -4
+						subtract_variable = { 
+							which = nus
+							value = 4
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 2
+								}
+							}
+						}
+						add_mil_power = -2
+						subtract_variable = { 
+							which = nus
+							value = 2
+						}
+					}
+					if = { 
+						limit = { 
+							AND = { 
+								check_variable = { 
+									which = nus
+									value = 1
+								}
+							}
+						}
+						add_mil_power = -1
+						subtract_variable = { 
+							which = nus
+							value = 1
+						}
+					}
+					set_variable = { 
+						which = nus
+						value = 0
+					}
+				}
+				every_owned_province = { 
+					limit = { 
+						AND = { 
+							check_variable = { 
+								which = nts
+								value = 0.001
+							}
+						}
+					}
+					set_province_flag = comes_from_manual
+					set_variable = { 
+						which = nuf
+						which = PREV
+					}
+					set_variable = { 
+						which = nue
+						which = PREV
+					}
+					change_variable = { 
+						which = nuf
+						value = 1
+					}
+					if = { 
+						limit = { 
+							has_province_flag = comes_from_manual
+						}
+						change_variable = { 
+							which = nts
+							which = nue
+						}
+						clr_province_flag = comes_from_manual
+					}
+					Redux_ConstructionSubmit = { id = 13 height = Courthouse_Amount width = Courthouse_Parallel owner = 0 origin = 1 }
+					change_variable = { 
+						which = gcx
+						which = nua
+					}
+					set_variable = { 
+						which = nua
+						value = 0
+					}
+					set_variable = { 
+						which = nts
+						value = 0
+					}
+					set_variable = { 
+						which = nuf
+						value = 0
+					}
+				}
+			}
+		}
+		else = { 
+			custom_tooltip = SYS_Courthouse.001.aNOPEWHY
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.100
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.001.e
+		trigger = { 
+			any_owned_province = { 
+				has_province_flag = UI_Select
+			}
+			AND = { 
+				check_variable = { 
+					which = nts
+					value = 0.001
+				}
+			}
+		}
+		custom_tooltip = SYS_Courthouse.001.etooltip
+		hidden_effect = { 
+			country_event = { 
+				id = SYS_Courthouse.014
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.001.d
+		custom_tooltip = SYS_Courthouse.001.dtooltip
+		hidden_effect = { 
+			country_event = { 
+				id = SYS_Courthouse.013
+			}
+		}
+	}
+	option = { 
+		name = PTM_EXIT
+		highlight = yes
+	}
+	after = { 
+		set_variable = { 
+			which = nub
+			value = 0
+		}
+		set_variable = { 
+			which = nuc
+			value = 0
+		}
+		set_variable = { 
+			which = nud
+			value = 0
+		}
+		clr_country_flag = UI_Freeze
+	}
+}
+country_event = { 
+	id = SYS_Courthouse.130
+	title = no_localisation
+	desc = no_localisation
+	picture = CITY_DEVELOPMENT_eventPicture
+	is_triggered_only = yes
+	hidden = yes
+	immediate = { }
+	option = { 
+		name = PTM_EXIT
+		highlight = yes
+		hidden_effect = { 
+			country_event = { 
+				id = SYS_Courthouse.013
+			}
+		}
+	}
+}
+country_event = { 
+	id = SYS_Courthouse.013
+	title = SYS_Courthouse.013.t
+	desc = SYS_Courthouse.013.desc
+	picture = CITY_DEVELOPMENT_eventPicture
+	is_triggered_only = yes
+	immediate = { 
+		hidden_effect = { 
+			if = { 
+				limit = { 
+					AND = { 
+						check_variable = { 
+							which = nts
+							value = 7
+						}
+					}
+				}
+				set_variable = { 
+					which = nts
+					value = 7
+				}
+			}
+			if = { 
+				limit = { 
+					NOT = { 
+						OR = { 
+							AND = { 
+								is_variable_equal = { 
+									which = nue
+									value = 1
+								}
+							}
+							AND = { 
+								is_variable_equal = { 
+									which = nue
+									value = 2
+								}
+							}
+							AND = { 
+								is_variable_equal = { 
+									which = nue
+									value = 3
+								}
+							}
+							AND = { 
+								is_variable_equal = { 
+									which = nue
+									value = 4
+								}
+							}
+							AND = { 
+								is_variable_equal = { 
+									which = nue
+									value = 5
+								}
+							}
+						}
+					}
+				}
+				set_variable = { 
+					which = nue
+					value = 0
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.013.a
+		trigger = { 
+			AND = { 
+				check_variable = { 
+					which = nts
+					value = 0.001
+				}
+			}
+		}
+		hidden_effect = { 
+			country_event = { 
+				id = SYS_Courthouse.001
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.013.b
+		trigger = { 
+			AND = { 
+				is_variable_equal = { 
+					which = ntt
+					value = 1
+				}
+			}
+		}
+		custom_tooltip = SYS_Courthouse.013.btooltip
+		hidden_effect = { 
+			set_variable = { 
+				which = ntt
+				value = 0
+			}
+			set_variable = { 
+				which = nts
+				value = 0
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.130
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.013.i
+		trigger = { 
+			AND = { 
+				is_variable_equal = { 
+					which = ntt
+					value = 0
+				}
+			}
+		}
+		custom_tooltip = SYS_Courthouse.013.itooltip
+		hidden_effect = { 
+			set_variable = { 
+				which = ntt
+				value = 1
+			}
+			set_variable = { 
+				which = nts
+				value = 0
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.130
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.013.c
+		hidden_effect = { 
+			set_variable = { 
+				which = nts
+				value = 1
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.130
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.013.d
+		hidden_effect = { 
+			set_variable = { 
+				which = nts
+				value = 2
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.130
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.013.e
+		hidden_effect = { 
+			set_variable = { 
+				which = nts
+				value = 3
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.130
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.013.f
+		hidden_effect = { 
+			set_variable = { 
+				which = nts
+				value = 4
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.130
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.013.g
+		hidden_effect = { 
+			set_variable = { 
+				which = nts
+				value = 5
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.130
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.013.h
+		hidden_effect = { 
+			set_variable = { 
+				which = nts
+				value = 6
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.130
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.013.j
+		hidden_effect = { 
+			set_variable = { 
+				which = nts
+				value = 7
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.130
+				}
+			}
+		}
+	}
+	option = { 
+		name = Extra_Units_More
+		custom_tooltip = custom.Extra_Units_More
+		trigger = { 
+			NOT = { 
+				AND = { 
+					is_variable_equal = { 
+						which = nue
+						value = 5
+					}
+				}
+			}
+		}
+		hidden_effect = { 
+			change_variable = { 
+				which = nue
+				value = 1
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.130
+				}
+			}
+		}
+	}
+	option = { 
+		name = Extra_Units_Less
+		trigger = { 
+			AND = { 
+				check_variable = { 
+					which = nue
+					value = 1
+				}
+			}
+		}
+		custom_tooltip = custom.Extra_Units_More
+		hidden_effect = { 
+			change_variable = { 
+				which = nue
+				value = -1
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.130
+				}
+			}
+		}
+	}
+	option = { 
+		name = Extra_Units_Reset
+		trigger = { 
+			NOT = { 
+				AND = { 
+					is_variable_equal = { 
+						which = nue
+						value = 0
+					}
+				}
+			}
+		}
+		custom_tooltip = custom.Extra_Units_Reset
+		hidden_effect = { 
+			set_variable = { 
+				which = nue
+				value = 0
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.130
+				}
+			}
+		}
+	}
+	option = { 
+		name = PTM_BACK
+		highlight = yes
+		hidden_effect = { 
+			country_event = { 
+				id = SYS_Courthouse.001
+			}
+		}
+	}
+}
+country_event = { 
+	id = SYS_Courthouse.140
+	title = no_localisation
+	desc = no_localisation
+	picture = CITY_DEVELOPMENT_eventPicture
+	is_triggered_only = yes
+	hidden = yes
+	immediate = { }
+	option = { 
+		name = PTM_EXIT
+		highlight = yes
+		hidden_effect = { 
+			country_event = { 
+				id = SYS_Courthouse.014
+			}
+		}
+	}
+}
+country_event = { 
+	id = SYS_Courthouse.014
+	title = SYS_Courthouse.014.t
+	desc = SYS_Courthouse.014.desc
+	picture = CITY_DEVELOPMENT_eventPicture
+	is_triggered_only = yes
+	immediate = { 
+		hidden_effect = { 
+			set_variable = { 
+				which = nud
+				which = nuf
+			}
+			change_variable = { 
+				which = nud
+				value = 1
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.014.a
+		hidden_effect = { 
+			set_variable = { 
+				which = nuf
+				value = 0
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.140
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.014.b
+		hidden_effect = { 
+			set_variable = { 
+				which = nuf
+				value = 1
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.140
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.014.c
+		hidden_effect = { 
+			set_variable = { 
+				which = nuf
+				value = 2
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.140
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.014.d
+		hidden_effect = { 
+			set_variable = { 
+				which = nuf
+				value = 3
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.140
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.014.e
+		hidden_effect = { 
+			set_variable = { 
+				which = nuf
+				value = 4
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.140
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.014.f
+		hidden_effect = { 
+			set_variable = { 
+				which = nuf
+				value = 5
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.140
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.014.g
+		hidden_effect = { 
+			set_variable = { 
+				which = nuf
+				value = 6
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.140
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.014.h
+		hidden_effect = { 
+			set_variable = { 
+				which = nuf
+				value = 7
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.140
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.014.i
+		hidden_effect = { 
+			set_variable = { 
+				which = nuf
+				value = 9
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.140
+				}
+			}
+		}
+	}
+	option = { 
+		name = SYS_Courthouse.014.j
+		hidden_effect = { 
+			set_variable = { 
+				which = nuf
+				value = 9
+			}
+			hidden_effect = { 
+				country_event = { 
+					id = SYS_Courthouse.140
+				}
+			}
+		}
+	}
+	option = { 
+		name = PTM_BACK
+		highlight = yes
+		hidden_effect = { 
+			country_event = { 
+				id = SYS_Courthouse.001
+			}
+		}
+		hidden_effect = { 
+			set_variable = { 
+				which = nud
+				value = 0
+			}
+		}
+	}
+}

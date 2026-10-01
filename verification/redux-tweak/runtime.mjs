@@ -6,25 +6,37 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(process.argv[2] ?? fileURLToPath(new URL('../../', import.meta.url)));
 const read = path => readFileSync(join(root, 'redux-tweak', path), 'utf8');
 function parse(text) {
-    const tokens = text.match(/#[^\r\n]*|"(?:\\.|[^"\\])*"|[{}=]|[^\s{}=]+/g).filter(t => !t.startsWith('#'));
+    const tokens = text.match(/#[^\r\n]*|"(?:\\.|[^"\\])*"|\[\[\w+\]|[{}=\]]|[^\s{}=\]]+/g).filter(t => !t.startsWith('#'));
     let i = 0;
-    function block(nested = false) {
+    function block(nested = false, end = '}') {
         const pairs = [];
-        while (i < tokens.length && tokens[i] !== '}') {
+        while (i < tokens.length && tokens[i] !== end) {
             const key = tokens[i++];
+            if (key.startsWith('[[')) { pairs.push([key.slice(1), block(true, ']')]); continue; }
             assert.equal(tokens[i++], '=', `Expected assignment after ${key}`);
             assert.ok(i < tokens.length, `Missing value after ${key}`);
             const value = tokens[i++] === '{' ? block(true) : tokens[i - 1].replace(/^"|"$/g, '');
             pairs.push([key, value]);
         }
-        if (nested) assert.equal(tokens[i++], '}');
+        if (nested) assert.equal(tokens[i++], end);
         return pairs;
     }
     const result = block();
     assert.equal(i, tokens.length);
     return result;
 }
-const effects = new Map(parse(read('common/scripted_effects/ReduxConstruction.txt')));
+const effects = new Map([
+    ...parse(read('common/scripted_effects/ReduxConstruction.txt')),
+    ...parse(read('common/scripted_effects/ReduxConstructionDispatch.txt')),
+    ...parse(read('common/scripted_effects/SYS-Infra.txt')).filter(([name]) =>
+        ['Infra_StartProject', 'Infra_CheckProject', 'Redux_ConstructionStartProperty', 'Redux_ConstructionCheckProperty',
+            'Infra_StartProjectHelper', 'Infra_CheckProjectHelper', 'Infra_ParallelAdd', 'Infra_ParallelClear'].includes(name))
+]);
+const constructionTriggers = new Map([
+    ...parse(read('common/scripted_triggers/ReduxConstruction.txt')),
+    ...parse(read('common/scripted_triggers/SYS-Infra.txt')).filter(([name]) =>
+        ['Infra_CanConstruct', 'Redux_ConstructionHasFreeSlot'].includes(name))
+]);
 const hook = new Map(parse(read('common/on_actions/ReduxConstruction.txt'))).get('on_monthly_pulse');
 const eventFile = new Map(parse(read('events/ReduxConstruction.txt')));
 const event = new Map(eventFile.get('country_event'));
@@ -32,7 +44,6 @@ assert.equal(eventFile.get('namespace'), 'ReduxConstruction');
 assert.equal(event.get('id'), 'ReduxConstruction.1');
 assert.equal(event.get('is_triggered_only'), 'yes');
 assert.equal(event.get('hidden'), 'yes');
-for (const name of effects.keys()) assert.ok(name.startsWith('Redux_Construction'));
 
 const fixtures = JSON.parse(readFileSync(join(root, 'verification/redux-tweak/mt-construction.json'), 'utf8'));
 const normalize = tree => tree.map(node => node.length === 3
@@ -87,6 +98,7 @@ function test(tree, p, w) {
             return key === 'check_variable' ? get(p, names[0]) >= right : get(p, names[0]) === right;
         }
         if (w.extraTriggers?.has(key)) return test(substitute(w.extraTriggers.get(key), value === 'yes' ? {} : Object.fromEntries(value)), p, w);
+        if (constructionTriggers.has(key)) return test(substitute(constructionTriggers.get(key), value === 'yes' ? {} : Object.fromEntries(value)), p, w);
         throw new Error(`Unsupported trigger: ${key}`);
     });
 }
@@ -197,7 +209,13 @@ const group = (p, slot) => ['','Owner','Parallel'].map(suffix => get(p, `Infra_S
 function totals(p) {
     const result = {};
     for (const slot of active(p)) result[group(p, slot)] = (result[group(p, slot)] ?? 0) + 1 + get(p, `Infra_S${slot}Size`);
+    for (let order = 1; order <= 32; order++) if (p.flags.has(`Redux_ConstructionQ${order}`)) {
+        const pending = get(p, `Redux_ConstructionQ${order}Pending`);
+        if (!pending) continue;
+        const key = ['Type', 'Owner', 'Width'].map(suffix => get(p, `Redux_ConstructionQ${order}${suffix}`)).join(':');
+        result[key] = (result[key] ?? 0) + pending;
+    }
     return result;
 }
 
-export { parse, substitute, fixed, get, set, resources, infrastructure, effects, hook, event, fixtures, test, execute, world, call, queue, active, group, totals };
+export { parse, substitute, fixed, get, set, resources, infrastructure, effects, constructionTriggers, hook, event, fixtures, test, execute, world, call, queue, active, group, totals };

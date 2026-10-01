@@ -42,7 +42,7 @@ for (const variant of Object.keys(fixtures.variants)) {
     refill(w);
     assert.equal(active(w.p).length, 10);
     for (let slot = 0; slot < 8; slot++) call(w, 'Infra_CheckProject', { slot });
-    assert.equal(active(w.p).length, 2);
+    assert.equal(active(w.p).length, 10, 'Completed units immediately release slots to waiting orders');
     refill(w);
     assert.equal(active(w.p).length, 10);
     assert.ok(active(w.p).every(slot => get(w.p, `Infra_S${slot}`) === 10));
@@ -106,8 +106,8 @@ for (const variant of Object.keys(fixtures.variants)) {
         assert.equal(active(w.p).length, 1, 'Unsupported property IDs must not get infrastructure costs');
         scenarios++;
     }
-    for (const [tag, month, sim, expected] of [['AAA', 1, false, 1], ['AAA', 0, false, 0],
-        ['AAA', 2, false, 0], ['TEU', 1, false, 0], ['AAA', 1, true, 0]]) {
+    for (const [tag, month, sim, expected] of [['AAA', 1, false, 1], ['AAA', 0, false, 1],
+        ['AAA', 2, false, 1], ['TEU', 1, false, 0], ['AAA', 1, true, 0]]) {
         const w = world(variant);
         queue(w, 0);
         const invalid = structuredClone(w.p); invalid.valid = false;
@@ -134,4 +134,4 @@ for (const variant of Object.keys(fixtures.variants)) {
         scenarios++;
     }
 }
-console.log(`PASS: ${scenarios} construction scenarios against public and installed MT effects; totals, progress, payer, caps, display counters, annual completion and February routing`);
+console.log(`PASS: ${scenarios} construction scenarios against public and installed MT effects; totals, progress, payer, caps, display counters, annual completion and monthly dispatch`);

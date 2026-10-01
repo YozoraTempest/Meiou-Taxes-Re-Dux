@@ -1,5 +1,6 @@
 ReduxTest_EmptyProvince = {
     isValidProv = yes
+    NOT = { has_province_flag = Redux_ConstructionOrders }
     NOT = { OR = {
         has_province_flag = Infra_S0
         has_province_flag = Infra_S1
@@ -33,7 +34,13 @@ ReduxTest_ManualSlot = {
     has_province_flag = Infra_S$slot$
     check_key = { lhs = Infra_S$slot$ value = 8 }
     NOT = { check_key = { lhs = Infra_S$slot$ value = 15 } }
-    is_key_equal = { lhs = Infra_S$slot$Owner value = 0 }
+    has_province_flag = Redux_ConstructionS$slot$
+    is_variable_equal = { which = Redux_ConstructionS$slot$Origin value = 1 }
+}
+
+ReduxTest_ManualOrderRecord = {
+    has_province_flag = Redux_ConstructionQ$order$
+    is_variable_equal = { which = Redux_ConstructionQ$order$Origin value = 1 }
 }
 
 ReduxTest_HasManualOrder = {
@@ -48,6 +55,39 @@ ReduxTest_HasManualOrder = {
         ReduxTest_ManualSlot = { slot = 7 }
         ReduxTest_ManualSlot = { slot = 8 }
         ReduxTest_ManualSlot = { slot = 9 }
+        ReduxTest_ManualOrderRecord = { order = 1 }
+        ReduxTest_ManualOrderRecord = { order = 2 }
+        ReduxTest_ManualOrderRecord = { order = 3 }
+        ReduxTest_ManualOrderRecord = { order = 4 }
+        ReduxTest_ManualOrderRecord = { order = 5 }
+        ReduxTest_ManualOrderRecord = { order = 6 }
+        ReduxTest_ManualOrderRecord = { order = 7 }
+        ReduxTest_ManualOrderRecord = { order = 8 }
+        ReduxTest_ManualOrderRecord = { order = 9 }
+        ReduxTest_ManualOrderRecord = { order = 10 }
+        ReduxTest_ManualOrderRecord = { order = 11 }
+        ReduxTest_ManualOrderRecord = { order = 12 }
+        ReduxTest_ManualOrderRecord = { order = 13 }
+        ReduxTest_ManualOrderRecord = { order = 14 }
+        ReduxTest_ManualOrderRecord = { order = 15 }
+        ReduxTest_ManualOrderRecord = { order = 16 }
+        ReduxTest_ManualOrderRecord = { order = 17 }
+        ReduxTest_ManualOrderRecord = { order = 18 }
+        ReduxTest_ManualOrderRecord = { order = 19 }
+        ReduxTest_ManualOrderRecord = { order = 20 }
+        ReduxTest_ManualOrderRecord = { order = 21 }
+        ReduxTest_ManualOrderRecord = { order = 22 }
+        ReduxTest_ManualOrderRecord = { order = 23 }
+        ReduxTest_ManualOrderRecord = { order = 24 }
+        ReduxTest_ManualOrderRecord = { order = 25 }
+        ReduxTest_ManualOrderRecord = { order = 26 }
+        ReduxTest_ManualOrderRecord = { order = 27 }
+        ReduxTest_ManualOrderRecord = { order = 28 }
+        ReduxTest_ManualOrderRecord = { order = 29 }
+        ReduxTest_ManualOrderRecord = { order = 30 }
+        ReduxTest_ManualOrderRecord = { order = 31 }
+        ReduxTest_ManualOrderRecord = { order = 32 }
+
     }
 }
 

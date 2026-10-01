@@ -90,4 +90,20 @@ country_decisions = {
         effect = { country_event = { id = ReduxTest.30 } }
         ai_will_do = { factor = 0 }
     }
+    redux_test_full_player = {
+        major = no
+        potential = { ai = no NOT = { any_owned_province = { has_province_flag = ReduxTestProvince } } }
+        allow = { custom_trigger_tooltip = { tooltip = redux_test_start_requirements ReduxTest_CanStart = yes } }
+        effect = { random_owned_province = { limit = { has_province_flag = UI_Select ReduxTest_EmptyProvince = yes }
+            province_event = { id = ReduxTest.40 } } }
+        ai_will_do = { factor = 0 }
+    }
+    redux_test_class_yield = {
+        major = no
+        potential = { ai = no NOT = { any_owned_province = { has_province_flag = ReduxTestProvince } } }
+        allow = { custom_trigger_tooltip = { tooltip = redux_test_start_requirements ReduxTest_CanStart = yes } }
+        effect = { random_owned_province = { limit = { has_province_flag = UI_Select ReduxTest_EmptyProvince = yes }
+            province_event = { id = ReduxTest.41 } } }
+        ai_will_do = { factor = 0 }
+    }
 }

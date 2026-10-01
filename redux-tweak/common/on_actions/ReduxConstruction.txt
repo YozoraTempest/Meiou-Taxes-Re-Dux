@@ -1,10 +1,9 @@
 # EU4 1.36+ adds this hook to the existing on_actions.
-# February follows both the single-player and multiplayer January census.
+# Dispatch monthly; completed units also dispatch immediately during the census.
 on_monthly_pulse = {
     if = {
         limit = {
             tag = AAA
-            is_month = 1
             NOT = { has_global_flag = POP_Sim }
         }
         country_event = { id = ReduxConstruction.1 }

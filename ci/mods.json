@@ -18,18 +18,49 @@
         "descriptor.mod",
         "common/on_actions/ReduxConstruction.txt",
         "common/scripted_effects/ReduxConstruction.txt",
-        "events/ReduxConstruction.txt"
+        "events/ReduxConstruction.txt",
+        "common/scripted_effects/ReduxConstructionDispatch.txt",
+        "common/scripted_triggers/ReduxConstruction.txt",
+        "common/scripted_effects/SYS-Infra.txt",
+        "common/scripted_triggers/SYS-Infra.txt",
+        "events/SYS-CensusNew.txt",
+        "events/SYS-Construct.txt",
+        "events/SYS-AI.txt",
+        "events/SYS-Courthouse.txt",
+        "events/E-BurghersEvents.txt",
+        "decisions/D - Granada.txt"
       ],
       "test_inputs": [
         "verification/VERIFY.sh",
         "verification/VERIFY.mjs",
         "verification/redux-tweak/VERIFY.mjs",
         "verification/redux-tweak/runtime.mjs",
-        "verification/redux-tweak/mt-construction.json"
+        "verification/redux-tweak/mt-construction.json",
+        "ci/construction.mjs",
+        "verification/redux-tweak/SCHEDULER.mjs",
+        "verification/redux-tweak/mt-runtime/manifest.json",
+        "verification/redux-tweak/mt-runtime/0.txt.gz",
+        "verification/redux-tweak/mt-runtime/1.txt.gz",
+        "verification/redux-tweak/mt-runtime/2.txt.gz",
+        "verification/redux-tweak/mt-runtime/3.txt.gz",
+        "verification/redux-tweak/mt-runtime/4.txt.gz",
+        "verification/redux-tweak/mt-runtime/5.txt.gz",
+        "verification/redux-tweak/mt-runtime/6.txt.gz",
+        "verification/redux-tweak/mt-runtime/7.txt.gz"
       ],
       "tests": [
-        ["sh", "verification/VERIFY.sh"],
-        ["node", "verification/redux-tweak/VERIFY.mjs"]
+        [
+          "sh",
+          "verification/VERIFY.sh"
+        ],
+        [
+          "node",
+          "verification/redux-tweak/VERIFY.mjs"
+        ],
+        [
+          "node",
+          "verification/redux-tweak/SCHEDULER.mjs"
+        ]
       ],
       "depends_on": []
     },
@@ -54,8 +85,16 @@
         "verification/redux-subject/mt-subject-types.json"
       ],
       "tests": [
-        ["node", "verification/VERIFY.mjs", ".", "redux-subject"],
-        ["node", "verification/redux-subject/VERIFY.mjs"]
+        [
+          "node",
+          "verification/VERIFY.mjs",
+          ".",
+          "redux-subject"
+        ],
+        [
+          "node",
+          "verification/redux-subject/VERIFY.mjs"
+        ]
       ],
       "depends_on": []
     },
@@ -83,11 +122,24 @@
         "ci/vendor/eu4-special-escape/LICENSE"
       ],
       "tests": [
-        ["node", "verification/VERIFY.mjs", ".", "redux-test"],
-        ["node", "verification/redux-test/VERIFY.mjs"],
-        ["node", "verification/redux-test/LOCALISATION.mjs"]
+        [
+          "node",
+          "verification/VERIFY.mjs",
+          ".",
+          "redux-test"
+        ],
+        [
+          "node",
+          "verification/redux-test/VERIFY.mjs"
+        ],
+        [
+          "node",
+          "verification/redux-test/LOCALISATION.mjs"
+        ]
       ],
-      "depends_on": ["redux-tweak"]
+      "depends_on": [
+        "redux-tweak"
+      ]
     }
   ]
 }

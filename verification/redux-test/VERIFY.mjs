@@ -12,13 +12,13 @@ const eventTree = parse(read('events/ReduxTestConstruction.txt'));
 assert.equal(eventTree.find(([name]) => name === 'namespace')[1], 'ReduxTest');
 const events = new Map(eventTree.filter(([name]) => name.endsWith('_event')).map(([, body]) =>
     [body.find(([name]) => name === 'id')[1], body]));
-assert.equal(events.size, 16);
+assert.equal(events.size, 18);
 for (const [id, body] of events) {
     assert.ok(id.startsWith('ReduxTest.'));
     assert.equal(new Map(body).get('is_triggered_only'), 'yes');
 }
 const decisions = new Map(new Map(parse(read('decisions/ReduxTestConstruction.txt'))).get('country_decisions'));
-assert.equal(decisions.size, 11);
+assert.equal(decisions.size, 13);
 for (const body of decisions.values()) {
     assert.equal(new Map(new Map(body).get('potential')).get('ai'), 'no');
     assert.deepEqual(new Map(body).get('ai_will_do'), [['factor', '0']]);
@@ -105,7 +105,7 @@ for (const variant of Object.keys(fixtures.variants)) {
         assert.equal(get(w.p, 'ReduxTestOther'), 8);
         audit(w);
         action(w, 'release');
-        assert.equal(active(w.p).length, 2);
+        assert.equal(active(w.p).length, 10);
         assert.equal(get(w.p, 'Infra_PathingSize'), 0);
         assert.equal(get(w.p, 'Infra_InConstPathing'), 0);
         assert.equal(get(w.p, 'Infra_InConstAmenities'), 10);
@@ -198,13 +198,32 @@ for (const variant of Object.keys(fixtures.variants)) {
         action(w, 'release');
         w.month = 0;
         execute(hook, w.aaa, w);
-        assert.equal(active(w.p).length, 2);
+        assert.equal(active(w.p).length, 10);
         w.month = 1;
         execute(hook, w.aaa, w);
         assert.equal(active(w.p).length, 10);
         decision(w, 'status');
         assert.equal(get(w.p, 'ReduxTestManual'), 10);
         action(w, 'cleanup');
+        scenarios++;
+    }
+    for (const key of ['full_player', 'class_yield']) {
+        const w = setup(variant);
+        start(w, key);
+        assert.equal(get(w.p, 'ReduxTestActive'), 10);
+        assert.equal(get(w.p, 'ReduxTestManual'), key === 'full_player' ? 10 : 2);
+        assert.equal(get(w.p, 'ReduxTestClassActive'), key === 'full_player' ? 0 : 8);
+        assert.equal(get(w.p, 'ReduxTestClassWaiting'), key === 'full_player' ? 4 : 8);
+        action(w, 'advance');
+        assert.equal(get(w.p, 'ReduxTestCompleted'), 10);
+        assert.equal(get(w.p, 'ReduxTestClassActive'), 2);
+        assert.equal(get(w.p, 'ReduxTestManual'), 8);
+        assert.equal(get(w.p, 'ReduxTestUnits'), key === 'full_player' ? 14 : 16);
+        verifyCounters(w);
+        action(w, 'cleanup');
+        assert.equal(get(w.p, 'ReduxTestUnits'), 0);
+        assert.equal(active(w.p).length, 0);
+        verifyCounters(w);
         scenarios++;
     }
     for (const corrupted of ['slots', 'totals', 'progress', 'funds', 'payer', 'type']) {
@@ -264,4 +283,4 @@ for (const variant of Object.keys(fixtures.variants)) {
         scenarios++;
     }
 }
-console.log(`PASS: REDUX TEST ${scenarios} decision/event scenarios against both MT variants; fixtures, refill assertions, native event, February route, completion speed and cleanup`);
+console.log(`PASS: REDUX TEST ${scenarios} decision/event scenarios against both MT variants; fixtures, refill assertions, native event, monthly route, completion speed and cleanup`);

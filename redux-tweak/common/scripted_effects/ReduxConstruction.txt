@@ -1,126 +1,277 @@
-# Existing saves identify a queue group by type, payer and requested parallelism.
-# Count each active slot, including slots with no further queued units.
-Redux_ConstructionCountSlot = {
-    if = {
-        limit = {
-            has_province_flag = Infra_S$slot$
-            is_key_equal = { lhs = Infra_S$slot$ which = Infra_S$source$ }
-            is_key_equal = { lhs = Infra_S$slot$Owner which = Infra_S$source$Owner }
-            is_key_equal = { lhs = Infra_S$slot$Parallel which = Infra_S$source$Parallel }
+# Orders persist separately from MT's ten current-unit slots.
+# Origin: 0 = existing save/unknown, 1 = state/player, 2 = local classes.
+Redux_ConstructionFindEmpty = {
+    if = { limit = {
+        is_variable_equal = { which = Redux_ConstructionRecord value = 0 }
+        NOT = { has_province_flag = Redux_ConstructionQ$order$ }
+    } set_variable = { which = Redux_ConstructionRecord value = $order$ } }
+}
+Redux_ConstructionFindLegacy = {
+    if = { limit = {
+        is_variable_equal = { which = Redux_ConstructionRecord value = 0 }
+        has_province_flag = Redux_ConstructionQ$order$
+        is_variable_equal = { which = Redux_ConstructionQ$order$Origin value = 0 }
+        is_variable_equal = { which = Redux_ConstructionQ$order$Type which = Redux_ConstructionInputType }
+        is_variable_equal = { which = Redux_ConstructionQ$order$Owner which = Redux_ConstructionInputOwner }
+        is_variable_equal = { which = Redux_ConstructionQ$order$Width which = Redux_ConstructionInputWidth }
+    } set_variable = { which = Redux_ConstructionRecord value = $order$ } }
+}
+Redux_ConstructionCreateAt = {
+    if = { limit = { is_variable_equal = { which = Redux_ConstructionRecord value = $order$ } }
+        set_province_flag = Redux_ConstructionQ$order$
+        change_variable = { which = Redux_ConstructionSequence value = 1 }
+        set_variable = { which = Redux_ConstructionQ$order$Age which = Redux_ConstructionSequence }
+        set_variable = { which = Redux_ConstructionQ$order$Type which = Redux_ConstructionInputType }
+        set_variable = { which = Redux_ConstructionQ$order$Owner which = Redux_ConstructionInputOwner }
+        set_variable = { which = Redux_ConstructionQ$order$Width which = Redux_ConstructionInputWidth }
+        set_variable = { which = Redux_ConstructionQ$order$Origin which = Redux_ConstructionInputOrigin }
+        set_variable = { which = Redux_ConstructionQ$order$Pending value = 0 }
+        set_variable = { which = Redux_ConstructionQ$order$Active value = 0 }
+        set_province_flag = Redux_ConstructionOrders
+    }
+}
+Redux_ConstructionAttachAt = {
+    if = { limit = { is_variable_equal = { which = Redux_ConstructionRecord value = $order$ } }
+        change_variable = { which = Redux_ConstructionQ$order$Pending which = Redux_ConstructionInputAmount }
+    }
+}
+Redux_ConstructionNormalizeWidth = {
+    if = { limit = { NOT = { check_variable = { which = Redux_ConstructionInputWidth value = 1 } } }
+        set_variable = { which = Redux_ConstructionInputWidth value = 1 }
+    }
+}
+Redux_ConstructionImportSlot = {
+    if = { limit = {
+        has_province_flag = Infra_S$slot$
+        NOT = { has_province_flag = Redux_ConstructionS$slot$ }
+        check_key = { lhs = Infra_S$slot$ value = 8 }
+        NOT = { check_key = { lhs = Infra_S$slot$ value = 15 } }
+    }
+        set_var_from_key = { var = Redux_ConstructionInputType key = Infra_S$slot$ }
+        set_var_from_key = { var = Redux_ConstructionInputOwner key = Infra_S$slot$Owner }
+        set_var_from_key = { var = Redux_ConstructionInputWidth key = Infra_S$slot$Parallel }
+        set_var_from_key = { var = Redux_ConstructionInputAmount key = Infra_S$slot$Size }
+        set_variable = { which = Redux_ConstructionInputOrigin value = 0 }
+        Redux_ConstructionNormalizeWidth = yes
+        Redux_ConstructionImportFind = yes
+        if = { limit = { check_variable = { which = Redux_ConstructionRecord value = 1 } }
+            Redux_ConstructionAttachRecord = yes
+            set_variable = { which = Redux_ConstructionS$slot$Order which = Redux_ConstructionRecord }
+            set_variable = { which = Redux_ConstructionS$slot$Origin value = 0 }
+            set_province_flag = Redux_ConstructionS$slot$
+            set_key = { lhs = Infra_S$slot$Size value = 0 }
         }
-        change_variable = { which = Redux_ConstructionActive value = 1 }
     }
 }
-
-# Transfer one unstarted unit. The upstream helper maintains cost and display
-# counters; cancel its InConst increment because this is an existing order.
-Redux_ConstructionOpenSlot = {
-    set_key = { lhs = Public_Tmp4 value = 1 }
-    Infra_StartProjectHelper = {
-        slot = $target$
-        id = $id$
-        size = Public_Tmp4
-        width = Infra_S$source$Parallel
+Redux_ConstructionResetActive = {
+    if = { limit = { has_province_flag = Redux_ConstructionQ$order$ }
+        set_variable = { which = Redux_ConstructionQ$order$Active value = 0 }
     }
-    set_key = { lhs = Infra_S$target$Owner which = Infra_S$source$Owner }
-    set_key = { lhs = Infra_S$target$Spend value = 0 }
-    subtract_key = { lhs = Infra_S$source$Size value = 1 }
-    Infra_RunScript = { id = Infra_S$target$ script = Infra_InConstSubtractOne }
-    change_variable = { which = Redux_ConstructionActive value = 1 }
-    set_key = { lhs = Public_Tmp4 value = 0 }
 }
-
-Redux_ConstructionFillSlot = {
-    if = {
-        limit = {
-            NOT = { has_province_flag = Infra_S$target$ }
-            check_key = { lhs = Infra_S$source$Size value = 1 }
-            NOT = {
-                check_variable = { which = Redux_ConstructionActive which = Redux_ConstructionCap }
+Redux_ConstructionCountAt = {
+    if = { limit = { is_variable_equal = { which = Redux_ConstructionCountRecord value = $order$ } }
+        change_variable = { which = Redux_ConstructionQ$order$Active value = 1 }
+    }
+}
+Redux_ConstructionCountActive = {
+    if = { limit = { has_province_flag = Infra_S$slot$ has_province_flag = Redux_ConstructionS$slot$ }
+        set_variable = { which = Redux_ConstructionCountRecord which = Redux_ConstructionS$slot$Order }
+        Redux_ConstructionCountRecord = yes
+        if = { limit = { is_variable_equal = { which = Redux_ConstructionS$slot$Origin value = 2 } }
+            change_variable = { which = Redux_ConstructionClassActive value = 1 }
+        }
+    }
+}
+Redux_ConstructionRefreshOrder = {
+    if = { limit = { has_province_flag = Redux_ConstructionQ$order$ }
+        if = { limit = { OR = {
+            check_variable = { which = Redux_ConstructionQ$order$Pending value = 1 }
+            check_variable = { which = Redux_ConstructionQ$order$Active value = 1 }
+        } }
+            set_province_flag = Redux_ConstructionOrders
+            if = { limit = { NOT = { is_variable_equal = { which = Redux_ConstructionQ$order$Origin value = 2 } } }
+                set_variable = { which = Redux_ConstructionManualPresent value = 1 }
             }
         }
-        if = {
-            limit = { is_key_equal = { lhs = Infra_S$source$ value = 8 } }
-            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 8 }
+        else = { clr_province_flag = Redux_ConstructionQ$order$ }
+    }
+}
+# Snapshot caller inputs before importing old queues and reusing MT scratch keys.
+Redux_ConstructionSubmit = {
+    set_var_from_key = { var = Redux_ConstructionSubmitAmount key = $height$ }
+    set_var_from_key = { var = Redux_ConstructionSubmitWidth key = $width$ }
+    Redux_ConstructionPrepare = yes
+    Redux_ConstructionRefresh = yes
+    clr_province_flag = Redux_ConstructionRejected
+    if = { limit = {
+        Redux_ConstructionCanQueue = yes
+        check_variable = { which = Redux_ConstructionSubmitAmount value = 1 }
+    }
+        set_variable = { which = Redux_ConstructionInputType value = $id$ }
+        set_variable = { which = Redux_ConstructionInputOwner value = 0 }
+        [[owner] set_variable = { which = Redux_ConstructionInputOwner value = $owner$ } ]
+        set_variable = { which = Redux_ConstructionInputOrigin value = $origin$ }
+        set_variable = { which = Redux_ConstructionInputAmount which = Redux_ConstructionSubmitAmount }
+        set_variable = { which = Redux_ConstructionInputWidth which = Redux_ConstructionSubmitWidth }
+        Redux_ConstructionNormalizeWidth = yes
+        Redux_ConstructionFindRecord = yes
+        Redux_ConstructionCreateRecord = yes
+        Redux_ConstructionAttachRecord = yes
+        set_key_from_var = { key = Public_Tmp4 var = Redux_ConstructionSubmitAmount }
+        set_key = { lhs = Public_Tmp3 value = $id$ }
+        Infra_RunScript = { id = Public_Tmp3 script = Infra_InConstAdd paramInfra = size inpInfra = Public_Tmp4 }
+        set_key = { lhs = Public_Tmp3 value = 0 }
+        set_key = { lhs = Public_Tmp4 value = 0 }
+        Redux_ConstructionDispatch = yes
+    }
+    else = { set_province_flag = Redux_ConstructionRejected }
+}
+Redux_ConstructionChoose = {
+    set_variable = { which = Redux_ConstructionChoice value = $order$ }
+    set_variable = { which = Redux_ConstructionAge which = Redux_ConstructionQ$order$Age }
+}
+Redux_ConstructionPickClass = {
+    if = { limit = {
+        has_province_flag = Redux_ConstructionQ$order$
+        is_variable_equal = { which = Redux_ConstructionQ$order$Origin value = 2 }
+        check_variable = { which = Redux_ConstructionQ$order$Pending value = 1 }
+        NOT = { check_variable = { which = Redux_ConstructionQ$order$Active value = 2 } }
+        NOT = { check_variable = { which = Redux_ConstructionQ$order$Active which = Redux_ConstructionQ$order$Width } }
+        OR = {
+            is_variable_equal = { which = Redux_ConstructionManualPresent value = 0 }
+            NOT = { check_variable = { which = Redux_ConstructionClassActive value = 2 } }
         }
-        else_if = {
-            limit = { is_key_equal = { lhs = Infra_S$source$ value = 9 } }
-            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 9 }
+        OR = {
+            is_variable_equal = { which = Redux_ConstructionChoice value = 0 }
+            NOT = { check_variable = { which = Redux_ConstructionQ$order$Age which = Redux_ConstructionAge } }
         }
-        else_if = {
-            limit = { is_key_equal = { lhs = Infra_S$source$ value = 10 } }
-            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 10 }
+    } Redux_ConstructionChoose = { order = $order$ } }
+}
+Redux_ConstructionPickState = {
+    if = { limit = {
+        has_province_flag = Redux_ConstructionQ$order$
+        NOT = { is_variable_equal = { which = Redux_ConstructionQ$order$Origin value = 2 } }
+        check_variable = { which = Redux_ConstructionQ$order$Pending value = 1 }
+        NOT = { check_variable = { which = Redux_ConstructionQ$order$Active which = Redux_ConstructionQ$order$Width } }
+        OR = {
+            is_variable_equal = { which = Redux_ConstructionChoice value = 0 }
+            NOT = { check_variable = { which = Redux_ConstructionQ$order$Age which = Redux_ConstructionAge } }
         }
-        else_if = {
-            limit = { is_key_equal = { lhs = Infra_S$source$ value = 11 } }
-            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 11 }
-        }
-        else_if = {
-            limit = { is_key_equal = { lhs = Infra_S$source$ value = 12 } }
-            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 12 }
-        }
-        else_if = {
-            limit = { is_key_equal = { lhs = Infra_S$source$ value = 13 } }
-            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 13 }
-        }
-        else_if = {
-            limit = { is_key_equal = { lhs = Infra_S$source$ value = 14 } }
-            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 14 }
+    } Redux_ConstructionChoose = { order = $order$ } }
+}
+Redux_ConstructionOpenAt = {
+    if = { limit = { is_variable_equal = { which = Redux_ConstructionChoice value = $order$ } }
+        set_variable = { which = Redux_ConstructionOpeningType which = Redux_ConstructionQ$order$Type }
+        set_variable = { which = Redux_ConstructionOpeningOwner which = Redux_ConstructionQ$order$Owner }
+        set_variable = { which = Redux_ConstructionOpeningWidth which = Redux_ConstructionQ$order$Width }
+        set_variable = { which = Redux_ConstructionOpeningOrigin which = Redux_ConstructionQ$order$Origin }
+        subtract_variable = { which = Redux_ConstructionQ$order$Pending value = 1 }
+        change_variable = { which = Redux_ConstructionQ$order$Active value = 1 }
+        if = { limit = { is_variable_equal = { which = Redux_ConstructionOpeningOrigin value = 2 } }
+            change_variable = { which = Redux_ConstructionClassActive value = 1 }
         }
     }
 }
-
-Redux_ConstructionTrySource = {
-    if = {
-        limit = {
-            has_province_flag = Infra_S$source$
-            check_key = { lhs = Infra_S$source$Size value = 1 }
-            check_key = { lhs = Infra_S$source$Parallel value = 2 }
-            # Infra_RunScript supports the infrastructure IDs 8 through 14.
-            check_key = { lhs = Infra_S$source$ value = 8 }
-            NOT = { check_key = { lhs = Infra_S$source$ value = 15 } }
+Redux_ConstructionStartUnit = {
+    set_key = { lhs = Public_Tmp4 value = 1 }
+    set_key_from_var = { key = Public_Tmp3 var = Redux_ConstructionOpeningWidth }
+    Infra_StartProjectHelper = { slot = $slot$ id = $id$ size = Public_Tmp4 width = Public_Tmp3 }
+    set_key_from_var = { key = Infra_S$slot$Owner var = Redux_ConstructionOpeningOwner }
+    set_key = { lhs = Infra_S$slot$Spend value = 0 }
+    Infra_RunScript = { id = Infra_S$slot$ script = Infra_InConstSubtractOne }
+    set_variable = { which = Redux_ConstructionS$slot$Order which = Redux_ConstructionChoice }
+    set_variable = { which = Redux_ConstructionS$slot$Origin which = Redux_ConstructionOpeningOrigin }
+    set_province_flag = Redux_ConstructionS$slot$
+    set_key = { lhs = Public_Tmp3 value = 0 }
+    set_key = { lhs = Public_Tmp4 value = 0 }
+}
+Redux_ConstructionDispatchSlot = {
+    if = { limit = { NOT = { has_province_flag = Infra_S$slot$ } }
+        Redux_ConstructionPick = yes
+        if = { limit = { check_variable = { which = Redux_ConstructionChoice value = 1 } }
+            Redux_ConstructionOpen = yes
+            if = { limit = { is_variable_equal = { which = Redux_ConstructionOpeningType value = 8 } }
+                Redux_ConstructionStartUnit = { slot = $slot$ id = 8 } }
+            else_if = { limit = { is_variable_equal = { which = Redux_ConstructionOpeningType value = 9 } }
+                Redux_ConstructionStartUnit = { slot = $slot$ id = 9 } }
+            else_if = { limit = { is_variable_equal = { which = Redux_ConstructionOpeningType value = 10 } }
+                Redux_ConstructionStartUnit = { slot = $slot$ id = 10 } }
+            else_if = { limit = { is_variable_equal = { which = Redux_ConstructionOpeningType value = 11 } }
+                Redux_ConstructionStartUnit = { slot = $slot$ id = 11 } }
+            else_if = { limit = { is_variable_equal = { which = Redux_ConstructionOpeningType value = 12 } }
+                Redux_ConstructionStartUnit = { slot = $slot$ id = 12 } }
+            else_if = { limit = { is_variable_equal = { which = Redux_ConstructionOpeningType value = 13 } }
+                Redux_ConstructionStartUnit = { slot = $slot$ id = 13 } }
+            else_if = { limit = { is_variable_equal = { which = Redux_ConstructionOpeningType value = 14 } }
+                Redux_ConstructionStartUnit = { slot = $slot$ id = 14 } }
         }
-        set_var_from_key = { var = Redux_ConstructionCap key = Infra_S$source$Parallel }
-        if = {
-            limit = { check_variable = { which = Redux_ConstructionCap value = 10 } }
-            set_variable = { which = Redux_ConstructionCap value = 10 }
-        }
-        set_variable = { which = Redux_ConstructionActive value = 0 }
-        Redux_ConstructionCountSlot = { source = $source$ slot = 0 }
-        Redux_ConstructionCountSlot = { source = $source$ slot = 1 }
-        Redux_ConstructionCountSlot = { source = $source$ slot = 2 }
-        Redux_ConstructionCountSlot = { source = $source$ slot = 3 }
-        Redux_ConstructionCountSlot = { source = $source$ slot = 4 }
-        Redux_ConstructionCountSlot = { source = $source$ slot = 5 }
-        Redux_ConstructionCountSlot = { source = $source$ slot = 6 }
-        Redux_ConstructionCountSlot = { source = $source$ slot = 7 }
-        Redux_ConstructionCountSlot = { source = $source$ slot = 8 }
-        Redux_ConstructionCountSlot = { source = $source$ slot = 9 }
-
-        Redux_ConstructionFillSlot = { source = $source$ target = 0 }
-        Redux_ConstructionFillSlot = { source = $source$ target = 1 }
-        Redux_ConstructionFillSlot = { source = $source$ target = 2 }
-        Redux_ConstructionFillSlot = { source = $source$ target = 3 }
-        Redux_ConstructionFillSlot = { source = $source$ target = 4 }
-        Redux_ConstructionFillSlot = { source = $source$ target = 5 }
-        Redux_ConstructionFillSlot = { source = $source$ target = 6 }
-        Redux_ConstructionFillSlot = { source = $source$ target = 7 }
-        Redux_ConstructionFillSlot = { source = $source$ target = 8 }
-        Redux_ConstructionFillSlot = { source = $source$ target = 9 }
     }
 }
-
-Redux_ConstructionRefill = {
-    Redux_ConstructionTrySource = { source = 0 }
-    Redux_ConstructionTrySource = { source = 1 }
-    Redux_ConstructionTrySource = { source = 2 }
-    Redux_ConstructionTrySource = { source = 3 }
-    Redux_ConstructionTrySource = { source = 4 }
-    Redux_ConstructionTrySource = { source = 5 }
-    Redux_ConstructionTrySource = { source = 6 }
-    Redux_ConstructionTrySource = { source = 7 }
-    Redux_ConstructionTrySource = { source = 8 }
-    Redux_ConstructionTrySource = { source = 9 }
-    set_variable = { which = Redux_ConstructionActive value = 0 }
-    set_variable = { which = Redux_ConstructionCap value = 0 }
+# MT consumes resources and money; a completed unit releases its slot before dispatch.
+Redux_ConstructionCheckUnit = {
+    if = { limit = { has_province_flag = Infra_S$slot$ }
+        Infra_CheckProjectHelper = { slot = $slot$ prod = 6 }
+        Infra_CheckProjectHelper = { slot = $slot$ prod = 10 }
+        Infra_CheckProjectHelper = { slot = $slot$ prod = 22 }
+        Infra_CheckProjectHelper = { slot = $slot$ prod = 23 }
+        Infra_CheckProjectHelper = { slot = $slot$ prod = 24 }
+        Infra_CheckProjectHelper = { slot = $slot$ prod = 41 }
+        Infra_CheckProjectHelper = { slot = $slot$ labor = R }
+        Infra_CheckProjectHelper = { slot = $slot$ labor = UL }
+        if = { limit = {
+            is_key_equal = { lhs = Infra_S$slot$6 value = 0 }
+            is_key_equal = { lhs = Infra_S$slot$10 value = 0 }
+            is_key_equal = { lhs = Infra_S$slot$22 value = 0 }
+            is_key_equal = { lhs = Infra_S$slot$23 value = 0 }
+            is_key_equal = { lhs = Infra_S$slot$24 value = 0 }
+            is_key_equal = { lhs = Infra_S$slot$41 value = 0 }
+            is_key_equal = { lhs = Infra_S$slot$R value = 0 }
+            is_key_equal = { lhs = Infra_S$slot$UL value = 0 }
+        }
+            Infra_RunScript = { id = Infra_S$slot$ script = Infra_IncreaseSizeByOne }
+            Infra_RunScript = { id = Infra_S$slot$ script = Infra_InConstSubtractOne }
+            Redux_ConstructionClearUnit = { slot = $slot$ }
+            if = { limit = { NOT = { has_province_flag = Redux_ConstructionSuspended } }
+                Redux_ConstructionDispatch = yes
+            }
+        }
+    }
+}
+Redux_ConstructionClearUnit = {
+    Infra_RunScript = { id = Infra_S$slot$ script = Infra_ParallelClear }
+    clr_province_flag = Infra_S$slot$
+    clr_province_flag = Redux_ConstructionS$slot$
+    set_variable = { which = Redux_ConstructionS$slot$Order value = 0 }
+    set_variable = { which = Redux_ConstructionS$slot$Origin value = 0 }
+    set_key = { lhs = Infra_S$slot$ value = 0 }
+    set_key = { lhs = Infra_S$slot$Size value = 0 }
+    set_key = { lhs = Infra_S$slot$Owner value = 0 }
+    set_key = { lhs = Infra_S$slot$Spend value = 0 }
+    set_key = { lhs = Infra_S$slot$Parallel value = 0 }
+}
+Redux_ConstructionSnapshotSlot = {
+    clr_province_flag = Redux_ConstructionAnnualS$slot$
+    if = { limit = { has_province_flag = Infra_S$slot$ }
+        set_province_flag = Redux_ConstructionAnnualS$slot$
+    }
+}
+Redux_ConstructionAnnualCheck = {
+    if = { limit = { has_province_flag = Redux_ConstructionAnnualS$slot$ }
+        clr_province_flag = Redux_ConstructionAnnualS$slot$
+        Infra_CheckProject = { slot = $slot$ }
+    }
+}
+# Cleanup discards unstarted units before canceling current units.
+Redux_ConstructionCancelOrder = {
+    if = { limit = { has_province_flag = Redux_ConstructionQ$order$ }
+        set_key_from_var = { key = Public_Tmp3 var = Redux_ConstructionQ$order$Type }
+        set_key_from_var = { key = Public_Tmp4 var = Redux_ConstructionQ$order$Pending }
+        Infra_RunScript = { id = Public_Tmp3 script = Redux_ConstructionSubtractWaiting paramInfra = size inpInfra = Public_Tmp4 }
+        set_variable = { which = Redux_ConstructionQ$order$Pending value = 0 }
+        set_key = { lhs = Public_Tmp3 value = 0 }
+        set_key = { lhs = Public_Tmp4 value = 0 }
+    }
+}
+Redux_ConstructionSubtractWaiting = {
+    subtract_key = { lhs = Infra_InConst$infra$ which = $size$ }
 }

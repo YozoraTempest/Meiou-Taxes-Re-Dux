@@ -4,6 +4,7 @@ country_event = {
     id = ReduxConstruction.1
     title = no_localisation
     desc = no_localisation
+    picture = MEIOU_AND_TAXES_eventPicture
     hidden = yes
     is_triggered_only = yes
 
@@ -11,20 +12,10 @@ country_event = {
         every_province = {
             limit = {
                 isValidProv = yes
-                OR = {
-                    has_province_flag = Infra_S0
-                    has_province_flag = Infra_S1
-                    has_province_flag = Infra_S2
-                    has_province_flag = Infra_S3
-                    has_province_flag = Infra_S4
-                    has_province_flag = Infra_S5
-                    has_province_flag = Infra_S6
-                    has_province_flag = Infra_S7
-                    has_province_flag = Infra_S8
-                    has_province_flag = Infra_S9
-                }
+                Redux_ConstructionNeedsDispatch = yes
             }
             Redux_ConstructionRefill = yes
         }
     }
+    option = { name = no_localisation }
 }
