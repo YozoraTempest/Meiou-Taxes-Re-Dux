@@ -67,12 +67,16 @@ sh Sync-ReduxMods.sh "C:/Users/Vulon/OneDrive/文档/Paradox Interactive/Europa 
 
 | 分支或事件 | 行为 | 下载位置 |
 | --- | --- | --- |
-| 推送 `develop` | 按 mod 检查输入变化，构建 nightly | [Nightly Mods 工作流](https://github.com/YozoraTempest/Meiou-Taxes-Re-Dux/actions/workflows/nightly.yml) 的 Artifacts |
-| 每日北京时间 02:00 | 检查 `develop`，补建变化、失败或过期的产物 | 同上 |
+| 推送 `develop` | 按 mod 检查输入变化，构建并更新滚动 Nightly Release | [Redux Tweak Nightly](https://github.com/YozoraTempest/MnT-Re-Dux/releases/tag/redux-tweak-nightly)、[Redux Subject Nightly](https://github.com/YozoraTempest/MnT-Re-Dux/releases/tag/redux-subject-nightly) |
+| 每日北京时间 02:00 | 检查 `develop`，补建变化、缺失或发布未完成的产物 | 同上 |
 | `develop → main` PR | 校验合并结果和正式版本号，不重复生成开发包 | PR 检查报告 |
-| PR 合并进 `main` | 从合入提交构建正式包并发布 | [Releases](https://github.com/YozoraTempest/Meiou-Taxes-Re-Dux/releases) |
+| PR 合并进 `main` | 从合入提交构建正式包并发布 | [Releases](https://github.com/YozoraTempest/MnT-Re-Dux/releases) |
 
-nightly 名称为 `<mod-id>-nightly.zip`，保留 14 天；同一 mod 的构建输入不变、已有成功产物尚未过期时跳过重建。输入指纹包含源码、打包配置、共享构建脚本、声明的依赖及专属测试，不使用相邻两次推送的差异作为唯一依据。新的推送会取消未完成的旧 nightly 工作流，后续任务按输入指纹补建尚未成功的 mod。定时工作流定义需要存在于默认分支 `main`，任务实际检出 `develop`。GitHub 定时任务可能排队延迟，公开仓库连续 60 天无活动时会停用定时任务。
+每个 mod 使用固定的 `<mod-id>-nightly` 标签和同一个 Nightly Release，标记为预发布版本。构建成功后覆盖 `<mod-id>-nightly.zip`、其 SHA256 文件和 `<mod-id>-build-info.json`，把标签移到本次构建提交，并更新发布说明中的版本、提交和构建时间。固定标签与附件名称保持下载链接稳定；不累积每次构建的 Release，也不占用正式版的 Latest 标记。
+
+只有已公开的 Nightly Release 与当前输入指纹一致、三个附件的 GitHub SHA256 摘要匹配、标签指向构建信息记录的提交时才跳过重建。ZIP 与校验和先上传并核对，构建信息最后上传；首次发布的附件完整前保持草稿。构建或发布失败、附件缺失、标签不一致时，后续任务会重新构建并补齐同一个 Release。Actions Artifacts 仍保留 14 天用于检查；过期不影响 Release 下载，也不触发内容不变的重新发布。
+
+输入指纹包含源码、打包配置、共享构建脚本、声明的依赖及专属测试，不使用相邻两次推送的差异作为唯一依据。新的推送会取消未完成的旧 nightly 工作流，后续任务按 Release 状态补建尚未完整发布的 mod。定时工作流定义需要存在于默认分支 `main`，任务实际检出 `develop`。GitHub 定时任务可能排队延迟，公开仓库连续 60 天无活动时会停用定时任务。
 
 每个 mod 使用独立的正式标签，例如 `redux-tweak-v0.1.1`，附件为 `redux-tweak-0.1.1.zip`、SHA256 文件和构建元数据。下载模组附件，不使用 GitHub 自动生成的 Source code 压缩包。仓库全局的 Latest 标记不代表每个 mod 的最新版本，请按 mod 名称选择 Release。
 

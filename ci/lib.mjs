@@ -112,9 +112,21 @@ export function releaseNeeded(current, previous) {
     return true;
 }
 
-export function nightlyNeeded(current, artifacts) {
-    return !artifacts.some(artifact => artifact.name === `nightly-${current.id}-${current.fingerprint}` &&
-        !artifact.expired && artifact.successful);
+export function nightlyNeeded(current, release, metadataText, tagSha) {
+    if (!release || release.draft || !release.prerelease || release.tag_name !== `${current.id}-nightly`) return true;
+    let metadata;
+    try { metadata = JSON.parse(metadataText); } catch { return true; }
+    const filename = `${current.id}-nightly.zip`;
+    if (!metadata || metadata.schema_version !== 1 || metadata.id !== current.id || metadata.channel !== 'nightly' ||
+        metadata.version !== current.version || metadata.fingerprint !== current.fingerprint ||
+        metadata.contentFingerprint !== current.contentFingerprint || metadata.filename !== filename ||
+        !/^[a-f0-9]{40}$/.test(metadata.sourceSha) || metadata.sourceSha !== tagSha ||
+        !/^[a-f0-9]{64}$/.test(metadata.zipSha256)) return true;
+    const digests = [[filename, metadata.zipSha256],
+        [`${filename}.sha256`, sha256(`${metadata.zipSha256}  ${filename}\n`)],
+        [`${current.id}-build-info.json`, sha256(metadataText)]];
+    return digests.some(([name, digest]) => !release.assets?.some(asset =>
+        asset.name === name && asset.state === 'uploaded' && asset.digest === `sha256:${digest}`));
 }
 
 export function findRelease(releases, tag) {

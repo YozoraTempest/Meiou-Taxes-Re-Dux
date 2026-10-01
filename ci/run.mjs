@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { affectedMods, compareVersions, describeMod, findRelease, loadRegistry, nightlyNeeded, releaseNeeded, sha256 } from './lib.mjs';
+import { publishNightly } from './nightly.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const registry = loadRegistry(root);
@@ -33,18 +34,22 @@ const getMod = id => {
 };
 const sourceSha = () => command('git', ['rev-parse', 'HEAD']);
 
-function metadataFor(release, id) {
+function downloadMetadata(release, id) {
     const directory = mkdtempSync(join(tmpdir(), 'mod-release-'));
     try {
         command('gh', ['release', 'download', release.tag_name, '--repo', repository,
             '--pattern', `${id}-build-info.json`, '--dir', directory]);
-        const metadata = JSON.parse(readFileSync(join(directory, `${id}-build-info.json`), 'utf8'));
-        assert.equal(metadata.schema_version, 1);
-        assert.equal(metadata.id, id);
-        assert.equal(release.tag_name, `${id}-v${metadata.version}`);
-        assert.match(metadata.contentFingerprint, /^[a-f0-9]{64}$/);
-        return metadata;
+        return readFileSync(join(directory, `${id}-build-info.json`), 'utf8');
     } finally { rmSync(directory, { recursive: true, force: true }); }
+}
+
+function metadataFor(release, id) {
+    const metadata = JSON.parse(downloadMetadata(release, id));
+    assert.equal(metadata.schema_version, 1);
+    assert.equal(metadata.id, id);
+    assert.equal(release.tag_name, `${id}-v${metadata.version}`);
+    assert.match(metadata.contentFingerprint, /^[a-f0-9]{64}$/);
+    return metadata;
 }
 
 function previousRelease(mod, releases) {
@@ -59,24 +64,16 @@ function plan(channel) {
     let selected;
     let validation;
     if (channel === 'nightly') {
-        const jobCache = new Map();
+        const releases = api(`repos/${repository}/releases?per_page=100`, false, true).flat();
         selected = registry.mods.filter(mod => {
             const current = describeMod(root, registry, mod);
-            const name = `nightly-${mod.id}-${current.fingerprint}`;
-            const pages = api(`repos/${repository}/actions/artifacts?name=${encodeURIComponent(name)}&per_page=100`, false, true);
-            const artifacts = pages.flatMap(page => page.artifacts).filter(artifact => !artifact.expired);
-            for (const artifact of artifacts) {
-                const runId = artifact.workflow_run?.id;
-                if (!runId) continue;
-                if (!jobCache.has(runId)) jobCache.set(runId, api(`repos/${repository}/actions/runs/${runId}/jobs?per_page=100`, false, true)
-                    .flatMap(page => page.jobs));
-                artifact.successful = jobCache.get(runId).some(job => job.name === `Nightly / ${mod.id}` && job.conclusion === 'success');
-            }
-            const needed = nightlyNeeded(current, artifacts);
-            if (!needed) {
-                const artifact = artifacts.find(item => item.successful);
-                summary(`- ${mod.id}: unchanged; [existing nightly](https://github.com/${repository}/actions/runs/${artifact.workflow_run.id}/artifacts/${artifact.id})`);
-            }
+            const tag = `${mod.id}-nightly`;
+            const release = findRelease(releases, tag);
+            const metadataText = release && !release.draft && release.prerelease && release.assets.some(asset =>
+                asset.name === `${mod.id}-build-info.json` && asset.state === 'uploaded') ? downloadMetadata(release, mod.id) : null;
+            const tagSha = metadataText ? api(`repos/${repository}/commits/${tag}`, true)?.sha : null;
+            const needed = nightlyNeeded(current, release, metadataText, tagSha);
+            if (!needed) summary(`- ${mod.id}: unchanged; [existing nightly](https://github.com/${repository}/releases/tag/${tag})`);
             return needed;
         });
     } else {
@@ -182,8 +179,10 @@ try {
     else if (action === 'verify') verify(...args);
     else if (action === 'build') build(...args);
     else if (action === 'publish') publish(...args);
+    else if (action === 'publish-nightly') publishNightly({ root, repository, current: describeMod(root, registry, getMod(args[0])),
+        sourceSha: sourceSha(), api, command, summary });
     else if (action === 'describe') console.log(JSON.stringify({ ...describeMod(root, registry, getMod(args[0])), root }));
-    else throw new Error('Usage: node ci/run.mjs plan CHANNEL | verify MOD | build CHANNEL MOD [OUTPUT] | publish MOD | describe MOD');
+    else throw new Error('Usage: node ci/run.mjs plan CHANNEL | verify MOD | build CHANNEL MOD [OUTPUT] | publish MOD | publish-nightly MOD | describe MOD');
 } catch (error) {
     console.error(error.stack);
     process.exitCode = 1;

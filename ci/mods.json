@@ -3,6 +3,7 @@
   "shared_inputs": [
     "ci/lib.mjs",
     "ci/run.mjs",
+    "ci/nightly.mjs",
     "ci/package.sh",
     "ci/run.sh",
     ".gitattributes",

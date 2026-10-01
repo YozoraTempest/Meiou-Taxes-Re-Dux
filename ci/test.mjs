@@ -5,7 +5,8 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
-import { affectedMods, compareVersions, describeMod, findRelease, loadRegistry, nightlyNeeded, packageFiles, releaseNeeded, safePath } from './lib.mjs';
+import { affectedMods, compareVersions, describeMod, findRelease, loadRegistry, nightlyNeeded, packageFiles, releaseNeeded, safePath, sha256 } from './lib.mjs';
+import { publishNightly } from './nightly.mjs';
 
 function fixture(t) {
     const root = mkdtempSync(join(tmpdir(), 'mod-ci-test-'));
@@ -141,15 +142,169 @@ test('numeric version ordering', () => {
     assert.equal(compareVersions('0.1.1', '0.2.0'), -1);
     assert.equal(compareVersions('1.0.0', '1.0.0'), 0);
 });
-test('nightly skips only exact successful unexpired input fingerprint', t => {
-    const f = fixture(t), current = f.describe('alpha');
-    const artifact = { name: `nightly-alpha-${current.fingerprint}`, expired: false, successful: true };
-    assert.equal(nightlyNeeded(current, [artifact]), false);
-    assert.equal(nightlyNeeded(current, [{ ...artifact, expired: true }]), true);
-    assert.equal(nightlyNeeded(current, [{ ...artifact, successful: false }]), true);
-    assert.equal(nightlyNeeded(current, []), true);
-    f.write('alpha/common/test.txt', 'value = 4');
-    assert.equal(nightlyNeeded(f.describe('alpha'), [artifact]), true);
+function nightlyFixture(t, existing = false) {
+    const f = fixture(t);
+    const current = f.describe('alpha');
+    const sourceSha = 'a'.repeat(40);
+    const repository = 'owner/mods';
+    const endpoint = `repos/${repository}`;
+    const tag = 'alpha-nightly';
+    const metadata = { schema_version: 1, ...current, channel: 'nightly', sourceSha,
+        builtAt: '2026-10-01T00:00:00.000Z', filename: 'alpha-nightly.zip', zipSha256: sha256('nightly package') };
+    const metadataText = JSON.stringify(metadata, null, 2) + '\n';
+    f.write('dist/alpha/alpha-nightly.zip', 'nightly package');
+    f.write('dist/alpha/alpha-nightly.zip.sha256', `${metadata.zipSha256}  ${metadata.filename}\n`);
+    f.write('dist/alpha/alpha-build-info.json', metadataText);
+    const asset = name => ({ name, state: 'uploaded', digest: `sha256:${sha256(readFileSync(join(f.root, 'dist/alpha', name)))}` });
+    const ready = { id: 1, tag_name: tag, draft: false, prerelease: true, immutable: false,
+        assets: [metadata.filename, `${metadata.filename}.sha256`, 'alpha-build-info.json'].map(asset) };
+    const state = { release: existing ? structuredClone(ready) : null, tagSha: existing ? 'b'.repeat(40) : null, calls: [] };
+    const api = (path, optional) => {
+        state.calls.push(['read', path]);
+        if (path === `${endpoint}/releases?per_page=100`) return [state.release ? [structuredClone(state.release)] : []];
+        if (path === `${endpoint}/releases/1`) return structuredClone(state.release);
+        if (path === `${endpoint}/git/ref/tags/${tag}` && optional) return state.tagSha ? { object: { type: 'commit', sha: state.tagSha } } : null;
+        if (path === `${endpoint}/commits/${tag}`) return { sha: state.tagSha };
+        assert.fail(`Unexpected API call: ${path}`);
+    };
+    const command = (program, args) => {
+        assert.equal(program, 'gh');
+        state.calls.push(args);
+        if (args[0] === 'api') {
+            assert.equal(args[2], state.tagSha ? 'PATCH' : 'POST');
+            assert.equal(args[3], state.tagSha ? `${endpoint}/git/refs/tags/${tag}` : `${endpoint}/git/refs`);
+            if (state.tagSha) assert.ok(args.includes('force=true'));
+            else assert.ok(args.includes(`ref=refs/tags/${tag}`));
+            state.tagSha = args.find(arg => arg.startsWith('sha=')).slice(4);
+            return;
+        }
+        assert.equal(args[0], 'release');
+        assert.equal(args[2], tag);
+        assert.equal(args[args.indexOf('--repo') + 1], repository);
+        if (args[1] === 'create') {
+            assert.equal(state.release, null);
+            assert.ok(args.includes('--draft') && args.includes('--prerelease') && args.includes('--latest=false'));
+            state.release = { ...ready, draft: true, assets: [] };
+            return;
+        }
+        if (args[1] === 'upload') {
+            assert.ok(args.includes('--clobber'));
+            const paths = args.slice(3, args.indexOf('--repo'));
+            if (state.failMetadata && paths.some(path => path.endsWith('alpha-build-info.json'))) throw new Error('Upload interrupted');
+            for (const path of paths) {
+                const name = path.split(/[\\/]/).at(-1);
+                state.release.assets = state.release.assets.filter(item => item.name !== name);
+                state.release.assets.push(asset(name));
+            }
+            return;
+        }
+        if (args[1] === 'edit') {
+            assert.ok(args.includes('--prerelease') && args.includes('--latest=false'));
+            state.release.prerelease = true;
+            if (args.includes('--draft=false')) {
+                assert.equal(nightlyNeeded(current, { ...state.release, draft: false }, metadataText, state.tagSha), false,
+                    'A new nightly must have all verified assets before publication');
+                state.release.draft = false;
+            }
+            if (args.includes('--notes-file')) state.release.body = readFileSync(args[args.indexOf('--notes-file') + 1], 'utf8');
+            if (args.includes('--target')) state.release.target_commitish = args[args.indexOf('--target') + 1];
+            return;
+        }
+        assert.fail(`Unexpected command: ${args.join(' ')}`);
+    };
+    const publish = () => publishNightly({ root: f.root, repository, current, sourceSha, api, command, summary: () => {} });
+    return { ...f, current, sourceSha, metadata, metadataText, ready, state, publish };
+}
+
+test('nightly skips an intact published release even when Actions artifacts have expired', t => {
+    const f = nightlyFixture(t);
+    assert.equal(nightlyNeeded(f.current, f.ready, f.metadataText, f.sourceSha), false);
+    f.write('verification/alpha.mjs', 'changed validation');
+    assert.equal(nightlyNeeded(f.describe('alpha'), f.ready, f.metadataText, f.sourceSha), true);
+});
+
+test('nightly retries absent, draft, wrong-channel, stale, or damaged releases', t => {
+    const f = nightlyFixture(t);
+    for (const release of [null, { ...f.ready, draft: true }, { ...f.ready, prerelease: false },
+        { ...f.ready, tag_name: 'alpha-v1.0.0' }, { ...f.ready, assets: f.ready.assets.slice(0, 2) },
+        { ...f.ready, assets: f.ready.assets.map(asset => ({ ...asset, digest: 'sha256:wrong' })) },
+        { ...f.ready, assets: f.ready.assets.map(asset => ({ ...asset, state: 'starter' })) }]) {
+        assert.equal(nightlyNeeded(f.current, release, f.metadataText, f.sourceSha), true);
+    }
+    assert.equal(nightlyNeeded(f.current, f.ready, f.metadataText, 'b'.repeat(40)), true);
+    assert.equal(nightlyNeeded(f.current, f.ready, f.metadataText, null), true);
+    for (const text of [null, '{invalid', 'null', JSON.stringify({ ...f.metadata, channel: 'release' }),
+        JSON.stringify({ ...f.metadata, fingerprint: 'stale' }), JSON.stringify({ ...f.metadata, zipSha256: 'wrong' })]) {
+        assert.equal(nightlyNeeded(f.current, f.ready, text, f.sourceSha), true);
+    }
+});
+
+test('nightly publisher creates one prerelease with verified assets and a matching tag', t => {
+    const f = nightlyFixture(t);
+    f.publish();
+    assert.equal(nightlyNeeded(f.current, f.state.release, f.metadataText, f.state.tagSha), false);
+    assert.match(f.state.release.body, /Rolling development build/);
+    assert.equal(f.state.release.target_commitish, f.sourceSha);
+    assert.equal(f.state.calls.filter(args => args[1] === 'create').length, 1);
+});
+
+test('nightly publisher reuses release ID, moves the tag, and overwrites fixed asset names', t => {
+    const f = nightlyFixture(t, true);
+    f.state.release.assets = f.state.release.assets.map(asset => ({ ...asset, digest: 'sha256:old' }));
+    f.publish();
+    assert.equal(f.state.release.id, 1);
+    assert.equal(f.state.tagSha, f.sourceSha);
+    assert.equal(f.state.calls.filter(args => args[1] === 'create').length, 0);
+    assert.equal(f.state.calls.filter(args => args[2] === 'PATCH').length, 1);
+    const uploads = f.state.calls.filter(args => args[1] === 'upload');
+    assert.equal(uploads.length, 2);
+    assert.ok(uploads[0][3].endsWith('alpha-nightly.zip') && uploads[0][4].endsWith('.zip.sha256'));
+    assert.ok(uploads[1][3].endsWith('alpha-build-info.json'));
+    assert.equal(nightlyNeeded(f.current, f.state.release, f.metadataText, f.state.tagSha), false);
+});
+
+test('interrupted nightly update remains eligible and can be retried', t => {
+    const f = nightlyFixture(t, true);
+    f.state.release.assets = f.state.release.assets.map(asset => ({ ...asset, digest: 'sha256:old' }));
+    f.state.failMetadata = true;
+    assert.throws(f.publish, /Upload interrupted/);
+    assert.equal(nightlyNeeded(f.current, f.state.release, f.metadataText, f.state.tagSha), true);
+    f.state.failMetadata = false;
+    f.publish();
+    assert.equal(f.state.release.id, 1);
+    assert.equal(nightlyNeeded(f.current, f.state.release, f.metadataText, f.state.tagSha), false);
+});
+
+test('nightly publisher resumes a draft left by an interrupted first publication', t => {
+    const f = nightlyFixture(t);
+    f.state.failMetadata = true;
+    assert.throws(f.publish, /Upload interrupted/);
+    assert.equal(f.state.release.draft, true);
+    f.state.failMetadata = false;
+    f.publish();
+    assert.equal(f.state.release.draft, false);
+    assert.equal(f.state.calls.filter(args => args[1] === 'create').length, 1);
+});
+
+test('nightly publisher rejects tampered artifacts or a different checkout before remote changes', t => {
+    const f = nightlyFixture(t);
+    f.write('dist/alpha/alpha-nightly.zip', 'damaged package');
+    assert.throws(f.publish);
+    assert.deepEqual(f.state.calls, []);
+    f.write('dist/alpha/alpha-nightly.zip', 'nightly package');
+    f.write('dist/alpha/alpha-build-info.json', JSON.stringify({ ...f.metadata, sourceSha: 'b'.repeat(40) }));
+    assert.throws(f.publish);
+    assert.deepEqual(f.state.calls, []);
+});
+
+test('nightly publisher protects formal and immutable releases', t => {
+    const f = nightlyFixture(t, true);
+    f.state.release.prerelease = false;
+    assert.throws(f.publish, /formal release/);
+    f.state.release.prerelease = true;
+    f.state.release.immutable = true;
+    assert.throws(f.publish, /mutable/);
+    assert.ok(f.state.calls.every(args => args[0] === 'read'));
 });
 test('real packager verifies allowlist and produces repeatable ZIP bytes', t => {
     const f = fixture(t);

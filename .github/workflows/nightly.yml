@@ -77,3 +77,33 @@ jobs:
           ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
         run: |
           printf '\n- %s nightly download: %s\n' "$MOD_ID" "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+
+  publish:
+    name: Publish Nightly / ${{ matrix.id }}
+    needs: [plan, build]
+    if: needs.plan.outputs.has_mods == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.plan.outputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '26'
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: nightly-${{ matrix.id }}-${{ matrix.fingerprint }}
+          path: dist/${{ matrix.id }}/
+      - name: Publish Rolling Nightly Release
+        env:
+          MOD_ID: ${{ matrix.id }}
+          GH_TOKEN: ${{ github.token }}
+        run: sh ci/run.sh publish-nightly "$MOD_ID"
