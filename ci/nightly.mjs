@@ -36,10 +36,10 @@ export function publishNightly({ root, repository, current, sourceSha, api, comm
         `Download \`${metadata.filename}\` and extract it into the EU4 mod directory.\n\n` +
         `SHA256: \`${metadata.zipSha256}\`\n\nThis package contains ${current.files.length} runtime/license files.\n`);
     if (!release) {
-        command('gh', ['release', 'create', tag, '--repo', repository, '--target', sourceSha,
-            '--draft', '--prerelease', '--latest=false', '--title', title, '--notes-file', notes]);
-        release = findRelease(listReleases(), tag);
-        assert.ok(release?.draft, 'Expected a new nightly draft');
+        release = JSON.parse(command('gh', ['api', '--method', 'POST', `${endpoint}/releases`,
+            '-f', `tag_name=${tag}`, '-f', `target_commitish=${sourceSha}`, '-f', `name=${title}`,
+            '-F', 'draft=true', '-F', 'prerelease=true', '-f', 'make_latest=false', '-F', `body=@${notes}`]));
+        assert.ok(release?.draft && release.tag_name === tag, 'Expected a new nightly draft');
     }
     const packageNames = [metadata.filename, `${metadata.filename}.sha256`];
     command('gh', ['release', 'upload', tag, ...packageNames.map(name => join(output, name)), '--repo', repository, '--clobber']);

@@ -171,6 +171,14 @@ function nightlyFixture(t, existing = false) {
         assert.equal(program, 'gh');
         state.calls.push(args);
         if (args[0] === 'api') {
+            if (args[3] === `${endpoint}/releases`) {
+                assert.equal(args[2], 'POST');
+                assert.equal(state.release, null);
+                assert.ok(args.includes(`tag_name=${tag}`) && args.includes(`target_commitish=${sourceSha}`));
+                assert.ok(args.includes('draft=true') && args.includes('prerelease=true') && args.includes('make_latest=false'));
+                state.release = { ...ready, draft: true, assets: [] };
+                return JSON.stringify(state.release);
+            }
             assert.equal(args[2], state.tagSha ? 'PATCH' : 'POST');
             assert.equal(args[3], state.tagSha ? `${endpoint}/git/refs/tags/${tag}` : `${endpoint}/git/refs`);
             if (state.tagSha) assert.ok(args.includes('force=true'));
@@ -181,12 +189,6 @@ function nightlyFixture(t, existing = false) {
         assert.equal(args[0], 'release');
         assert.equal(args[2], tag);
         assert.equal(args[args.indexOf('--repo') + 1], repository);
-        if (args[1] === 'create') {
-            assert.equal(state.release, null);
-            assert.ok(args.includes('--draft') && args.includes('--prerelease') && args.includes('--latest=false'));
-            state.release = { ...ready, draft: true, assets: [] };
-            return;
-        }
         if (args[1] === 'upload') {
             assert.ok(args.includes('--clobber'));
             const paths = args.slice(3, args.indexOf('--repo'));
@@ -245,7 +247,9 @@ test('nightly publisher creates one prerelease with verified assets and a matchi
     assert.equal(nightlyNeeded(f.current, f.state.release, f.metadataText, f.state.tagSha), false);
     assert.match(f.state.release.body, /Rolling development build/);
     assert.equal(f.state.release.target_commitish, f.sourceSha);
-    assert.equal(f.state.calls.filter(args => args[1] === 'create').length, 1);
+    assert.equal(f.state.calls.filter(args => args[0] === 'api' && args[3] === 'repos/owner/mods/releases').length, 1);
+    assert.equal(f.state.calls.filter(args => args[0] === 'read' && args[1].includes('releases?')).length, 1,
+        'Use the creation response without relying on a freshly updated release list');
 });
 
 test('nightly publisher reuses release ID, moves the tag, and overwrites fixed asset names', t => {
@@ -254,7 +258,7 @@ test('nightly publisher reuses release ID, moves the tag, and overwrites fixed a
     f.publish();
     assert.equal(f.state.release.id, 1);
     assert.equal(f.state.tagSha, f.sourceSha);
-    assert.equal(f.state.calls.filter(args => args[1] === 'create').length, 0);
+    assert.equal(f.state.calls.filter(args => args[0] === 'api' && args[3] === 'repos/owner/mods/releases').length, 0);
     assert.equal(f.state.calls.filter(args => args[2] === 'PATCH').length, 1);
     const uploads = f.state.calls.filter(args => args[1] === 'upload');
     assert.equal(uploads.length, 2);
@@ -283,7 +287,7 @@ test('nightly publisher resumes a draft left by an interrupted first publication
     f.state.failMetadata = false;
     f.publish();
     assert.equal(f.state.release.draft, false);
-    assert.equal(f.state.calls.filter(args => args[1] === 'create').length, 1);
+    assert.equal(f.state.calls.filter(args => args[0] === 'api' && args[3] === 'repos/owner/mods/releases').length, 1);
 });
 
 test('nightly publisher rejects tampered artifacts or a different checkout before remote changes', t => {
