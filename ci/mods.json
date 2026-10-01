@@ -14,17 +14,20 @@
       "id": "redux-tweak",
       "name": "Redux Tweak",
       "files": [
-        "descriptor.mod"
+        "descriptor.mod",
+        "common/on_actions/ReduxConstruction.txt",
+        "common/scripted_effects/ReduxConstruction.txt",
+        "events/ReduxConstruction.txt"
       ],
       "test_inputs": [
         "verification/VERIFY.sh",
-        "verification/VERIFY.mjs"
+        "verification/VERIFY.mjs",
+        "verification/redux-tweak/VERIFY.mjs",
+        "verification/redux-tweak/mt-construction.json"
       ],
       "tests": [
-        [
-          "sh",
-          "verification/VERIFY.sh"
-        ]
+        ["sh", "verification/VERIFY.sh"],
+        ["node", "verification/redux-tweak/VERIFY.mjs"]
       ],
       "depends_on": []
     },
@@ -49,16 +52,8 @@
         "verification/redux-subject/mt-subject-types.json"
       ],
       "tests": [
-        [
-          "node",
-          "verification/VERIFY.mjs",
-          ".",
-          "redux-subject"
-        ],
-        [
-          "node",
-          "verification/redux-subject/VERIFY.mjs"
-        ]
+        ["node", "verification/VERIFY.mjs", ".", "redux-subject"],
+        ["node", "verification/redux-subject/VERIFY.mjs"]
       ],
       "depends_on": []
     }

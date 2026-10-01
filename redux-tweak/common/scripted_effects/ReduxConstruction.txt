@@ -1,0 +1,126 @@
+# Existing saves identify a queue group by type, payer and requested parallelism.
+# Count each active slot, including slots with no further queued units.
+Redux_ConstructionCountSlot = {
+    if = {
+        limit = {
+            has_province_flag = Infra_S$slot$
+            is_key_equal = { lhs = Infra_S$slot$ which = Infra_S$source$ }
+            is_key_equal = { lhs = Infra_S$slot$Owner which = Infra_S$source$Owner }
+            is_key_equal = { lhs = Infra_S$slot$Parallel which = Infra_S$source$Parallel }
+        }
+        change_variable = { which = Redux_ConstructionActive value = 1 }
+    }
+}
+
+# Transfer one unstarted unit. The upstream helper maintains cost and display
+# counters; cancel its InConst increment because this is an existing order.
+Redux_ConstructionOpenSlot = {
+    set_key = { lhs = Public_Tmp4 value = 1 }
+    Infra_StartProjectHelper = {
+        slot = $target$
+        id = $id$
+        size = Public_Tmp4
+        width = Infra_S$source$Parallel
+    }
+    set_key = { lhs = Infra_S$target$Owner which = Infra_S$source$Owner }
+    set_key = { lhs = Infra_S$target$Spend value = 0 }
+    subtract_key = { lhs = Infra_S$source$Size value = 1 }
+    Infra_RunScript = { id = Infra_S$target$ script = Infra_InConstSubtractOne }
+    change_variable = { which = Redux_ConstructionActive value = 1 }
+    set_key = { lhs = Public_Tmp4 value = 0 }
+}
+
+Redux_ConstructionFillSlot = {
+    if = {
+        limit = {
+            NOT = { has_province_flag = Infra_S$target$ }
+            check_key = { lhs = Infra_S$source$Size value = 1 }
+            NOT = {
+                check_variable = { which = Redux_ConstructionActive which = Redux_ConstructionCap }
+            }
+        }
+        if = {
+            limit = { is_key_equal = { lhs = Infra_S$source$ value = 8 } }
+            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 8 }
+        }
+        else_if = {
+            limit = { is_key_equal = { lhs = Infra_S$source$ value = 9 } }
+            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 9 }
+        }
+        else_if = {
+            limit = { is_key_equal = { lhs = Infra_S$source$ value = 10 } }
+            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 10 }
+        }
+        else_if = {
+            limit = { is_key_equal = { lhs = Infra_S$source$ value = 11 } }
+            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 11 }
+        }
+        else_if = {
+            limit = { is_key_equal = { lhs = Infra_S$source$ value = 12 } }
+            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 12 }
+        }
+        else_if = {
+            limit = { is_key_equal = { lhs = Infra_S$source$ value = 13 } }
+            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 13 }
+        }
+        else_if = {
+            limit = { is_key_equal = { lhs = Infra_S$source$ value = 14 } }
+            Redux_ConstructionOpenSlot = { source = $source$ target = $target$ id = 14 }
+        }
+    }
+}
+
+Redux_ConstructionTrySource = {
+    if = {
+        limit = {
+            has_province_flag = Infra_S$source$
+            check_key = { lhs = Infra_S$source$Size value = 1 }
+            check_key = { lhs = Infra_S$source$Parallel value = 2 }
+            # Infra_RunScript supports the infrastructure IDs 8 through 14.
+            check_key = { lhs = Infra_S$source$ value = 8 }
+            NOT = { check_key = { lhs = Infra_S$source$ value = 15 } }
+        }
+        set_var_from_key = { var = Redux_ConstructionCap key = Infra_S$source$Parallel }
+        if = {
+            limit = { check_variable = { which = Redux_ConstructionCap value = 10 } }
+            set_variable = { which = Redux_ConstructionCap value = 10 }
+        }
+        set_variable = { which = Redux_ConstructionActive value = 0 }
+        Redux_ConstructionCountSlot = { source = $source$ slot = 0 }
+        Redux_ConstructionCountSlot = { source = $source$ slot = 1 }
+        Redux_ConstructionCountSlot = { source = $source$ slot = 2 }
+        Redux_ConstructionCountSlot = { source = $source$ slot = 3 }
+        Redux_ConstructionCountSlot = { source = $source$ slot = 4 }
+        Redux_ConstructionCountSlot = { source = $source$ slot = 5 }
+        Redux_ConstructionCountSlot = { source = $source$ slot = 6 }
+        Redux_ConstructionCountSlot = { source = $source$ slot = 7 }
+        Redux_ConstructionCountSlot = { source = $source$ slot = 8 }
+        Redux_ConstructionCountSlot = { source = $source$ slot = 9 }
+
+        Redux_ConstructionFillSlot = { source = $source$ target = 0 }
+        Redux_ConstructionFillSlot = { source = $source$ target = 1 }
+        Redux_ConstructionFillSlot = { source = $source$ target = 2 }
+        Redux_ConstructionFillSlot = { source = $source$ target = 3 }
+        Redux_ConstructionFillSlot = { source = $source$ target = 4 }
+        Redux_ConstructionFillSlot = { source = $source$ target = 5 }
+        Redux_ConstructionFillSlot = { source = $source$ target = 6 }
+        Redux_ConstructionFillSlot = { source = $source$ target = 7 }
+        Redux_ConstructionFillSlot = { source = $source$ target = 8 }
+        Redux_ConstructionFillSlot = { source = $source$ target = 9 }
+    }
+}
+
+Redux_ConstructionRefill = {
+    Redux_ConstructionTrySource = { source = 0 }
+    Redux_ConstructionTrySource = { source = 1 }
+    Redux_ConstructionTrySource = { source = 2 }
+    Redux_ConstructionTrySource = { source = 3 }
+    Redux_ConstructionTrySource = { source = 4 }
+    Redux_ConstructionTrySource = { source = 5 }
+    Redux_ConstructionTrySource = { source = 6 }
+    Redux_ConstructionTrySource = { source = 7 }
+    Redux_ConstructionTrySource = { source = 8 }
+    Redux_ConstructionTrySource = { source = 9 }
+    set_variable = { which = Redux_ConstructionActive value = 0 }
+    set_variable = { which = Redux_ConstructionCap value = 0 }
+}
